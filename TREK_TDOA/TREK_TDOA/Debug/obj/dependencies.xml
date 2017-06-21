@@ -1,0 +1,356 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dependencies>
+   <includePath signature="/I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\Libraries\CMSIS /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\decadriver /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\Libraries\CMSIS\CM3\CoreSupport /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\src /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\startup /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\FRT_Library\FreeRTOS\Source\portable\GCC\ARM_CM3 /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\platform /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\FRT_Library\FreeRTOS\Source\include /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\Libraries\CMSIS\CM3\DeviceSupport\ST /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\inc /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\Libraries\STM32F10x_StdPeriph_Driver\src /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\Libraries\STM32F10x_StdPeriph_Driver /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\FRT_Library\FreeRTOS\Source\portable /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\Libraries\CMSIS\CM3\DeviceSupport /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\FRT_Library\FreeRTOS\Source\portable\GCC /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\FRT_Library\FreeRTOS /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\FRT_Library\FreeRTOS\Source /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\Libraries\CMSIS\CM3 /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\Libraries\STM32F10x_StdPeriph_Driver\inc /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace /I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\CoIDE_workspace\TREK_TDOA\Libraries">
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\include\list.h" lastModified="15c7e4d3a76">
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_flash.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_cec.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_cec.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\decadriver\deca_regs.h" lastModified="159ad851080">
+         <include file="..\..\..\decadriver\deca_version.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_spi.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_dma.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_wwdg.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\include\task.h" lastModified="15c7e4d3bc0">
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\list.h"/>
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\include\croutine.h" lastModified="15c7e4d39f0">
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\list.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_usart.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\startup\startup_stm32f10x_cl.S" lastModified="159ad851468">
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_flash.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_flash.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\misc.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\misc.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_spi.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_spi.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_dma.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_dma.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\src\tdoa_anc.c" lastModified="15cc739a66e">
+         <include file="..\..\..\inc\tdoa_anc.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_usart.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_usart.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_rcc.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\platform\deca_sleep.c" lastModified="15c7e3d9182">
+         <include file="..\..\..\decadriver\deca_device_api.h"/>
+         <include file="..\..\..\platform\sleep.h"/>
+         <include file="..\..\..\platform\port_deca.h"/>
+      </source>
+      <source file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\CoreSupport\core_cm3.h"/>
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\system_stm32f10x.h"/>
+         <include file="..\..\..\platform\stm32f10x_conf.h"/>
+      </source>
+      <source file="..\..\..\inc\tdoa_anc.h" lastModified="15cc6d381b1">
+         <include file="..\..\..\decadriver\deca_types.h"/>
+         <include file="..\..\..\decadriver\deca_device_api.h"/>
+         <include file="..\..\..\decadriver\deca_regs.h"/>
+         <include file="..\..\..\platform\port_deca.h"/>
+      </source>
+      <source file="..\..\..\decadriver\deca_types.h" lastModified="159ad851080">
+      </source>
+      <source file="..\..\..\decadriver\deca_device.c" lastModified="159ad851468">
+         <include file="..\..\..\decadriver\deca_types.h"/>
+         <include file="..\..\..\decadriver\deca_param_types.h"/>
+         <include file="..\..\..\decadriver\deca_regs.h"/>
+         <include file="..\..\..\decadriver\deca_device_api.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_crc.h" lastModified="159ad851468">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\platform\sleep.h" lastModified="159ad851850">
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_adc.h" lastModified="159ad851468">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\platform\syscalls.c" lastModified="15c7e3b8a6a">
+         <include file="..\..\..\platform\port_deca.h"/>
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\portable\GCC\ARM_CM3\portmacro.h" lastModified="15c7e68f848">
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\include\deprecated_definitions.h" lastModified="15c7e4dfd63">
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\portable\GCC\ARM_CM3\portmacro.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\portable\GCC\ARM_CM3\portmacro.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\portable\GCC\ARM_CM3\portmacro.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\portable\GCC\ARM_CM3\portmacro.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\portable\GCC\ARM_CM3\portmacro.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\portable\GCC\ARM_CM3\portmacro.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\portable\GCC\ARM_CM3\portmacro.h"/>
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\queue.c" lastModified="15c7e4d75b1">
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\FreeRTOS.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\task.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\queue.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\croutine.h"/>
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\tasks.c" lastModified="15c7e4d7dc2">
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\FreeRTOS.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\task.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\timers.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\StackMacros.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_exti.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_exti.h"/>
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\include\StackMacros.h" lastModified="15c7e4d3b70">
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_crc.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_crc.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_adc.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_adc.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\include\FreeRTOS.h" lastModified="15c7e4d4611">
+         <include file="..\..\..\FreeRTOSConfig.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\projdefs.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\portable.h"/>
+      </source>
+      <source file="..\..\..\platform\lcd.h" lastModified="159ad851850">
+         <include file="..\..\..\decadriver\deca_types.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_exti.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\decadriver\deca_device_api.h" lastModified="159ad851080">
+      </source>
+      <source file="..\..\..\platform\lcd.c" lastModified="15c7e3b0a49">
+         <include file="..\..\..\platform\sleep.h"/>
+         <include file="..\..\..\platform\port_deca.h"/>
+         <include file="..\..\..\platform\lcd.h"/>
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\include\portable.h" lastModified="15c7e4d3ad8">
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\deprecated_definitions.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\portable\GCC\ARM_CM3\portmacro.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\mpu_wrappers.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_fsmc.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_fsmc.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_i2c.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_pwr.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_fsmc.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_can.h" lastModified="159ad851468">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rtc.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\include\projdefs.h" lastModified="15c7e4d3afc">
+      </source>
+      <source file="..\..\..\platform\deca_mutex.c" lastModified="15c7e3b490a">
+         <include file="..\..\..\decadriver\deca_device_api.h"/>
+         <include file="..\..\..\platform\port_deca.h"/>
+      </source>
+      <source file="..\..\..\decadriver\deca_version.h" lastModified="159ad851080">
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_tim.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_i2c.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_i2c.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_dbgmcu.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_dbgmcu.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_pwr.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_pwr.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_can.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_can.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\decadriver\deca_param_types.h" lastModified="159ad851080">
+         <include file="..\..\..\decadriver\deca_types.h"/>
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\croutine.c" lastModified="15c7e4d6d78">
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\FreeRTOS.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\task.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\croutine.h"/>
+      </source>
+      <source file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\system_stm32f10x.h" lastModified="159ad851468">
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_rtc.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rtc.h"/>
+      </source>
+      <source file="..\..\..\platform\port_deca.h" lastModified="15c7ee3e591">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_tim.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_tim.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\system_stm32f10x.c" lastModified="159ad851468">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\platform\port_deca.c" lastModified="15c82d97024">
+         <include file="..\..\..\platform\sleep.h"/>
+         <include file="..\..\..\platform\lcd.h"/>
+         <include file="..\..\..\platform\port_deca.h"/>
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\include\semphr.h" lastModified="15c7e4d3b4c">
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\queue.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_dac.h" lastModified="159ad851468">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\CMSIS\CM3\CoreSupport\core_cm3.h" lastModified="159ad851c38">
+      </source>
+      <source file="..\..\..\platform\stm32f10x_conf.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_adc.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_bkp.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_can.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_cec.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_crc.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_dac.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_dbgmcu.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_dma.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_exti.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_flash.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_fsmc.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_gpio.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_i2c.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_iwdg.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_pwr.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rtc.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_sdio.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_spi.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_tim.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_usart.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_wwdg.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\misc.h"/>
+      </source>
+      <source file="..\..\..\platform\stm32f10x_it.h" lastModified="159ad851850">
+      </source>
+      <source file="..\..\..\src\main.c" lastModified="15cc6d0738f">
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\FreeRTOS.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\semphr.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\task.h"/>
+         <include file="..\..\..\decadriver\deca_device_api.h"/>
+         <include file="..\..\..\decadriver\deca_regs.h"/>
+         <include file="..\..\..\platform\sleep.h"/>
+         <include file="..\..\..\platform\lcd.h"/>
+         <include file="..\..\..\platform\port_deca.h"/>
+         <include file="..\..\..\inc\tdoa_anc.h"/>
+      </source>
+      <source file="..\..\..\Libraries\CMSIS\CM3\CoreSupport\core_cm3.c" lastModified="159ad851850">
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\portable\GCC\ARM_CM3\port.c" lastModified="15c7e4d4403">
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\FreeRTOS.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\task.h"/>
+      </source>
+      <source file="..\..\..\decadriver\deca_params_init.c" lastModified="159ad851850">
+         <include file="..\..\..\decadriver\deca_regs.h"/>
+         <include file="..\..\..\decadriver\deca_device_api.h"/>
+         <include file="..\..\..\decadriver\deca_param_types.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_gpio.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_gpio.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\platform\deca_spi.h" lastModified="159ad851850">
+         <include file="..\..\..\decadriver\deca_types.h"/>
+      </source>
+      <source file="..\..\..\platform\stm32f10x_it.c" lastModified="15c7f259fce">
+         <include file="..\..\..\platform\stm32f10x_it.h"/>
+         <include file="..\..\..\platform\port_deca.h"/>
+      </source>
+      <source file="..\..\..\platform\deca_spi.c" lastModified="15c7e3b3d6a">
+         <include file="..\..\..\platform\deca_spi.h"/>
+         <include file="..\..\..\decadriver\deca_device_api.h"/>
+         <include file="..\..\..\platform\port_deca.h"/>
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\include\queue.h" lastModified="15c7e4d3b24">
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_sdio.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_sdio.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_dac.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_dac.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_gpio.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\include\timers.h" lastModified="15c7e4d3bf1">
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\task.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_iwdg.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_iwdg.h"/>
+      </source>
+      <source file="..\..\..\FreeRTOSConfig.h" lastModified="15c7f161f8e">
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\include\mpu_wrappers.h" lastModified="15c7e4d3ab2">
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_iwdg.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_sdio.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_bkp.h" lastModified="159ad851468">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_dbgmcu.h" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_wwdg.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_wwdg.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+      <source file="..\..\..\FRT_Library\FreeRTOS\Source\list.c" lastModified="15c7e4d71a8">
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\FreeRTOS.h"/>
+         <include file="..\..\..\FRT_Library\FreeRTOS\Source\include\list.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\misc.h" lastModified="159ad851468">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_cec.h" lastModified="159ad851468">
+         <include file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\stm32f10x.h"/>
+      </source>
+      <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_bkp.c" lastModified="159ad851850">
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_bkp.h"/>
+         <include file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\inc\stm32f10x_rcc.h"/>
+      </source>
+   </includePath>
+</dependencies>

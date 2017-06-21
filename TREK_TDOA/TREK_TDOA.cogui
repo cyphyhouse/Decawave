@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workbench version="2.0">
+<workbenchAdvisor/>
+<window>
+<fastViewData fastViewLocation="1024"/>
+<perspectiveBar/>
+<page focus="true" label="Workspace - CooCox CoBuilder">
+<editors>
+<editorArea activeWorkbook="DefaultEditorWorkbook">
+<info part="DefaultEditorWorkbook">
+<folder appearance="1" expanded="2">
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+<part id="2"/>
+<part id="1"/>
+<part id="3"/>
+<part id="4"/>
+<part id="5"/>
+<part id="6"/>
+</presentation>
+</folder>
+</info>
+</editorArea>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" partName="main.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/src/main.c" title="main.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/src/main.c" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/src/main.c"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="7183" selectionTopPixel="3269"/>
+</editor>
+<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="tdoa_anc.c" partName="tdoa_anc.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/src/tdoa_anc.c" title="tdoa_anc.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/src/tdoa_anc.c" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/src/tdoa_anc.c"/>
+<editorState selectionHorizontalPixel="0" selectionLength="7" selectionOffset="789" selectionTopPixel="1523"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="tdoa_anc.h" partName="tdoa_anc.h" path="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/inc/tdoa_anc.h" title="tdoa_anc.h" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/inc/tdoa_anc.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/inc/tdoa_anc.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="568" selectionTopPixel="960"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="portmacro.h" partName="portmacro.h" path="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/FRT_Library/FreeRTOS/Source/portable/GCC/ARM_CM3/portmacro.h" title="portmacro.h" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/FRT_Library/FreeRTOS/Source/portable/GCC/ARM_CM3/portmacro.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/FRT_Library/FreeRTOS/Source/portable/GCC/ARM_CM3/portmacro.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="5891" selectionTopPixel="1908"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="port_deca.c" partName="port_deca.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/platform/port_deca.c" title="port_deca.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/platform/port_deca.c" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/platform/port_deca.c"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="24011" selectionTopPixel="13124"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="port_deca.h" partName="port_deca.h" path="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/platform/port_deca.h" title="port_deca.h" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/platform/port_deca.h" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/platform/port_deca.h"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="658" selectionTopPixel="160"/>
+</editor>
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="lcd.c" partName="lcd.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/platform/lcd.c" title="lcd.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/platform/lcd.c" workbook="DefaultEditorWorkbook">
+<input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/platform/lcd.c"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1630" selectionTopPixel="979"/>
+</editor>
+</editors>
+<views>
+<view id="org.coocox.builder.ui.views.ProjectView" partName="Project">
+<viewState CommonNavigator.LINKING_ENABLED="0" horizontalPosition="0" org.eclipse.ui.navigator.resources.workingSets.showTopLevelWorkingSets="0" verticalPosition="0">
+<expanded>
+<element path="/TREK_TDOA"/>
+</expanded>
+<selection>
+<element path="/TREK_TDOA"/>
+</selection>
+</viewState>
+</view>
+<view id="org.coocox.codebugger.trace.ui.traceview" partName="Semihosting">
+<viewState/>
+</view>
+<view id="org.eclipse.debug.ui.DebugView" partName="Debug">
+<viewState/>
+</view>
+<view id="org.eclipse.ui.console.ConsoleView" partName="Console">
+<viewState/>
+</view>
+<view id="org.eclipse.debug.ui.VariableView" partName="Variables">
+<viewState/>
+</view>
+<view id="org.eclipse.debug.ui.BreakpointView" partName="Breakpoints">
+<viewState/>
+</view>
+</views>
+<perspectives activePart="org.eclipse.cdt.ui.editor.CEditor" activePerspective="org.coocox.builder.perspective.CoBuilder">
+<perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
+<descriptor class="org.coocox.builder.ui.PerspectiveCoBuilder" id="org.coocox.builder.perspective.CoBuilder" label="CooCox CoBuilder"/>
+<alwaysOnActionSet id="org.coocox.component.ui.actionSet"/>
+<alwaysOnActionSet id="org.coocox.welcome.ui.actionSet"/>
+<alwaysOnActionSet id="org.eclipse.search.searchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.annotationNavigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.navigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.keyBindings"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.openFiles"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.breakpointActionSet"/>
+<alwaysOnActionSet id="org.coocox.userspace.actionSet"/>
+<hide_menu_item_id id="org.coocox.codebugger.configuration.showMemoryAction"/>
+<hide_menu_item_id id="org.eclipse.jdt.ui.refactoring.menu"/>
+<hide_menu_item_id id="org.coocox.codebugger.configuration.ShowDisassemblyAction"/>
+<hide_menu_item_id id="org.coocox.codebugger.configuration.showExpressionsAction"/>
+<hide_menu_item_id id="org.coocox.codebugger.configuration.showDebugAction"/>
+<hide_menu_item_id id="org.coocox.codebugger.configuration.showConsoleAction"/>
+<hide_menu_item_id id="org.eclipse.cdt.debug.internal.ui.actions.ToggleInstructionStepModeAction"/>
+<hide_menu_item_id id="org.eclipse.jdt.ui.source.menu"/>
+<hide_menu_item_id id="org.coocox.codebugger.configuration.showMemoryBrowserAction"/>
+<hide_menu_item_id id="org.coocox.codebugger.configuration.showVariablesAction"/>
+<hide_menu_item_id id="org.coocox.builder.ui.openProjectExplorerAction"/>
+<hide_menu_item_id id="org.coocox.codebugger.trace.actions.ShowTraceControlAction"/>
+<hide_menu_item_id id="org.eclipse.debug.ui.commands.TerminateAndRelaunch"/>
+<hide_menu_item_id id="org.coocox.codebugger.configuration.showRegistersAction"/>
+<hide_toolbar_item_id id="org.eclipse.cdt.debug.internal.ui.actions.ToggleInstructionStepModeAction"/>
+<hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
+<hide_toolbar_item_id id="org.eclipse.debug.ui.commands.TerminateAndRelaunch"/>
+<view id="org.coocox.builder.ui.views.ProjectView"/>
+<view id="org.eclipse.ui.console.ConsoleView"/>
+<fastViewBars/>
+<layout>
+<mainWindow>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@1f7375">
+<folder appearance="2" expanded="2">
+<page content="org.coocox.component.ui.ComponentView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+</folder>
+</info>
+<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1434" ratioRight="478" relationship="2" relative="org.eclipse.ui.internal.ViewStack@1f7375">
+<folder appearance="2" expanded="2">
+<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
+</folder>
+</info>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@5d027" ratio="0.7698238" ratioLeft="699" ratioRight="209" relationship="4" relative="org.eclipse.ui.internal.ViewStack@1f7375">
+<folder activePageID="org.eclipse.ui.console.ConsoleView" appearance="2" expanded="2">
+<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@1d0aff5" ratio="0.1959257" ratioLeft="327" ratioRight="1342" relationship="2" relative="org.eclipse.ui.internal.ViewStack@1f7375">
+<folder appearance="2" expanded="2">
+<page content="org.coocox.builder.ui.exampleView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+</folder>
+</info>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@e70de" ratio="0.71983916" ratioLeft="1074" ratioRight="418" relationship="2" relative="org.eclipse.ui.internal.ViewStack@1d0aff5">
+<folder appearance="2" expanded="2">
+<page content="org.coocox.component.ui.Help" label="LabelNotFound"/>
+<page content="org.eclipse.debug.ui.BreakpointView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
+<page content="org.coocox.coassistant.view.CoAssistantView" label="LabelNotFound"/>
+<page content="org.coocox.builder.ui.MoreExampleView" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+</folder>
+</info>
+<info part="org.eclipse.ui.editorss" ratio="0.44911504" ratioLeft="406" ratioRight="498" relationship="4" relative="org.eclipse.ui.internal.ViewStack@1d0aff5"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@d53ece" ratio="0.36946902" ratioLeft="334" ratioRight="570" relationship="4" relative="org.eclipse.ui.internal.ViewStack@1f7375">
+<folder activePageID="org.coocox.builder.ui.views.ProjectView" appearance="2" expanded="2">
+<page content="org.coocox.builder.ui.views.ProjectView" label="Project"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
+<part id="0"/>
+</presentation>
+</folder>
+</info>
+</mainWindow>
+</layout>
+</perspective>
+<perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
+<descriptor class="org.coocox.codebugger.configuration.ui.Perspective" id="org.coocox.codebugger.configuration.perspective" label="CoDebugger"/>
+<alwaysOnActionSet id="org.coocox.component.ui.actionSet"/>
+<alwaysOnActionSet id="org.coocox.welcome.ui.actionSet"/>
+<alwaysOnActionSet id="org.eclipse.search.searchActionSet"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.annotationNavigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.navigation"/>
+<alwaysOnActionSet id="org.eclipse.ui.edit.text.actionSet.convertLineDelimitersTo"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.keyBindings"/>
+<alwaysOnActionSet id="org.eclipse.ui.actionSet.openFiles"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.breakpointActionSet"/>
+<alwaysOnActionSet id="org.eclipse.debug.ui.debugActionSet"/>
+<hide_menu_item_id id="org.coocox.builder.ui.newFolder"/>
+<hide_menu_item_id id="org.coocox.welcome.ui.action.repository"/>
+<hide_menu_item_id id="org.eclipse.ui.file.save"/>
+<hide_menu_item_id id="org.eclipse.jdt.ui.refactoring.menu"/>
+<hide_menu_item_id id="org.eclipse.ui.file.saveAll"/>
+<hide_menu_item_id id="org.coocox.builder.ui.rebuild"/>
+<hide_menu_item_id id="org.coocox.builder.ui.openFile"/>
+<hide_menu_item_id id="org.eclipse.ui.file.saveAs"/>
+<hide_menu_item_id id="org.coocox.builder.rcp.projectMenu"/>
+<hide_menu_item_id id="org.coocox.builder.rcp.flashMenu"/>
+<hide_menu_item_id id="org.coocox.builder.ui.debug"/>
+<hide_menu_item_id id="org.coocox.builder.ui.showHelpViewAction"/>
+<hide_menu_item_id id="org.coocox.builder.ui.newFile"/>
+<hide_menu_item_id id="org.coocox.builder.ui.actions.ConfigurationAction"/>
+<hide_menu_item_id id="org.eclipse.jdt.ui.source.menu"/>
+<hide_menu_item_id id="org.coocox.builder.ui.build"/>
+<hide_menu_item_id id="org.coocox.welcome.ui.action.welcome"/>
+<hide_menu_item_id id="org.coocox.component.ui.ShowRepositoryAction"/>
+<hide_toolbar_item_id id="org.coocox.builder.ui.actions.TargetManageAction"/>
+<hide_toolbar_item_id id="org.coocox.builder.ui.newProject"/>
+<hide_toolbar_item_id id="org.coocox.welcome.ui.action.repository"/>
+<hide_toolbar_item_id id="org.eclipse.ui.file.save"/>
+<hide_toolbar_item_id id="org.coocox.builder.ui.rebuild"/>
+<hide_toolbar_item_id id="org.coocox.codebugger.configuration.coideFlashEraseAction"/>
+<hide_toolbar_item_id id="org.coocox.builder.ui.debug"/>
+<hide_toolbar_item_id id="org.coocox.builder.ui.newFile"/>
+<hide_toolbar_item_id id="org.coocox.builder.ui.actions.ConfigurationAction"/>
+<hide_toolbar_item_id id="org.eclipse.ui.edit.text.toggleShowSelectedElementOnly"/>
+<hide_toolbar_item_id id="org.coocox.builder.ui.build"/>
+<hide_toolbar_item_id id="org.coocox.welcome.ui.action.welcome"/>
+<hide_toolbar_item_id id="org.coocox.codebugger.configuration.coideProgramDownloadAction"/>
+<hide_toolbar_item_id id="org.coocox.component.ui.ShowRepositoryAction"/>
+<view id="org.eclipse.ui.console.ConsoleView"/>
+<view id="org.eclipse.debug.ui.DebugView"/>
+<view id="org.eclipse.debug.ui.BreakpointView"/>
+<view id="org.coocox.codebugger.trace.ui.traceview"/>
+<view id="org.eclipse.debug.ui.VariableView"/>
+<view id="org.coocox.builder.ui.views.ProjectView"/>
+<fastViewBars/>
+<viewLayoutRec closeable="false" id="org.eclipse.debug.ui.DebugView"/>
+<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="org.eclipse.ui.internal.ViewStack@12d7ac8">&#x0A;<folder activePageID="org.coocox.builder.ui.views.ProjectView" appearance="2" expanded="2">&#x0A;<page content="org.coocox.builder.ui.views.ProjectView" label="Project"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1254" ratioRight="418" relationship="2" relative="org.eclipse.ui.internal.ViewStack@12d7ac8">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
+</folder>
+</info>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@ceaadc" ratio="0.59801763" ratioLeft="543" ratioRight="365" relationship="4" relative="org.eclipse.ui.internal.ViewStack@12d7ac8">&#x0A;<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<page content="org.eclipse.debug.ui.DebugView" label="Debug"/>
+<page content="org.eclipse.debug.ui.BreakpointView" label="Breakpoints"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<part id="1"/>
+<part id="2"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@10e75cd" ratio="0.5" ratioLeft="836" ratioRight="836" relationship="2" relative="org.eclipse.ui.internal.ViewStack@ceaadc">&#x0A;<folder activePageID="org.eclipse.debug.ui.VariableView" appearance="2" expanded="2">&#x0A;<page content="org.coocox.codebugger.trace.ui.traceview" label="Semihosting"/>
+<page content="org.eclipse.debug.ui.VariableView" label="Variables"/>
+<page content="org.eclipse.debug.ui.ExpressionView" label="LabelNotFound"/>
+<page content="org.eclipse.debug.ui.MemoryView" label="LabelNotFound"/>
+<page content="org.eclipse.cdt.debug.ui.memory.memorybrowser.MemoryBrowser" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
+<part id="1"/>
+</presentation>
+</folder>
+</info>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@ce1e5f" ratio="0.75" ratioLeft="1254" ratioRight="418" relationship="2" relative="org.eclipse.ui.internal.ViewStack@12d7ac8">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.cdt.dsf.debug.ui.disassembly.view" label="LabelNotFound"/>
+<page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
+<page content="org.eclipse.debug.ui.RegisterView" label="LabelNotFound"/>
+<page content="org.coocox.coassistant.view.CoAssistantView_debug" label="LabelNotFound"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory"/>
+</folder>
+</info>
+<info part="org.eclipse.ui.editorss" ratio="0.2998405" ratioLeft="376" ratioRight="878" relationship="2" relative="org.eclipse.ui.internal.ViewStack@12d7ac8"/>
+</mainWindow>
+</layout>
+</perspective>
+</perspectives>
+<workingSets/>
+<navigationHistory>
+<editors>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/tdoa_anc.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/main.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/inc/tdoa_anc.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/platform/port_deca.c"/>
+<editor factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory" id="org.coocox.builder.ui.editors.ConfigEditor">
+<org.coocox.builder.ui.editors.ConfigEditor/>
+</editor>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/tdoa_anc.c"/>
+</editors>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6694" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6734" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6890" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6944" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="803" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="3400" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="3543" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="3685" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="3779" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="873" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="888" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="1169" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="1231" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="1268" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6960" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6993" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="7029" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="2120" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="2147" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="2182" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="2319" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6618" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="7229" y="0"/>
+</item>
+<item historyLabel="port_deca.c" index="3">
+<position info="not_deleted" x="24011" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6920" y="0"/>
+</item>
+<item historyLabel="main.c" index="1">
+<position info="not_deleted" x="7183" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6944" y="0"/>
+</item>
+<item historyLabel="main.c" index="1">
+<position info="not_deleted" x="7183" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6944" y="0"/>
+</item>
+<item historyLabel="main.c" index="1">
+<position info="not_deleted" x="7183" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6944" y="0"/>
+</item>
+<item historyLabel="main.c" index="1">
+<position info="not_deleted" x="7183" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6944" y="14"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="803" y="0"/>
+</item>
+<item historyLabel="Configuration" index="4"/>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6888" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.h" index="2">
+<position info="not_deleted" x="3137" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6888" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.h" index="2">
+<position info="not_deleted" x="2060" y="5"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="6888" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.h" index="2">
+<position info="not_deleted" x="1614" y="8"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="645" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.h" index="2">
+<position info="not_deleted" x="1614" y="8"/>
+</item>
+<item historyLabel="main.c" index="1">
+<position info="not_deleted" x="7183" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.h" index="2">
+<position info="not_deleted" x="1614" y="8"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="645" y="0"/>
+</item>
+<item historyLabel="main.c" index="1">
+<position info="not_deleted" x="7183" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="0">
+<position info="not_deleted" x="681" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.h" index="2">
+<position info="not_deleted" x="1614" y="8"/>
+</item>
+<item active="true" historyLabel="tdoa_anc.c" index="5">
+<position info="not_deleted" x="681" y="0"/>
+</item>
+</navigationHistory>
+<input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
+</page>
+<workbenchWindowAdvisor/>
+<actionBarAdvisor/>
+</window>
+<mruList>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="deca_device.c" tooltip="TREK_TDOA/decadriver/deca_device.c">
+<persistable path="/TREK_TDOA/decadriver/deca_device.c"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="lcd.c" tooltip="TREK_TDOA/platform/lcd.c">
+<persistable path="/TREK_TDOA/platform/lcd.c"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="list.c" tooltip="TREK_TDOA/FRT_Library/FreeRTOS/Source/list.c">
+<persistable path="/TREK_TDOA/FRT_Library/FreeRTOS/Source/list.c"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.asm.AsmEditor" name="startup_stm32f10x_cl.S" tooltip="TREK_TDOA/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/Startup/startup_stm32f10x_cl.S">
+<persistable path="/TREK_TDOA/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/Startup/startup_stm32f10x_cl.S"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="deca_device_api.h" tooltip="TREK_TDOA/decadriver/deca_device_api.h">
+<persistable path="/TREK_TDOA/decadriver/deca_device_api.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ui.DefaultTextEditor" name="stm32_flash_256k_ram_64k.ld" tooltip="TREK_TDOA/stm32_flash_256k_ram_64k.ld">
+<persistable path="/TREK_TDOA/stm32_flash_256k_ram_64k.ld"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="core_cm3.h" tooltip="TREK_TDOA/Libraries/CMSIS/CM3/CoreSupport/core_cm3.h">
+<persistable path="/TREK_TDOA/Libraries/CMSIS/CM3/CoreSupport/core_cm3.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x_flash.h" tooltip="TREK_TDOA/Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_flash.h">
+<persistable path="/TREK_TDOA/Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_flash.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x_rcc.c" tooltip="TREK_TDOA/Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_rcc.c">
+<persistable path="/TREK_TDOA/Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_rcc.c"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x_rcc.h" tooltip="TREK_TDOA/Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_rcc.h">
+<persistable path="/TREK_TDOA/Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_rcc.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="FreeRTOSConfig.h" tooltip="TREK_TDOA/FreeRTOSConfig.h">
+<persistable path="/TREK_TDOA/FreeRTOSConfig.h"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="port.c" tooltip="TREK_TDOA/FRT_Library/FreeRTOS/Source/portable/GCC/ARM_CM3/port.c">
+<persistable path="/TREK_TDOA/FRT_Library/FreeRTOS/Source/portable/GCC/ARM_CM3/port.c"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="deca_device.c" tooltip="TREK_TDOA/decadriver/deca_device.c">
+<persistable path="/TREK_TDOA/decadriver/deca_device.c"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="lcd.c" tooltip="TREK_TDOA/platform/lcd.c">
+<persistable path="/TREK_TDOA/platform/lcd.c"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="port.c" tooltip="TREK_TDOA/FRT_Library/FreeRTOS/Source/portable/GCC/ARM_CM3/port.c">
+<persistable path="/TREK_TDOA/FRT_Library/FreeRTOS/Source/portable/GCC/ARM_CM3/port.c"/>
+</file>
+</mruList>
+</workbench>

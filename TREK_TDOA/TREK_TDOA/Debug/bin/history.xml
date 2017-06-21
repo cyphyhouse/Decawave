@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -g -Map=TREK_TDOA.map -O1 --gc-sections -lm -lgcc -lc -LC:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/linkers -TC:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/linkers/stm32_flash_256k_ram_64k.ld -g">
+      <target file="TREK_TDOA.elf" lastModified="15cc74f4970">
+         <source file="..\obj\stm32f10x_rtc.o" lastModified="15cc73b07d3"/>
+         <source file="..\obj\stm32f10x_tim.o" lastModified="15cc73b092b"/>
+         <source file="..\obj\core_cm3.o" lastModified="15cc73b09a9"/>
+         <source file="..\obj\stm32f10x_dbgmcu.o" lastModified="15cc73b0a35"/>
+         <source file="..\obj\system_stm32f10x.o" lastModified="15cc73b0acd"/>
+         <source file="..\obj\deca_device.o" lastModified="15cc73b0c57"/>
+         <source file="..\obj\deca_spi.o" lastModified="15cc73b0d03"/>
+         <source file="..\obj\stm32f10x_fsmc.o" lastModified="15cc73b0dbc"/>
+         <source file="..\obj\stm32f10x_pwr.o" lastModified="15cc73b0e58"/>
+         <source file="..\obj\stm32f10x_can.o" lastModified="15cc73b0f36"/>
+         <source file="..\obj\stm32f10x_gpio.o" lastModified="15cc73b0ff6"/>
+         <source file="..\obj\stm32f10x_dac.o" lastModified="15cc73b109e"/>
+         <source file="..\obj\main.o" lastModified="15cc73b1179"/>
+         <source file="..\obj\tdoa_anc.o" lastModified="15cc73b1276"/>
+         <source file="..\obj\stm32f10x_crc.o" lastModified="15cc73b1303"/>
+         <source file="..\obj\stm32f10x_rcc.o" lastModified="15cc73b13e9"/>
+         <source file="..\obj\startup_stm32f10x_cl.o" lastModified="15cc73b142a"/>
+         <source file="..\obj\stm32f10x_exti.o" lastModified="15cc73b14c4"/>
+         <source file="..\obj\tasks.o" lastModified="15cc73b1635"/>
+         <source file="..\obj\stm32f10x_adc.o" lastModified="15cc73b16f9"/>
+         <source file="..\obj\deca_mutex.o" lastModified="15cc73b1787"/>
+         <source file="..\obj\stm32f10x_usart.o" lastModified="15cc73b1867"/>
+         <source file="..\obj\deca_sleep.o" lastModified="15cc73b18e9"/>
+         <source file="..\obj\list.o" lastModified="15cc73b1968"/>
+         <source file="..\obj\syscalls.o" lastModified="15cc73b1a2c"/>
+         <source file="..\obj\stm32f10x_flash.o" lastModified="15cc73b1afa"/>
+         <source file="..\obj\stm32f10x_it.o" lastModified="15cc73b1b7f"/>
+         <source file="..\obj\stm32f10x_cec.o" lastModified="15cc73b1c1e"/>
+         <source file="..\obj\queue.o" lastModified="15cc73b1d45"/>
+         <source file="..\obj\port.o" lastModified="15cc73b1dc7"/>
+         <source file="..\obj\stm32f10x_sdio.o" lastModified="15cc73b1e69"/>
+         <source file="..\obj\stm32f10x_dma.o" lastModified="15cc73b1efc"/>
+         <source file="..\obj\croutine.o" lastModified="15cc73b1f4a"/>
+         <source file="..\obj\lcd.o" lastModified="15cc73b1fe9"/>
+         <source file="..\obj\misc.o" lastModified="15cc73b2075"/>
+         <source file="..\obj\stm32f10x_wwdg.o" lastModified="15cc73b210a"/>
+         <source file="..\obj\stm32f10x_spi.o" lastModified="15cc73b21e6"/>
+         <source file="..\obj\stm32f10x_i2c.o" lastModified="15cc73b22d0"/>
+         <source file="..\obj\deca_params_init.o" lastModified="15cc73b2351"/>
+         <source file="..\obj\port_deca.o" lastModified="15cc73b2440"/>
+         <source file="..\obj\stm32f10x_bkp.o" lastModified="15cc73b24df"/>
+         <source file="..\obj\stm32f10x_iwdg.o" lastModified="15cc73b2558"/>
+      </target>
+   </processor>
+</history>
