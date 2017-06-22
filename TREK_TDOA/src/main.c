@@ -1,17 +1,3 @@
-/*! ----------------------------------------------------------------------------
- *  @file    main.c
- *  @brief   main loop for the DecaRanging application
- *
- * @attention
- *
- * Copyright 2015 (c) DecaWave Ltd, Dublin, Ireland.
- *
- * All rights reserved.
- *
- * @author DecaWave
- */
-/* Includes */
-
 #include <stdio.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -32,12 +18,6 @@
 #include "port_deca.h"
 #include "tdoa_anc.h"
 
-
-
-extern void usb_run(void);
-extern int usb_init(void);
-extern void usb_printconfig(int, uint8*, int);
-extern void send_usbmessage(uint8*, int);
 
 #define SWS1_SHF_MODE 0x02	//short frame mode (6.81M)
 #define SWS1_CH5_MODE 0x04	//channel 5 mode
@@ -241,11 +221,6 @@ static void main_task(void *pvParameters)
 	int sw_mode = 1;
 	tdoa_init(s1switch, &chConfig[sw_mode]);
 
-#ifdef USB_SUPPORT //this is defined in the port.h file
-	// Configure USB for output, (i.e. not USB to SPI)
-	usb_printconfig(16, (uint8 *)SOFTWARE_VER_STRING, s1switch);
-#endif
-
 	//sleep for 5 seconds displaying last LCD message and flashing LEDs
 	i=30;
 	while(i--)
@@ -269,13 +244,6 @@ static void main_task(void *pvParameters)
     while(1)
     {
 		//Do something
-
-#ifdef USB_SUPPORT //this is set in the port.h file
-
-        //led_on(LED_PC7);
-        usb_run();
-        //led_off(LED_PC7);
-#endif
     }
 
 }
