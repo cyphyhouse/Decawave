@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="arm-none-eabi-gcc noversion nomachine -mcpu=cortex-m3 -mthumb -Wall -ffunction-sections -g -O0 -ffunction-sections -c -fmessage-length=0 -c -DSTM32F105RC -DSTM32F10X_CL -DUSE_STDPERIPH_DRIVER -D__ASSEMBLY__ -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\CMSIS -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\CMSIS\CM3\DeviceSupport -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\platform -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\CMSIS\CM3\DeviceSupport\ST -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\STM32_USB_Device_Library\Class\cdc\inc -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\STM32F10x_StdPeriph_Driver -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\src -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\CMSIS\CM3\CoreSupport -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\STM32F10x_StdPeriph_Driver\src -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\STM32_USB_Device_Library\Class\cdc -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\CMSIS\CM3 -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\platform\usb -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\decadriver -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\STM32F10x_StdPeriph_Driver\inc -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\STM32_USB_Device_Library\Class\msc\inc -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\STM32_USB_OTG_Driver\inc -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\STM32_USB_Device_Library\Core\inc -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\STM32_USB_Device_Library -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\inc -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\STM32_USB_Device_Library\Core -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\STM32_USB_Device_Library\Class -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\STM32_USB_OTG_Driver -I..\..\..\..\..\Users\JanschPortoJoaoPaulo\Documents\GitHub\Decawave\TREK_TAG\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\startup">
+      <target file="stm32f10x_iwdg.o" lastModified="15cd0d7d297">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_iwdg.c" lastModified="159ad851850"/>
+      </target>
+      <target file="stm32f10x_exti.o" lastModified="15cd0d7c0cb">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_exti.c" lastModified="159ad851850"/>
+      </target>
+      <target file="port_deca.o" lastModified="15cd0d7ce93">
+         <source file="..\..\..\platform\port_deca.c" lastModified="15cd0a9b65c"/>
+      </target>
+      <target file="syscalls.o" lastModified="15cd0d7c47b">
+         <source file="..\..\..\platform\syscalls.c" lastModified="15cd0b0cb55"/>
+      </target>
+      <target file="stm32f10x_gpio.o" lastModified="15cd0d7bd41">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_gpio.c" lastModified="159ad851850"/>
+      </target>
+      <target file="usbd_usr.o" lastModified="15cd0d7b81e">
+         <source file="..\..\..\platform\usb\usbd_usr.c" lastModified="15ab8f8489f"/>
+      </target>
+      <target file="misc.o" lastModified="15cd0d7ca89">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\misc.c" lastModified="159ad851850"/>
+      </target>
+      <target file="deca_params_init.o" lastModified="15cd0d7cd5f">
+         <source file="..\..\..\decadriver\deca_params_init.c" lastModified="159ad851080"/>
+      </target>
+      <target file="system_stm32f10x.o" lastModified="15cd0d7b9a5">
+         <source file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\system_stm32f10x.c" lastModified="15ab8f83c57"/>
+      </target>
+      <target file="usbd_ioreq.o" lastModified="15cd0d7cde8">
+         <source file="..\..\..\Libraries\STM32_USB_Device_Library\Core\src\usbd_ioreq.c" lastModified="15ab8f843a0"/>
+      </target>
+      <target file="stm32f10x_usart.o" lastModified="15cd0d7c380">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_usart.c" lastModified="159ad851850"/>
+      </target>
+      <target file="usbd_req.o" lastModified="15cd0d7c6d2">
+         <source file="..\..\..\Libraries\STM32_USB_Device_Library\Core\src\usbd_req.c" lastModified="15ab8f843b0"/>
+      </target>
+      <target file="stm32f10x_wwdg.o" lastModified="15cd0d7cb98">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_wwdg.c" lastModified="159ad851850"/>
+      </target>
+      <target file="usbd_cdc_core.o" lastModified="15cd0d7c898">
+         <source file="..\..\..\Libraries\STM32_USB_Device_Library\Class\cdc\src\usbd_cdc_core.c" lastModified="15ab8f8416b"/>
+      </target>
+      <target file="usbd_desc.o" lastModified="15cd0d7c1e8">
+         <source file="..\..\..\platform\usb\usbd_desc.c" lastModified="15ab8f8476d"/>
+      </target>
+      <target file="lcd.o" lastModified="15cd0d7ca17">
+         <source file="..\..\..\platform\lcd.c" lastModified="15c7e3b0661"/>
+      </target>
+      <target file="stm32f10x_flash.o" lastModified="15cd0d7c505">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_flash.c" lastModified="159ad851850"/>
+      </target>
+      <target file="stm32f10x_tim.o" lastModified="15cd0d7b74f">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_tim.c" lastModified="159ad851850"/>
+      </target>
+      <target file="deca_device.o" lastModified="15cd0d7ba93">
+         <source file="..\..\..\decadriver\deca_device.c" lastModified="159ad851080"/>
+      </target>
+      <target file="stm32f10x_it.o" lastModified="15cd0d7c59d">
+         <source file="..\..\..\platform\stm32f10x_it.c" lastModified="15cd0baf1ee"/>
+      </target>
+      <target file="usbd_core.o" lastModified="15cd0d7be5d">
+         <source file="..\..\..\Libraries\STM32_USB_Device_Library\Core\src\usbd_core.c" lastModified="15ab8f8438f"/>
+      </target>
+      <target file="deca_usb.o" lastModified="15cd0d7c2ec">
+         <source file="..\..\..\platform\usb\deca_usb.c" lastModified="15cd0c247af"/>
+      </target>
+      <target file="stm32f10x_sdio.o" lastModified="15cd0d7c80d">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_sdio.c" lastModified="159ad851850"/>
+      </target>
+      <target file="usb_hcd.o" lastModified="15cd0d7c997">
+         <source file="..\..\..\Libraries\STM32_USB_OTG_Driver\src\usb_hcd.c" lastModified="15ab8f844b9"/>
+      </target>
+      <target file="deca_usb_bsp_evk1000.o" lastModified="15cd0d7b8ab">
+         <source file="..\..\..\platform\usb\deca_usb_bsp_evk1000.c" lastModified="15cd0b219b9"/>
+      </target>
+      <target file="stm32f10x_cec.o" lastModified="15cd0d7c632">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_cec.c" lastModified="159ad851850"/>
+      </target>
+      <target file="stm32f10x_rtc.o" lastModified="15cd0d7b5a1">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_rtc.c" lastModified="159ad851850"/>
+      </target>
+      <target file="deca_mutex.o" lastModified="15cd0d7c253">
+         <source file="..\..\..\platform\deca_mutex.c" lastModified="15cd0afb8ea"/>
+      </target>
+      <target file="tdoa_tag.o" lastModified="15cd0d7cf2f">
+         <source file="..\..\..\src\tdoa_tag.c" lastModified="15cccd366a9"/>
+      </target>
+      <target file="stm32f10x_rcc.o" lastModified="15cd0d7c01d">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_rcc.c" lastModified="159ad851850"/>
+      </target>
+      <target file="usb_hcd_int.o" lastModified="15cd0d7d227">
+         <source file="..\..\..\Libraries\STM32_USB_OTG_Driver\src\usb_hcd_int.c" lastModified="15ab8f844ce"/>
+      </target>
+      <target file="usb_dcd.o" lastModified="15cd0d7cb25">
+         <source file="..\..\..\Libraries\STM32_USB_OTG_Driver\src\usb_dcd.c" lastModified="15ab8f8449b"/>
+      </target>
+      <target file="stm32f10x_can.o" lastModified="15cd0d7bcc2">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_can.c" lastModified="159ad851850"/>
+      </target>
+      <target file="stm32f10x_dac.o" lastModified="15cd0d7bdc3">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_dac.c" lastModified="159ad851850"/>
+      </target>
+      <target file="core_cm3.o" lastModified="15cd0d7b7b3">
+         <source file="..\..\..\Libraries\CMSIS\CM3\CoreSupport\core_cm3.c" lastModified="15ab8f83ae9"/>
+      </target>
+      <target file="stm32f10x_pwr.o" lastModified="15cd0d7bc29">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_pwr.c" lastModified="159ad851850"/>
+      </target>
+      <target file="stm32f10x_adc.o" lastModified="15cd0d7c164">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_adc.c" lastModified="159ad851850"/>
+      </target>
+      <target file="stm32f10x_fsmc.o" lastModified="15cd0d7bbb0">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_fsmc.c" lastModified="159ad851850"/>
+      </target>
+      <target file="stm32f10x_dbgmcu.o" lastModified="15cd0d7b91b">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_dbgmcu.c" lastModified="159ad851850"/>
+      </target>
+      <target file="stm32f10x_bkp.o" lastModified="15cd0d7cfb0">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_bkp.c" lastModified="159ad851850"/>
+      </target>
+      <target file="stm32f10x_dma.o" lastModified="15cd0d7c91d">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_dma.c" lastModified="159ad851850"/>
+      </target>
+      <target file="usb_core.o" lastModified="15cd0d7b675">
+         <source file="..\..\..\Libraries\STM32_USB_OTG_Driver\src\usb_core.c" lastModified="15ab8f8448b"/>
+      </target>
+      <target file="stm32f10x_crc.o" lastModified="15cd0d7bf87">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_crc.c" lastModified="159ad851850"/>
+      </target>
+      <target file="main.o" lastModified="15cd0d7bf17">
+         <source file="..\..\..\src\main.c" lastModified="15cd0d77cbc"/>
+      </target>
+      <target file="startup_stm32f10x_cl.o" lastModified="15cd0d7c05c">
+         <source file="..\..\..\Libraries\CMSIS\CM3\DeviceSupport\ST\STM32F10x\startup\startup_stm32f10x_cl.S" lastModified="15ab8f83c77"/>
+      </target>
+      <target file="usb_dcd_int.o" lastModified="15cd0d7c78a">
+         <source file="..\..\..\Libraries\STM32_USB_OTG_Driver\src\usb_dcd_int.c" lastModified="15ab8f844aa"/>
+      </target>
+      <target file="stm32f10x_i2c.o" lastModified="15cd0d7ccea">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_i2c.c" lastModified="159ad851850"/>
+      </target>
+      <target file="deca_spi.o" lastModified="15cd0d7bb18">
+         <source file="..\..\..\platform\deca_spi.c" lastModified="15cd0a40516"/>
+      </target>
+      <target file="stm32f10x_spi.o" lastModified="15cd0d7cc32">
+         <source file="..\..\..\Libraries\STM32F10x_StdPeriph_Driver\src\stm32f10x_spi.c" lastModified="159ad851850"/>
+      </target>
+      <target file="deca_sleep.o" lastModified="15cd0d7c3e1">
+         <source file="..\..\..\platform\deca_sleep.c" lastModified="15c7e3d9182"/>
+      </target>
+   </processor>
+</history>
