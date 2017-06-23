@@ -41,17 +41,16 @@ __ALIGN_BEGIN USB_OTG_CORE_HANDLE    USB_OTG_dev __ALIGN_END ;
 
 //USB to SPI data buffers
 int local_buff_length = 0;
-uint8_t local_buff[8000];
+uint8_t local_buff[512];
 uint16_t local_buff_offset = 0;
 int tx_buff_length = 0;
-uint8_t tx_buff[8000];
-int local_have_data = 0;
+uint8_t tx_buff[64];
+uint8_t local_have_data = 0;
 
 int version_size;
 uint8* version;
 int s1configswitch;
 extern uint32_t APP_Rx_length;
-extern void setLCDline1(uint8 s1switch);
 
 
 uint16_t DW_VCP_Init     (void) { return USBD_OK; }
@@ -129,7 +128,7 @@ uint16_t DW_VCP_DataRx (uint8_t* Buf, uint32_t Len)
   // ZS: This is where PC (USB Tx) data is received
   for (i = 0; i < Len; i++)
   {
-	  if((i + local_buff_offset) < 10000)
+	  if((i + local_buff_offset) < 512)
 	  {
 		  local_buff[i + local_buff_offset] = Buf[i];
 	  }
@@ -198,9 +197,10 @@ void send_usbmessage(uint8 *string, int len)
 	if(local_have_data == 0)
 	{
 		memcpy(&tx_buff[0], string, len);
-		tx_buff[len] = '\r';
-		tx_buff[len+1] = '\n';
-		tx_buff_length = len + 2;
+//		tx_buff[len] = '\r';
+//		tx_buff[len+1] = '\n';
+//		tx_buff_length = len + 2;
+		tx_buff_length = len;
 
 		local_have_data = 2;
 	}
@@ -216,7 +216,7 @@ void send_usbmessage(uint8 *string, int len)
 
 int usb_init(void)
 {
-	memset(local_buff, 0, 10000);
+	memset(local_buff, 0, 512);
 	led_off(LED_ALL); //to display error....
 
 	// enable/initialise the USB functionality

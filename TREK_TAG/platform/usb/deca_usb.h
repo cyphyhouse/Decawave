@@ -20,7 +20,7 @@
 //local data
 extern int local_buff_length;
 extern uint8_t local_buff[];
-extern int local_have_data;
+extern uint8_t local_have_data;
 extern uint16_t local_buff_offset;
 
 

@@ -265,7 +265,7 @@ int main(void)
 		// Check if we have data ready
 		if(usbDataReady == 1)
 		{
-			uint8 str_to_send[32];
+			uint8 str_to_send[9];
 			str_to_send[0] = 0xAA;
 			str_to_send[1] = usbData.prevAnc;
 			str_to_send[2] = usbData.currAnc;
@@ -274,12 +274,12 @@ int main(void)
 			str_to_send[4] = (asInt>>16);
 			str_to_send[5] = (asInt>>8);
 			str_to_send[6] = (asInt);
-			uint16_t cs = serial_checksum(&str_to_send[0], 7);
+ 			uint16_t cs = serial_checksum(&str_to_send[0], 7);
 			str_to_send[7] = (cs>>8);
 			str_to_send[8] = (cs);
 			send_usbmessage(str_to_send, 9);
 			usb_run();
-			sleep_ms(1000);
+			usbDataReady = 0;
 		}
 	}
 

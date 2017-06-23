@@ -76,7 +76,7 @@ uint8 anc_prf, anc_chan;
 uint32 tx_failed_count;
 
 usb_msg_t usbData;
-uint8 usbDataReady;
+volatile uint8 usbDataReady;
 
 void tdoa_init(uint8 s1switch, dwt_config_t *config);
 

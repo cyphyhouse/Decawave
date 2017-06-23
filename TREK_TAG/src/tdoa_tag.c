@@ -40,9 +40,9 @@ void tdoa_init(uint8 s1switch, dwt_config_t *config)
 
 float calcClockCorrection(const float frameTime, const float previousFrameTime)
 {
-    float clockCorrection = 1.0;
+    float clockCorrection = 1.0f;
 
-    if (frameTime != 0.0) {
+    if (frameTime != 0.0f) {
       clockCorrection = previousFrameTime / frameTime;
     }
 
@@ -62,6 +62,7 @@ uint64_t timestampToUint64(const uint8_t *ts)
 	return timestamp.full;
 }
 
+#pragma GCC optimize ("O3")
 void rx_ok_cb(const dwt_cb_data_t *rxd)
 {
 	statsReceivedPackets++;
@@ -159,6 +160,7 @@ static const uint8_t BIAS_500_64[] = {110, 105, 100,  93,  82,  69,  51, 27,  0,
 static const uint8_t BIAS_900_16[] = {137, 122, 105, 88, 69,  47,  25,  0, 21, 48, 79, 105, 127, 147, 160, 169, 178, 197};
 static const uint8_t BIAS_900_64[] = {147, 133, 117, 99, 75, 50, 29, 0, 24, 45, 63, 76, 87, 98, 116, 122, 132, 142};
 
+#pragma GCC optimize ("O3")
 void dwCorrectTimestamp(dwTime_t* timestamp)
 {
 	// base line dBm, which is -61, 2 dBm steps, total 18 data points (down to -95 dBm)
@@ -222,13 +224,12 @@ void dwCorrectTimestamp(dwTime_t* timestamp)
 	float rangeBias = rangeBiasLow + (rxPowerBase - rxPowerBaseLow) * (rangeBiasHigh - rangeBiasLow);
 	// range bias [mm] to timestamp modification value conversion
 	dwTime_t adjustmentTime;
-//	float rangecalc = (rangeBias * DISTANCE_OF_RADIO_INV * 0.001f);
-//	int rangecheck = (int)rangecalc;
 	adjustmentTime.full = (int)(rangeBias * DISTANCE_OF_RADIO_INV * 0.001f);
 	// apply correction
 	timestamp->full += adjustmentTime.full;
 }
 
+#pragma GCC optimize ("O3")
 float dwGetReceivePower(void)
 {
 	uint8 rxFrameInfo[RX_FINFO_LEN];
@@ -239,6 +240,7 @@ float dwGetReceivePower(void)
 	return calculatePower(C * TWOPOWER17, N);
 }
 
+#pragma GCC optimize ("O3")
 float calculatePower(float base, float N)
 {
 	float A, corrFac;
