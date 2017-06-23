@@ -19,6 +19,7 @@
 TDOA::TDOA(void)
 {
 	tdoaCount = 0;
+	nr_states = STATE_DIM;
 	S.setZero(STATE_DIM);
 	S(STATE_X) = 2;
 	S(STATE_Y) = 2.6;
@@ -41,7 +42,55 @@ TDOA::TDOA(void)
 	stdDev = 0.15f;
 }
 
-void TDOA::stateEstimatorUpdate(uint8_t Ar, uint8_t An, float distanceDiff)
+void TDOA::setTransitionMat(Eigen::MatrixXf transition_mat)
+{
+	if( (transition_mat.rows() != nr_states) || (transition_mat.cols() != nr_states) )
+	{
+		// If provided transition_mat is of wrong size, ignore input
+		return;
+	}
+
+	A = transition_mat;
+
+}
+
+void TDOA::setPredictionMat(Eigen::MatrixXf prediction_mat)
+{
+	if( (prediction_mat.rows() != nr_states) || (prediction_mat.cols() != nr_states) )
+	{
+		// If provided transition_mat is of wrong size, ignore input
+		return;
+	}
+
+	P = prediction_mat;
+}
+
+void TDOA::setAncPosition(int anc_num, vec3d_t anc_pos)
+{
+	if( (anc_num < 0) || (anc_num > MAX_NR_ANCHORS) )
+	{
+		//invalid anchor number
+		return;
+	}
+
+	anchorPosition[anc_num] = anc_pos;
+}
+
+void TDOA::setAncPosition(int anc_num, float x, float y, float z)
+{
+	vec3d_t temp;
+	temp.x = x;
+	temp.y = y;
+	temp.z = z;
+	setAncPosition(anc_num, temp);
+}
+
+vec3d_t TDOA::getAncPosition(int anc_num)
+{
+	return anchorPosition[anc_num];
+}
+
+void TDOA::scalarTDOADistUpdate(uint8_t Ar, uint8_t An, float distanceDiff)
 {
   /**
    * Measurement equation:
@@ -72,7 +121,6 @@ void TDOA::stateEstimatorUpdate(uint8_t Ar, uint8_t An, float distanceDiff)
 
 	stateEstimatorScalarUpdate(h, error, stdDev);
 
-  
 }
 
 void TDOA::stateEstimatorScalarUpdate(Eigen::RowVectorXf H, float error, float stdMeasNoise)
@@ -94,35 +142,12 @@ void TDOA::stateEstimatorScalarUpdate(Eigen::RowVectorXf H, float error, float s
 
 	// ====== MEASUREMENT UPDATE ======
 	// Calculate the Kalman gain and perform the state update
-//	for (int i=0; i<STATE_DIM; i++) {
-//		K(i) = PHTm(i)/HPHR; // kalman gain = (PH' (HPH' + R )^-1)
-//		S(i) = S(i) + K(i) * error; // state update
-//	}
 	K = PHTm/HPHR;
 	S = S + K*error;
 	
 
 	// ====== COVARIANCE UPDATE ======
 	P = (I - K*H)*P;
-/*	tmpNN1m = (K*H - I);  // (KH - I)
-	tmpNN2m = tmpNN1m.transpose();  // (KH - I)'
-	tmpNN3m = tmpNN1m*P;  // (KH - I)*P
-	P = tmpNN3m*tmpNN2m; // (KH - I)*P*(KH - I)'
-
-	// add the measurement variance and ensure boundedness and symmetry
-	for (int i=0; i<STATE_DIM; i++) {
-		for (int j=i; j<STATE_DIM; j++) {
-			float v = K(i) * R * K(j);
-			float p = 0.5f*P(i,j) + 0.5f*P(j,i) + v; // add measurement noise
-			if (std::isnan(p) || p > MAX_COVARIANCE) {
-				P(i,j) = P(j,i) = MAX_COVARIANCE;
-			} else if ( i==j && p < MIN_COVARIANCE ) {
-				P(i,j) = P(j,i) = MIN_COVARIANCE;
-			} else {
-				P(i,j) = P(j,i) = p;
-			}
-		}
-	}*/
 
 }
 
@@ -130,6 +155,19 @@ void TDOA::stateEstimatorPredict()
 {
 	// Covariance update
 	P = A*P*A.transpose();
+}
+
+vec3d_t TDOA::getLocation(void)
+{
+	vec3d_t pos;
+	pos.x = S(STATE_X);
+	pos.y = S(STATE_Y);
+	pos.z = S(STATE_Z);
+	
+	//For debugging purposes:
+	std::cout << S.transpose() << std::endl;
+	
+	return pos;
 }
 
 void TDOA::initAnchorPos(void)
@@ -149,9 +187,4 @@ void TDOA::initAnchorPos(void)
 	anchorPosition[3].x = 0.123;
 	anchorPosition[3].y = 1.673;
 	anchorPosition[3].z = 1.903;
-}
-
-void TDOA::getPos(void)
-{
-	std::cout << S.transpose() << std::endl;
 }
