@@ -9,6 +9,7 @@
  *  Author: Joao Paulo Jansch Porto <janschp2(at)illinois.edu>
  *
  *  Changelog:
+ *      v0.3 - Added extra library functions (06/26/2017)
  *      v0.2 - initial release (06/19/2017)
  *
  *************************************************/
@@ -20,15 +21,13 @@ TDOA::TDOA(void)
 {
 	tdoaCount = 0;
 	nr_states = STATE_DIM;
-	S.setZero(STATE_DIM);
-	S(STATE_X) = 2;
-	S(STATE_Y) = 2.6;
-	P.setZero(STATE_DIM, STATE_DIM);
 	
+	S.setZero(STATE_DIM);
+
+	P.setZero(STATE_DIM, STATE_DIM);
 	P(STATE_X, STATE_X) = powf(100,2);
 	P(STATE_Y, STATE_Y) = powf(100,2);
 	P(STATE_Z, STATE_Z) = powf(1,2);
-	
 	P(STATE_VX, STATE_VX) = powf(0.01,2);
 	P(STATE_VY, STATE_VY) = powf(0.01,2);
 	P(STATE_VZ, STATE_VZ) = powf(0.01,2);
@@ -37,6 +36,20 @@ TDOA::TDOA(void)
 	A(STATE_X,STATE_VX) = 0.016;
 	A(STATE_Y,STATE_VY) = 0.016;
 	A(STATE_Z,STATE_VZ) = 0.016;;
+	
+	initAnchorPos();
+	stdDev = 0.15f;
+}
+
+TDOA::TDOA(Eigen::MatrixXf transition_mat, Eigen::MatrixXf prediction_mat)
+{
+	tdoaCount = 0;
+	nr_states = STATE_DIM;
+	
+	S.setZero(STATE_DIM);
+	
+	P = prediction_mat;
+	A = transition_mat;
 	
 	initAnchorPos();
 	stdDev = 0.15f;
@@ -65,6 +78,17 @@ void TDOA::setPredictionMat(Eigen::MatrixXf prediction_mat)
 	P = prediction_mat;
 }
 
+void TDOA::setEstimationMat(Eigen::VectorXf estimation_mat)
+{
+	if(estimation_mat.size() != nr_states)
+	{
+		// If provided transition_mat is of wrong size, ignore input
+		return;
+	}
+
+	S = estimation_mat;
+}
+
 void TDOA::setAncPosition(int anc_num, vec3d_t anc_pos)
 {
 	if( (anc_num < 0) || (anc_num > MAX_NR_ANCHORS) )
@@ -83,6 +107,11 @@ void TDOA::setAncPosition(int anc_num, float x, float y, float z)
 	temp.y = y;
 	temp.z = z;
 	setAncPosition(anc_num, temp);
+}
+
+void TDOA::setStdDev(float sdev)
+{
+	stdDev = sdev;
 }
 
 vec3d_t TDOA::getAncPosition(int anc_num)
@@ -172,19 +201,10 @@ vec3d_t TDOA::getLocation(void)
 
 void TDOA::initAnchorPos(void)
 {
-	anchorPosition[0].x = 4.628;
-	anchorPosition[0].y = 0.600;
-	anchorPosition[0].z = 1.312;
-	
-	anchorPosition[1].x = 4.628;
-	anchorPosition[1].y = 3.810;
-	anchorPosition[1].z = 1.297;
-	
-	anchorPosition[2].x = 0.043;
-	anchorPosition[2].y = 4.210;
-	anchorPosition[2].z = 1.302;
-	
-	anchorPosition[3].x = 0.123;
-	anchorPosition[3].y = 1.673;
-	anchorPosition[3].z = 1.903;
+	setAncPosition(0, 4.521, 0.570, 1.322);
+	setAncPosition(1, 3.963, 4.974, 2.071);
+	setAncPosition(2, 0.560, 4.023, 0.160);
+	setAncPosition(3, 0.150, 1.105, 0.160);
+	setAncPosition(4, 4.500, 2.333, 0.160);
+	setAncPosition(5, 0.287, 2.333, 1.925);
 }
