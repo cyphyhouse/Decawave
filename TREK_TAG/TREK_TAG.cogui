@@ -23,17 +23,17 @@
 </folder>
 </info>
 </editorArea>
-<editor id="org.eclipse.cdt.ui.editor.CEditor" name="tdoa_tag.c" partName="tdoa_tag.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/src/tdoa_tag.c" title="tdoa_tag.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/src/tdoa_tag.c" workbook="DefaultEditorWorkbook">
+<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="tdoa_tag.c" partName="tdoa_tag.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/src/tdoa_tag.c" title="tdoa_tag.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/src/tdoa_tag.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TAG/src/tdoa_tag.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="4266" selectionTopPixel="1734"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="204" selectionTopPixel="0"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="tdoa_tag.h" partName="tdoa_tag.h" path="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/inc/tdoa_tag.h" title="tdoa_tag.h" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/inc/tdoa_tag.h" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TAG/inc/tdoa_tag.h"/>
 <editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1681" selectionTopPixel="1067"/>
 </editor>
-<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" partName="main.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/src/main.c" title="main.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/src/main.c" workbook="DefaultEditorWorkbook">
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" partName="main.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/src/main.c" title="main.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/src/main.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TAG/src/main.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="7126" selectionTopPixel="4229"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="6690" selectionTopPixel="4229"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="port_deca.c" partName="port_deca.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/platform/port_deca.c" title="port_deca.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/platform/port_deca.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TAG/platform/port_deca.c"/>
@@ -228,55 +228,39 @@
 <view id="org.eclipse.cdt.dsf.debug.ui.disassembly.view"/>
 <fastViewBars/>
 <viewLayoutRec closeable="false" id="org.eclipse.debug.ui.DebugView"/>
-<layout>
-<mainWindow>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@12d7ac8">
-<folder activePageID="org.coocox.builder.ui.views.ProjectView" appearance="2" expanded="2">
-<page content="org.coocox.builder.ui.views.ProjectView" label="Project"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<layout>&#x0A;<mainWindow>&#x0A;<info folder="true" part="org.eclipse.ui.internal.ViewStack@12d7ac8">&#x0A;<folder activePageID="org.coocox.builder.ui.views.ProjectView" appearance="2" expanded="2">&#x0A;<page content="org.coocox.builder.ui.views.ProjectView" label="Project"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1254" ratioRight="418" relationship="2" relative="org.eclipse.ui.internal.ViewStack@12d7ac8">
-<folder appearance="2" expanded="2">
-<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
+<info folder="true" part="stickyFolderRight" ratio="0.75" ratioLeft="1254" ratioRight="418" relationship="2" relative="org.eclipse.ui.internal.ViewStack@12d7ac8">&#x0A;<folder appearance="2" expanded="2">&#x0A;<page content="org.eclipse.help.ui.HelpView" label="LabelNotFound"/>
 <page content="org.eclipse.ui.internal.introview" label="LabelNotFound"/>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@ceaadc" ratio="0.59801763" ratioLeft="543" ratioRight="365" relationship="4" relative="org.eclipse.ui.internal.ViewStack@12d7ac8">
-<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">
-<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@ceaadc" ratio="0.59801763" ratioLeft="543" ratioRight="365" relationship="4" relative="org.eclipse.ui.internal.ViewStack@12d7ac8">&#x0A;<folder activePageID="org.eclipse.debug.ui.DebugView" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.ui.console.ConsoleView" label="Console"/>
 <page content="org.eclipse.debug.ui.DebugView" label="Debug"/>
 <page content="org.eclipse.debug.ui.BreakpointView" label="Breakpoints"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 <part id="1"/>
 <part id="2"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@10e75cd" ratio="0.5" ratioLeft="836" ratioRight="836" relationship="2" relative="org.eclipse.ui.internal.ViewStack@ceaadc">
-<folder activePageID="org.eclipse.debug.ui.VariableView" appearance="2" expanded="2">
-<page content="org.coocox.codebugger.trace.ui.traceview" label="Semihosting"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@10e75cd" ratio="0.5" ratioLeft="836" ratioRight="836" relationship="2" relative="org.eclipse.ui.internal.ViewStack@ceaadc">&#x0A;<folder activePageID="org.eclipse.debug.ui.VariableView" appearance="2" expanded="2">&#x0A;<page content="org.coocox.codebugger.trace.ui.traceview" label="Semihosting"/>
 <page content="org.eclipse.debug.ui.VariableView" label="Variables"/>
 <page content="org.eclipse.debug.ui.ExpressionView" label="LabelNotFound"/>
 <page content="org.eclipse.debug.ui.MemoryView" label="LabelNotFound"/>
 <page content="org.eclipse.cdt.debug.ui.memory.memorybrowser.MemoryBrowser" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 <part id="1"/>
 </presentation>
 </folder>
 </info>
-<info folder="true" part="org.eclipse.ui.internal.ViewStack@ce1e5f" ratio="0.75" ratioLeft="1254" ratioRight="418" relationship="2" relative="org.eclipse.ui.internal.ViewStack@12d7ac8">
-<folder activePageID="org.eclipse.cdt.dsf.debug.ui.disassembly.view" appearance="2" expanded="2">
-<page content="org.eclipse.cdt.dsf.debug.ui.disassembly.view" label="Disassembly"/>
+<info folder="true" part="org.eclipse.ui.internal.ViewStack@ce1e5f" ratio="0.75" ratioLeft="1254" ratioRight="418" relationship="2" relative="org.eclipse.ui.internal.ViewStack@12d7ac8">&#x0A;<folder activePageID="org.eclipse.cdt.dsf.debug.ui.disassembly.view" appearance="2" expanded="2">&#x0A;<page content="org.eclipse.cdt.dsf.debug.ui.disassembly.view" label="Disassembly"/>
 <page content="org.eclipse.ui.views.ContentOutline" label="LabelNotFound"/>
 <page content="org.eclipse.debug.ui.RegisterView" label="LabelNotFound"/>
 <page content="org.coocox.coassistant.view.CoAssistantView_debug" label="LabelNotFound"/>
-<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">
-<part id="0"/>
+<presentation id="org.eclipse.ui.presentations.WorkbenchPresentationFactory">&#x0A;<part id="0"/>
 </presentation>
 </folder>
 </info>
@@ -298,10 +282,8 @@
 <org.coocox.builder.ui.editors.ConfigEditor/>
 </editor>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TAG/platform/stm32f10x_it.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TAG/src/tdoa_tag.c"/>
 </editors>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="4820" y="0"/>
-</item>
 <item historyLabel="main.c" index="0">
 <position/>
 </item>
@@ -444,8 +426,11 @@
 <item historyLabel="tdoa_tag.h" index="3">
 <position info="not_deleted" x="1681" y="0"/>
 </item>
-<item active="true" historyLabel="main.c" index="0">
+<item historyLabel="main.c" index="0">
 <position info="not_deleted" x="6605" y="0"/>
+</item>
+<item active="true" historyLabel="tdoa_tag.c" index="8">
+<position info="not_deleted" x="4265" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -454,10 +439,11 @@
 <actionBarAdvisor/>
 </window>
 <mruList>
-<file factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory" id="org.coocox.builder.ui.editors.ConfigEditor" name="" tooltip="">
-<persistable>
-<org.coocox.builder.ui.editors.ConfigEditor/>
-</persistable>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="deca_device.c" tooltip="TREK_TDOA/decadriver/deca_device.c">
+<persistable path="/TREK_TDOA/decadriver/deca_device.c"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="deca_device_api.h" tooltip="TREK_TDOA/decadriver/deca_device_api.h">
+<persistable path="/TREK_TDOA/decadriver/deca_device_api.h"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="deca_usb.h" tooltip="TREK_TAG/platform/usb/deca_usb.h">
 <persistable path="/TREK_TAG/platform/usb/deca_usb.h"/>
@@ -486,14 +472,14 @@
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="unistd.c" tooltip="TREK_TAG/platform/unistd.c">
 <persistable path="/TREK_TAG/platform/unistd.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="deca_device.c" tooltip="TREK_TDOA/decadriver/deca_device.c">
-<persistable path="/TREK_TDOA/decadriver/deca_device.c"/>
-</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="lcd.c" tooltip="TREK_TDOA/platform/lcd.c">
 <persistable path="/TREK_TDOA/platform/lcd.c"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="list.c" tooltip="TREK_TDOA/FRT_Library/FreeRTOS/Source/list.c">
 <persistable path="/TREK_TDOA/FRT_Library/FreeRTOS/Source/list.c"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x_rcc.c" tooltip="TREK_TDOA/Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_rcc.c">
+<persistable path="/TREK_TDOA/Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_rcc.c"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.asm.AsmEditor" name="startup_stm32f10x_cl.S" tooltip="TREK_TDOA/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/Startup/startup_stm32f10x_cl.S">
 <persistable path="/TREK_TDOA/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/Startup/startup_stm32f10x_cl.S"/>

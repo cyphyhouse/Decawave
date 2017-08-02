@@ -131,9 +131,9 @@
     <File name="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_exti.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_exti.c" type="1"/>
     <File name="Libraries/CMSIS/CM3/DeviceSupport/ST/STMF10x" path="" type="2"/>
     <File name="platform/deca_spi.h" path="platform/deca_spi.h" type="1"/>
-    <File name="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rtc.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rtc.c" type="1"/>
     <File name="Libraries/STM32_USB_Device_Library/Core/inc/usbd_req.h" path="Libraries/STM32_USB_Device_Library/Core/inc/usbd_req.h" type="1"/>
     <File name="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_adc.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_adc.h" type="1"/>
+    <File name="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rtc.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rtc.c" type="1"/>
     <File name="platform/syscalls.c" path="platform/syscalls.c" type="1"/>
     <File name="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_fsmc.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_fsmc.c" type="1"/>
     <File name="Libraries/CMSIS/CM3/DeviceSupport/ST/STMF10x/startup" path="" type="2"/>
