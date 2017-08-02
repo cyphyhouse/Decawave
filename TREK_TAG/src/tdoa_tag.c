@@ -104,11 +104,11 @@ void rx_ok_cb(const dwt_cb_data_t *rxd)
 				const int64_t txAr_in_cl_Ar = timestampToUint64(rxPacketBuffer[previousAnchor].timestamps[previousAnchor]);
 
 				// Calculate distance diff
-				const int64_t tof_Ar_to_An_in_cl_Ar = (((truncateToTimeStamp(rxAr_by_An_in_cl_An - previous_txAn_in_cl_An) * clockCorrection_An_To_Ar) - truncateToTimeStamp(txAr_in_cl_Ar - rxAn_by_Ar_in_cl_Ar))) / 2.0;
+				const int64_t tof_Ar_to_An_in_cl_Ar = (((truncateToTimeStamp(rxAr_by_An_in_cl_An - previous_txAn_in_cl_An) * clockCorrection_An_To_Ar) - truncateToTimeStamp(txAr_in_cl_Ar - rxAn_by_Ar_in_cl_Ar))) / 2;
 				const int64_t delta_txAr_to_txAn_in_cl_Ar = (tof_Ar_to_An_in_cl_Ar + truncateToTimeStamp(txAn_in_cl_An - rxAr_by_An_in_cl_An) * clockCorrection_An_To_Ar);
 				const int64_t timeDiffOfArrival_in_cl_Ar =  truncateToTimeStamp(rxAn_by_T_in_cl_T - rxAr_by_T_in_cl_T) * clockCorrection_T_To_A[previousAnchor] - delta_txAr_to_txAn_in_cl_Ar;
 
-				const float tdoaDistDiff = timeDiffOfArrival_in_cl_Ar * 0.004690356867864; //SPEED_OF_LIGHT * timeDiffOfArrival_in_cl_Ar * DWT_TIME_UNITS
+				const float tdoaDistDiff = timeDiffOfArrival_in_cl_Ar * 0.004690356867864f; //SPEED_OF_LIGHT * timeDiffOfArrival_in_cl_Ar * DWT_TIME_UNITS
 
 				// Sanity check distances in case of missed packages
 				if (tdoaDistDiff > -MAX_DISTANCE_DIFF && tdoaDistDiff < MAX_DISTANCE_DIFF) {
