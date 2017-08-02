@@ -57,6 +57,7 @@ public:
 	void setTransitionMat(Eigen::MatrixXf transition_mat);
 	void setPredictionMat(Eigen::MatrixXf prediction_mat);
 	void setEstimationMat(Eigen::VectorXf estimation_mat);
+	void setCovarianceMat(Eigen::MatrixXf covariance_mat)
 	
 	void setAncPosition(int anc_num, vec3d_t anc_pos);
 	void setAncPosition(int anc_num, float x, float y, float z);
@@ -66,6 +67,9 @@ public:
 	// Update functions
 	void scalarTDOADistUpdate(uint8_t Ar, uint8_t An, float distanceDiff);
 	void stateEstimatorPredict();
+    void stateEstimatorFinalize();
+    void stateEstimatorAddProcessNoise();
+	
 	
 	// Get functions
 	vec3d_t getLocation();
@@ -84,9 +88,12 @@ private:
 	Eigen::VectorXf S;
 	Eigen::MatrixXf P;
 	Eigen::MatrixXf A;
+	Eigen::MatrixXf Q;
 	
 	//Functions
 	void stateEstimatorScalarUpdate(Eigen::RowVectorXf H, float error, float stdMeasNoise);
+	
+	void PredictionBound();
 	
 	void initAnchorPos(void);
 

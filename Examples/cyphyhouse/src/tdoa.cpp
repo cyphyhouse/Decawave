@@ -32,16 +32,18 @@ TDOA::TDOA(void)
 	P(STATE_VY, STATE_VY) = powf(0.01,2);
 	P(STATE_VZ, STATE_VZ) = powf(0.01,2);
 	
-	A = Eigen::MatrixXf::Identity(STATE_DIM,STATE_DIM);
+	A.setIdentity(STATE_DIM,STATE_DIM);
 	A(STATE_X,STATE_VX) = 0.016;
 	A(STATE_Y,STATE_VY) = 0.016;
-	A(STATE_Z,STATE_VZ) = 0.016;;
+	A(STATE_Z,STATE_VZ) = 0.016;
+	
+	Q.setZero(STATE_DIM, STATE_DIM);
 	
 	initAnchorPos();
 	stdDev = 0.15f;
 }
 
-TDOA::TDOA(Eigen::MatrixXf transition_mat, Eigen::MatrixXf prediction_mat)
+TDOA::TDOA(Eigen::MatrixXf transition_mat, Eigen::MatrixXf prediction_mat, Eigen::MatrixXf covariance_mat)
 {
 	tdoaCount = 0;
 	nr_states = STATE_DIM;
@@ -50,6 +52,7 @@ TDOA::TDOA(Eigen::MatrixXf transition_mat, Eigen::MatrixXf prediction_mat)
 	
 	P = prediction_mat;
 	A = transition_mat;
+	Q = covariance_mat;
 	
 	initAnchorPos();
 	stdDev = 0.15f;
@@ -158,9 +161,6 @@ void TDOA::stateEstimatorScalarUpdate(Eigen::RowVectorXf H, float error, float s
 	static Eigen::VectorXf K(STATE_DIM);
 
 	// Temporary matrices for the covariance updates
-	static Eigen::MatrixXf tmpNN1m(STATE_DIM, STATE_DIM);
-	static Eigen::MatrixXf tmpNN2m(STATE_DIM, STATE_DIM);
-	static Eigen::MatrixXf tmpNN3m(STATE_DIM, STATE_DIM);
 	static Eigen::VectorXf PHTm(STATE_DIM);
 	static Eigen::MatrixXf I = Eigen::MatrixXf::Identity(STATE_DIM, STATE_DIM);
 
@@ -176,14 +176,56 @@ void TDOA::stateEstimatorScalarUpdate(Eigen::RowVectorXf H, float error, float s
 	
 
 	// ====== COVARIANCE UPDATE ======
-	P = (I - K*H)*P;
-
+	P = (I - K*H)*P + K*R*K.transpose();
+	PredictionBound();
 }
 
 void TDOA::stateEstimatorPredict()
 {
 	// Covariance update
 	P = A*P*A.transpose();
+	
+	// If we had info from IMU, we would add it here
+}
+
+void TDOA::stateEstimatorFinalize()
+{
+	// So far nothing happens here
+	// Placeholder for future function
+	
+	PredictionBound();
+}
+
+void TDOA::stateEstimatorAddProcessNoise()
+{
+	// Covariance update
+	P += Q;
+    
+	PredictionBound();
+}
+
+void TDOA::PredictionBound()
+{
+	//Ensure boundedness and symmetry of Prediction Matrix
+	for (int i=0; i<STATE_DIM; i++) 
+	{
+		for (int j=i; j<STATE_DIM; j++) 
+		{
+			float p = 0.5f*P(i,j) + 0.5f*P(j,i);
+			if (isnan(p) || (p > MAX_COVARIANCE) ) 
+			{
+				P(i,j) = P(j,i) = MAX_COVARIANCE;
+			} 
+			else if ( (i==j) && (p < MIN_COVARIANCE) ) 
+			{
+				P(i,j) = P(j,i) = MIN_COVARIANCE;
+			} 
+			else 
+			{
+				P(i,j) = P(j,i) = p;
+			}
+		}
+	}
 }
 
 vec3d_t TDOA::getLocation(void)
@@ -201,10 +243,12 @@ vec3d_t TDOA::getLocation(void)
 
 void TDOA::initAnchorPos(void)
 {
-	setAncPosition(0, 4.521, 0.570, 1.322);
-	setAncPosition(1, 3.963, 4.974, 2.071);
-	setAncPosition(2, 0.560, 4.023, 0.160);
-	setAncPosition(3, 0.150, 1.105, 0.160);
-	setAncPosition(4, 4.500, 2.333, 0.160);
-	setAncPosition(5, 0.287, 2.333, 1.925);
+	setAncPosition(0, 0.155, 0.190, 2.390);
+	setAncPosition(1, 0.159, 0.792, 0.175);
+	setAncPosition(2, 4.495, 0.6096, 2.381);
+	setAncPosition(3, 4.498, 0.6746, 0.180);
+	setAncPosition(4, 0.155, 4.240, 2.379);
+	setAncPosition(5, 0.159, 4.360, 0.175);
+    setAncPosition(6, 4.498, 4.342, 2.374);
+    setAncPosition(7, 4.500, 4.332, 0.180);
 }

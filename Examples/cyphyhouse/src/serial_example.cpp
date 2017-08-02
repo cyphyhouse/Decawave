@@ -143,7 +143,11 @@ int main(int arc, char *argv[])
 				deca_pos.getLocation();
 			}
 			
+			deca_pos.stateEstimatorAddProcessNoise();
+			
 			deca_pos.scalarTDOADistUpdate(An, Ar, tdoaDistDiff);
+			
+			deca_pos.stateEstimatorFinalize();
 		}
 	}
 	
