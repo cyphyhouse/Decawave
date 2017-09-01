@@ -204,6 +204,7 @@ void slotStep(const dwt_cb_data_t *cb_data, eventState_e event)
 
 void rx_ok_cb(const dwt_cb_data_t *cb_data)
 {
+	led_off(LED_ALL);
 	led_on(LED_PC7);
 	if(ctx.state == synchronizedState)
 	{
@@ -251,11 +252,12 @@ void rx_ok_cb(const dwt_cb_data_t *cb_data)
 			}
 		}
 	}
-	led_off(LED_PC7);
+//	led_off(LED_PC7);
 }
 
 void rx_to_cb(const dwt_cb_data_t *cb_data)
 {
+	led_off(LED_ALL);
 	led_on(LED_PC6);
 	if(ctx.state == synchronizedState)
 	{
@@ -280,7 +282,7 @@ void rx_to_cb(const dwt_cb_data_t *cb_data)
 			dwt_rxenable(DWT_START_RX_IMMEDIATE);
 		}
 	}
-	led_off(LED_PC6);
+//	led_off(LED_PC6);
 }
 
 void rx_err_cb(const dwt_cb_data_t *cb_data)
@@ -312,6 +314,7 @@ void rx_err_cb(const dwt_cb_data_t *cb_data)
 
 void tx_conf_cb(const dwt_cb_data_t *cb_data)
 {
+	led_off(LED_ALL);
 	led_on(LED_PC9);
 	if(ctx.state == synchronizedState)
 	{
@@ -336,7 +339,7 @@ void tx_conf_cb(const dwt_cb_data_t *cb_data)
 			dwt_rxenable(DWT_START_RX_IMMEDIATE);
 		}
 	}
-	led_off(LED_PC9);
+//	led_off(LED_PC9);
 }
 
 
