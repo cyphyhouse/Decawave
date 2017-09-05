@@ -32,7 +32,8 @@ extern "C" {
 #define TDMA_GUARD_LENGTH_S (1e-6)
 #define TDMA_GUARD_LENGTH	(uint64_t)(TDMA_GUARD_LENGTH_S * 499.2e6 * 128)
 
-#define RECEIVE_TIMEOUT		250
+#define RECEIVE_TIMEOUT	    250
+#define TS_TX_SIZE          4
 
 #define MASK_TXDTS			(0x00FFFFFFFE00)  //The TX timestamp will snap to 8 ns resolution - mask lower 9 bits.
 
@@ -80,25 +81,27 @@ struct ctx_s {
 	uint8 slot;
 	uint8 nextSlot;
 	
+	// Current packet id
+	uint8_t packet_id;
+	
 	// TDMA start of frame in local clock
 	dwTime_t tdmaFrameStart;
 	
-	// List of timestamps for last frame
-	dwTime_t timestamps[NSLOTS];
+	// List of timestamps and ids for last frame
+	uint8_t packetIds[NSLOTS]
+	uint32_t rxTimestamps[NSLOTS];
+	uint32_t txTimestamps[NSLOTS];
 	
-	// Variable to achieve clock synchronization with Anchor 0
-	double skew;	//Clock skew/drift with anchor 0;
-	uint32 range;	//Range to anchor 0 in timer tick
-	dwTime_t T0tx0[2];
-	dwTime_t TNtxn[2];
+	uint16_t distances[NSLOTS]
 } ctx;
 
-#define PACKET_TYPE_RANGE 0x21
+#define PACKET_TYPE_RANGE 0x22
 
 typedef struct rangePacket_s {
-	uint8 type;
-	uint8 txMaster[5];				//TX time at master
-	uint8 timestamps[NSLOTS][5];	//Relevant time for anchors
+	uint8_t type;
+	uint8_t pid[NSLOTS];    // Packet id of the timestamps
+	uint8_t timestamps[NSLOTS][TS_TX_SIZE];
+	uint16_t distances[NSLOTS];
 }__attribute__((packed)) rangePacket_t;
 
 typedef struct packet_s {
@@ -138,6 +141,8 @@ void setTxData(void);
 
 uint32 adjustRxTime(dwTime_t *time);
 dwTime_t transmitTimeForSlot(int slot);
+
+void calculateDistance(int slot, int newId, uint32_t remoteTx, uint32_t remoteRx, uint32_t ts);
 
 void handleRxPacket(void);
 

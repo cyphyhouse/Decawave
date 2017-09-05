@@ -27,13 +27,13 @@
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/src/main.c"/>
 <editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="5446" selectionTopPixel="3440"/>
 </editor>
-<editor id="org.eclipse.cdt.ui.editor.CEditor" name="tdoa_anc.c" partName="tdoa_anc.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TDOA/src/tdoa_anc.c" title="tdoa_anc.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TDOA/src/tdoa_anc.c" workbook="DefaultEditorWorkbook">
+<editor id="org.eclipse.cdt.ui.editor.CEditor" name="tdoa_anc.c" partName="tdoa_anc.c" path="C:/Users/Joao/Documents/GitHub/Decawave/TREK_TDOA/src/tdoa_anc.c" title="tdoa_anc.c" tooltip="C:/Users/Joao/Documents/GitHub/Decawave/TREK_TDOA/src/tdoa_anc.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/src/tdoa_anc.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="8555" selectionTopPixel="5280"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="8555" selectionTopPixel="4472"/>
 </editor>
-<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="tdoa_anc.h" partName="tdoa_anc.h" path="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TDOA/inc/tdoa_anc.h" title="tdoa_anc.h" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TDOA/inc/tdoa_anc.h" workbook="DefaultEditorWorkbook">
+<editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="tdoa_anc.h" partName="tdoa_anc.h" path="C:/Users/Joao/Documents/GitHub/Decawave/TREK_TDOA/inc/tdoa_anc.h" title="tdoa_anc.h" tooltip="C:/Users/Joao/Documents/GitHub/Decawave/TREK_TDOA/inc/tdoa_anc.h" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/inc/tdoa_anc.h"/>
-<editorState selectionHorizontalPixel="0" selectionLength="11" selectionOffset="2675" selectionTopPixel="1440"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="832" selectionTopPixel="372"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="portmacro.h" partName="portmacro.h" path="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/FRT_Library/FreeRTOS/Source/portable/GCC/ARM_CM3/portmacro.h" title="portmacro.h" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/FRT_Library/FreeRTOS/Source/portable/GCC/ARM_CM3/portmacro.h" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/FRT_Library/FreeRTOS/Source/portable/GCC/ARM_CM3/portmacro.h"/>
@@ -56,8 +56,7 @@
 <editorState selectionHorizontalPixel="0" selectionLength="15" selectionOffset="4325" selectionTopPixel="1785"/>
 </editor>
 <editor id="org.coocox.builder.ui.editors.ConfigEditor" name="" partName="Configuration" title="Configuration" tooltip="" workbook="DefaultEditorWorkbook">
-<input factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory">
-<org.coocox.builder.ui.editors.ConfigEditor horizontalPosition="0" subTagIndex="2" verticalPosition="0"/>
+<input factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory">&#x0A;<org.coocox.builder.ui.editors.ConfigEditor horizontalPosition="0" subTagIndex="2" verticalPosition="0"/>
 </input>
 </editor>
 </editors>
@@ -85,7 +84,7 @@
 <viewState/>
 </view>
 </views>
-<perspectives activePart="org.eclipse.cdt.ui.editor.CEditor" activePerspective="org.coocox.builder.perspective.CoBuilder">
+<perspectives activePart="org.coocox.builder.ui.views.ProjectView" activePerspective="org.coocox.builder.perspective.CoBuilder">
 <perspective editorAreaTrimState="2" editorAreaVisible="1" fixed="0" version="0.016">
 <descriptor class="org.coocox.builder.ui.PerspectiveCoBuilder" id="org.coocox.builder.perspective.CoBuilder" label="CooCox CoBuilder"/>
 <alwaysOnActionSet id="org.coocox.component.ui.actionSet"/>
@@ -284,13 +283,8 @@
 </editor>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/tdoa_anc.c"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/inc/tdoa_anc.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/tdoa_anc.c"/>
 </editors>
-<item historyLabel="port_deca.c" index="1">
-<position info="not_deleted" x="24292" y="7"/>
-</item>
-<item historyLabel="tdoa_anc.c" index="0">
-<position info="not_deleted" x="7317" y="0"/>
-</item>
 <item historyLabel="tdoa_anc.c" index="0">
 <position info="not_deleted" x="7993" y="0"/>
 </item>
@@ -416,8 +410,14 @@
 <item historyLabel="tdoa_anc.c" index="13">
 <position info="not_deleted" x="8555" y="0"/>
 </item>
-<item active="true" historyLabel="tdoa_anc.h" index="14">
+<item historyLabel="tdoa_anc.h" index="14">
 <position info="not_deleted" x="2675" y="11"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="15">
+<position info="not_deleted" x="8555" y="0"/>
+</item>
+<item active="true" historyLabel="tdoa_anc.h" index="14">
+<position info="not_deleted" x="2709" y="11"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -426,47 +426,47 @@
 <actionBarAdvisor/>
 </window>
 <mruList>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x_flash.c" tooltip="TREK_TDOA/Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_flash.c">
-<persistable path="/TREK_TDOA/Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_flash.c"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="port.c" tooltip="DecaRangeRTLS/src/platform/port.c">
+<persistable path="/DecaRangeRTLS/src/platform/port.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x_flash.h" tooltip="TREK_TDOA/Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_flash.h">
-<persistable path="/TREK_TDOA/Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_flash.h"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="usb_dcd.c" tooltip="DecaRangeRTLS/Libraries/STM32_USB_OTG_Driver/src/usb_dcd.c">
+<persistable path="/DecaRangeRTLS/Libraries/STM32_USB_OTG_Driver/src/usb_dcd.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.ui.DefaultTextEditor" name="stm32_flash_256k_ram_64k.ld" tooltip="TREK_TDOA/stm32_flash_256k_ram_64k.ld">
-<persistable path="/TREK_TDOA/stm32_flash_256k_ram_64k.ld"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="usbd_core.c" tooltip="DecaRangeRTLS/Libraries/STM32_USB_Device_Library/Core/src/usbd_core.c">
+<persistable path="/DecaRangeRTLS/Libraries/STM32_USB_Device_Library/Core/src/usbd_core.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x_gpio.c" tooltip="TREK_TDOA/Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_gpio.c">
-<persistable path="/TREK_TDOA/Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_gpio.c"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="deca_usb_bsp_evk1000.c" tooltip="DecaRangeRTLS/src/usb/deca_usb_bsp_evk1000.c">
+<persistable path="/DecaRangeRTLS/src/usb/deca_usb_bsp_evk1000.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="deca_device.c" tooltip="TREK_TDOA/decadriver/deca_device.c">
-<persistable path="/TREK_TDOA/decadriver/deca_device.c"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="deca_usb.c" tooltip="DecaRangeRTLS/src/usb/deca_usb.c">
+<persistable path="/DecaRangeRTLS/src/usb/deca_usb.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="deca_device_api.h" tooltip="TREK_TDOA/decadriver/deca_device_api.h">
-<persistable path="/TREK_TDOA/decadriver/deca_device_api.h"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" tooltip="DecaRangeRTLS/src/application/main.c">
+<persistable path="/DecaRangeRTLS/src/application/main.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="deca_usb.h" tooltip="TREK_TAG/platform/usb/deca_usb.h">
-<persistable path="/TREK_TAG/platform/usb/deca_usb.h"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x.h" tooltip="DecaRangeRTLS/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/stm32f10x.h">
+<persistable path="/DecaRangeRTLS/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/stm32f10x.h"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x_it.c" tooltip="TREK_TAG/platform/stm32f10x_it.c">
-<persistable path="/TREK_TAG/platform/stm32f10x_it.c"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="system_stm32f10x.c" tooltip="DecaRangeRTLS/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/system_stm32f10x.c">
+<persistable path="/DecaRangeRTLS/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/system_stm32f10x.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x_conf.h" tooltip="TREK_TAG/platform/stm32f10x_conf.h">
-<persistable path="/TREK_TAG/platform/stm32f10x_conf.h"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="unistd.c" tooltip="DecaRangeRTLS/src/sys/unistd.c">
+<persistable path="/DecaRangeRTLS/src/sys/unistd.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="usbd_conf.h" tooltip="TREK_TAG/platform/usb/usbd_conf.h">
-<persistable path="/TREK_TAG/platform/usb/usbd_conf.h"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="syscalls.c" tooltip="DecaRangeRTLS/src/sys/syscalls.c">
+<persistable path="/DecaRangeRTLS/src/sys/syscalls.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="usbd_cdc_core.c" tooltip="TREK_TAG/Libraries/STM32_USB_Device_Library/Class/cdc/src/usbd_cdc_core.c">
-<persistable path="/TREK_TAG/Libraries/STM32_USB_Device_Library/Class/cdc/src/usbd_cdc_core.c"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="usbd_usr.c" tooltip="DecaRangeRTLS/src/usb/usbd_usr.c">
+<persistable path="/DecaRangeRTLS/src/usb/usbd_usr.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x_conf.h" tooltip="TREK_TDOA/platform/stm32f10x_conf.h">
-<persistable path="/TREK_TDOA/platform/stm32f10x_conf.h"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="usbd_cdc_core.c" tooltip="DecaRangeRTLS/Libraries/STM32_USB_Device_Library/Class/cdc/src/usbd_cdc_core.c">
+<persistable path="/DecaRangeRTLS/Libraries/STM32_USB_Device_Library/Class/cdc/src/usbd_cdc_core.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x_it.c" tooltip="TREK_TDOA/platform/stm32f10x_it.c">
-<persistable path="/TREK_TDOA/platform/stm32f10x_it.c"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="usbd_desc.c" tooltip="DecaRangeRTLS/src/usb/usbd_desc.c">
+<persistable path="/DecaRangeRTLS/src/usb/usbd_desc.c"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="lcd.c" tooltip="TREK_TAG/platform/lcd.c">
-<persistable path="/TREK_TAG/platform/lcd.c"/>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="usb_hcd.c" tooltip="DecaRangeRTLS/Libraries/STM32_USB_OTG_Driver/src/usb_hcd.c">
+<persistable path="/DecaRangeRTLS/Libraries/STM32_USB_OTG_Driver/src/usb_hcd.c"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="unistd.c" tooltip="TREK_TAG/platform/unistd.c">
 <persistable path="/TREK_TAG/platform/unistd.c"/>

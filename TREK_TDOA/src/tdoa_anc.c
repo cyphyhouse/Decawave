@@ -29,6 +29,25 @@ void tdoa_init(uint8 s1switch, dwt_config_t *config)
 	anc_chan = config->chan;
 }
 
+static void calculateDistance(int slot, int newId, uint32_t remoteTx, uint32_t remoteRx, uint32_t ts)
+{
+  // Check that the 2 last packets are consecutive packets
+	if (ctx.packetIds[slot] == ((newId-1)%0xFF)) 
+	{
+		double tround1 = remoteRx - ctx.txTimestamps[ctx.slot];
+		double treply1 = ctx.txTimestamps[ctx.anchorId] - ctx.rxTimestamps[ctx.slot];
+		double tround2 = ts - ctx.txTimestamps[ctx.anchorId];
+		double treply2 = remoteTx - remoteRx;
+
+		uint32_t distance = ((tround2 * tround1)-(treply1 * treply2)) / (2*(treply1 + tround2));
+		ctx.distances[slot] = distance & 0xfffful;
+	} 
+	else
+	{
+		ctx.distances[slot] = 0;
+	}
+}
+
 void setupTx()
 {
 	ctx.timestamps[ctx.anchorId] = transmitTimeForSlot(ctx.nextSlot);
