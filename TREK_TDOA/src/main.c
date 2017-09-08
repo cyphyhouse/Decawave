@@ -212,7 +212,7 @@ static void main_task(void *pvParameters)
 	//char lcd_str[16];
 	//sprintf(lcd_str, "TDOA v0.51 Anc:%d", (((s1switch & 0x10) << 2) + (s1switch & 0x20) + ((s1switch & 0x40) >> 2)) >> 4);
 	//char lcd_str[16] = {'T','D','O','A',' ','v','0','.','5','2',' ','A','n','c',':','9'};
-	char lcd_str[16] = "TDOA v0.60 Anc:x";
+	char lcd_str[16] = "TDOA v0.70 Anc:x";
 	lcd_str[15] = ((((s1switch & 0x10) << 2) + (s1switch & 0x20) + ((s1switch & 0x40) >> 2)) >> 4) + 0x30; //converts to ASCII number
 	lcd_display_str(lcd_str);
 

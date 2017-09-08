@@ -82,17 +82,17 @@ struct ctx_s {
 	uint8 nextSlot;
 	
 	// Current packet id
-	uint8_t packet_id;
+	uint8_t pid;
 	
 	// TDMA start of frame in local clock
 	dwTime_t tdmaFrameStart;
 	
 	// List of timestamps and ids for last frame
-	uint8_t packetIds[NSLOTS]
+	uint8_t packetIds[NSLOTS];
 	uint32_t rxTimestamps[NSLOTS];
 	uint32_t txTimestamps[NSLOTS];
 	
-	uint16_t distances[NSLOTS]
+	uint16_t distances[NSLOTS];
 } ctx;
 
 #define PACKET_TYPE_RANGE 0x22
@@ -139,10 +139,9 @@ void updateSlot(void);
 
 void setTxData(void);
 
-uint32 adjustRxTime(dwTime_t *time);
 dwTime_t transmitTimeForSlot(int slot);
 
-void calculateDistance(int slot, int newId, uint32_t remoteTx, uint32_t remoteRx, uint32_t ts);
+void calculateDistance(uint8_t slot, uint8_t newId, uint32_t remoteTx, uint32_t remoteRx, uint32_t ts);
 
 void handleRxPacket(void);
 
