@@ -5,9 +5,9 @@ Repository for decawave related code
 
 ### Repository structure ###
 
-* ./Libs
+* ./ROS/cyphyhouse
 
-Libraries related to the decawave hardware
+cyphyhouse ROS superproject. Includes the decaNode, used to track robots indoor.
 
 * ./TREK_TAG
 
