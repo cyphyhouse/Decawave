@@ -7,7 +7,7 @@
 #include <iostream>
 
 #include "ros/ros.h"
-#include "cyphy_msgs/PosVec.h"
+#include "geometry_msgs/Point.h"
 #include <sstream>
 
 #include "tdoa.h"
@@ -15,7 +15,7 @@
 
 
 #define DEVICE        "/dev/ttyACM0"
-#define SPEED         115200
+#define SPEED         B115200
 #define MSG_SIZE      9
 
 #define MSG_TYPE_BYTE 0
@@ -30,24 +30,12 @@
 #define SERIAL_BUF_SIZE 32
 
 
-
-static volatile int stopflag = 1;
-
 uint8_t ignoring_flag = 0;
 uint8_t RX_idx;
 uint8_t An, Ar, dist_recv;
 float tdoaDistDiff;
 uint8_t serial_msg[SERIAL_BUF_SIZE];
 
-
-void sigHandler(int signum)
-{
-    if(signum == SIGINT)
-    {
-        printf("Stopping\n");
-        stopflag = 0;
-    }
-}
 
 float to_float(uint8_t* buff)
 {
@@ -79,13 +67,15 @@ uint16_t serial_checksum(const uint8_t *data, size_t len)
 }
 
 int main(int argc, char *argv[])
-{
-    serial::Serial my_serial(DEVICE, SPEED, serial::Timeout::simpleTimeout(1000));
-    signal(SIGINT, &sigHandler);
-    
+{   
     ros::init(argc, argv, "decaNode");
     ros::NodeHandle nh;
-    ros::Publisher decaPos_pub = nh.advertise<cyphy_msgs::PosVec>("decaPos", 1000);
+    ros::NodeHandle private_handle("~");
+    ros::Publisher decaPos_pub = nh.advertise<geometry_msgs::Point>("decaPos", 1);
+    
+    std::string device_port;
+    private_handle.getParam("deca_port", device_port);
+    serial::Serial my_serial(device_port, SPEED, serial::Timeout::simpleTimeout(1000));
 
     int bytes_avail;
 
@@ -94,7 +84,7 @@ int main(int argc, char *argv[])
     
     TDOA deca_ekf;
 
-    while(stopflag)
+    while(ros::ok())
     {
         bytes_avail = my_serial.available();
         if(bytes_avail > 0)
@@ -146,7 +136,7 @@ int main(int argc, char *argv[])
             {
                 deca_ekf.stateEstimatorPredict();
                 vec3d_t pos = deca_ekf.getLocation();
-                cyphy_msgs::PosVec pos_msg;
+                geometry_msgs::Point pos_msg;
                 pos_msg.x = pos.x;
                 pos_msg.y = pos.y;
                 pos_msg.z = pos.z;
@@ -162,4 +152,5 @@ int main(int argc, char *argv[])
     }
     
     my_serial.close();
+    std::cout << "Closed serial" << std::endl;
 }

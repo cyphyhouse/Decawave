@@ -1,5 +1,6 @@
 <launch>
-    <arg name="port" default="/dev/ttyACM0" />
-    <node pkg= "decawave" name="positioning" type="subsystem_node" output="screen">
+    <arg name="deca_port" default="/dev/ttyACM1" />
+    <node name="positioning" pkg= "decawave" type="decaPos_node" output="screen">
+        <param name="deca_port" value="$(arg deca_port)" />
     </node>
 </launch>

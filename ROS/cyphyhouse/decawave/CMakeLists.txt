@@ -11,7 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   serial
   std_msgs
-  cyphy_msgs
+  geometry_msgs
 )
 
 ## System dependencies are found with CMake's conventions
