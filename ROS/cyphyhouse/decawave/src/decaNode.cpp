@@ -66,6 +66,12 @@ uint16_t serial_checksum(const uint8_t *data, size_t len)
     return sum2 << 8 | sum1;
 }
 
+void initAnchors()
+{
+    std::string path = ros::package::getPath("decawave");
+    std::ifstream input( path+"/config/anchorPos.txt");
+}
+
 int main(int argc, char *argv[])
 {   
     ros::init(argc, argv, "decaNode");
