@@ -1,0 +1,5 @@
+<launch>
+    <arg name="port" default="/dev/ttyACM0" />
+    <node pkg= "decawave" name="positioning" type="subsystem_node" output="screen">
+    </node>
+</launch>
