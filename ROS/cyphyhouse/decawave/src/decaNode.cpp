@@ -5,10 +5,11 @@
 #include <cmath>
 #include <csignal>
 #include <iostream>
+#include <fstream>
 
 #include "ros/ros.h"
 #include "geometry_msgs/Point.h"
-#include <sstream>
+
 
 #include "tdoa.h"
 #include "serial/serial.h"
@@ -69,7 +70,15 @@ uint16_t serial_checksum(const uint8_t *data, size_t len)
 void initAnchors()
 {
     std::string path = ros::package::getPath("decawave");
-    std::ifstream input( path+"/config/anchorPos.txt");
+    std::ifstream file( path+"/config/anchorPos.txt");
+    std::string str;
+    float x, y, z;
+    
+    while (std::getline(file,str)
+    {
+        sscanf(str, "%f, %f, %f", &x, &y, &z)
+        std::count << x << ", " << y << ", " << z << std::endl;
+    }
 }
 
 int main(int argc, char *argv[])
