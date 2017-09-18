@@ -9,14 +9,15 @@
 
 #include "ros/ros.h"
 #include "geometry_msgs/Point.h"
+#include "ros/package.h"
 
-
+#include "Eigen/Dense"
 #include "tdoa.h"
 #include "serial/serial.h"
 
 
 #define DEVICE        "/dev/ttyACM0"
-#define SPEED         B115200
+#define SPEED         115200
 #define MSG_SIZE      9
 
 #define MSG_TYPE_BYTE 0
@@ -36,6 +37,10 @@ uint8_t RX_idx;
 uint8_t An, Ar, dist_recv;
 float tdoaDistDiff;
 uint8_t serial_msg[SERIAL_BUF_SIZE];
+
+Eigen::MatrixXf P;
+Eigen::MatrixXf A;
+Eigen::MatrixXf Q;
 
 
 float to_float(uint8_t* buff)
@@ -67,19 +72,22 @@ uint16_t serial_checksum(const uint8_t *data, size_t len)
     return sum2 << 8 | sum1;
 }
 
-void initAnchors()
+void initAnchors(TDOA &ekf)
 {
     std::string path = ros::package::getPath("decawave");
     std::ifstream file( path+"/config/anchorPos.txt");
     std::string str;
     float x, y, z;
-    
-    while (std::getline(file,str)
+    int i = 0;
+    while (std::getline(file, str))
     {
-        sscanf(str, "%f, %f, %f", &x, &y, &z)
-        std::count << x << ", " << y << ", " << z << std::endl;
+        sscanf(str.c_str(), "%f, %f, %f", &x,&y,&z);
+        ekf.setAncPosition(i, x, y, z);
+        i++;
     }
 }
+
+void initRobotMatrices(std::string type);
 
 int main(int argc, char *argv[])
 {   
@@ -97,7 +105,15 @@ int main(int argc, char *argv[])
     RX_idx = 0;
     dist_recv = 0;
     
-    TDOA deca_ekf;
+    std::string robot_type;
+    private_handle.getParam("robot_type", robot_type);
+    initRobotMatrices(robot_type);
+    
+    vec3d_t initial_position = {0,0,0};
+    
+    TDOA deca_ekf(A, P, Q, initial_position);
+    
+    initAnchors(deca_ekf);
 
     while(ros::ok())
     {
@@ -168,4 +184,60 @@ int main(int argc, char *argv[])
     
     my_serial.close();
     std::cout << "Closed serial" << std::endl;
+}
+
+void initRobotMatrices(std::string type)
+{
+    if (type == "car")
+    {
+        A.setIdentity(6,6);
+        A(3,3) = 0.016;
+        A(4,4) = 0.016;
+        A(2,2) = 0;
+        A(5,5) = 0;
+        
+        P.setZero(6,6);
+        P(0,0) = 10000;
+        P(1,1) = 10000;
+        P(2,2) = 0;
+        P(3,3) = 1e-4;
+        P(4,4) = 1e-4;
+        P(5,5) = 0;
+        
+        Q.setZero(6,6);
+    }
+    else if (type == "quadcopter")
+    {
+        A.setIdentity(6,6);
+        A(3,3) = 0.016;
+        A(4,4) = 0.016;
+        A(5,5) = 0.016;
+        
+        P.setZero(6,6);
+        P(0,0) = 10000;
+        P(1,1) = 10000;
+        P(2,2) = 100;
+        P(3,3) = 1e-4;
+        P(4,4) = 1e-4;
+        P(5,5) = 1e-4;
+        
+        Q.setZero(6,6);
+    }
+    else
+    {
+        A.setIdentity(6,6);
+        A(3,3) = 0.016;
+        A(4,4) = 0.016;
+        A(5,5) = 0.016;
+        
+        P.setZero(6,6);
+        P(0,0) = 10000;
+        P(1,1) = 10000;
+        P(2,2) = 100;
+        P(3,3) = 1e-4;
+        P(4,4) = 1e-4;
+        P(5,5) = 1e-4;
+        
+        Q.setZero(6,6);
+    }
 }

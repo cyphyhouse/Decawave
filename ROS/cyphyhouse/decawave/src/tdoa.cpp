@@ -27,7 +27,7 @@ TDOA::TDOA(void)
     P.setZero(STATE_DIM, STATE_DIM);
     P(STATE_X, STATE_X) = powf(100,2);
     P(STATE_Y, STATE_Y) = powf(100,2);
-    P(STATE_Z, STATE_Z) = powf(1,2);
+    P(STATE_Z, STATE_Z) = powf(100,2);
     P(STATE_VX, STATE_VX) = powf(0.01,2);
     P(STATE_VY, STATE_VY) = powf(0.01,2);
     P(STATE_VZ, STATE_VZ) = powf(0.01,2);
@@ -39,22 +39,23 @@ TDOA::TDOA(void)
     
     Q.setZero(STATE_DIM, STATE_DIM);
     
-    initAnchorPos();
     stdDev = 0.15f;
 }
 
-TDOA::TDOA(Eigen::MatrixXf transition_mat, Eigen::MatrixXf prediction_mat, Eigen::MatrixXf covariance_mat)
+TDOA::TDOA(Eigen::MatrixXf transition_mat, Eigen::MatrixXf prediction_mat, Eigen::MatrixXf covariance_mat, vec3d_t init_pos)
 {
     tdoaCount = 0;
     nr_states = transition_mat.rows();
     
-    S.setZero(STATE_DIM);
+    setPredictionMat(prediction_mat);
+    setTransitionMat(transition_mat);
+    setCovarianceMat(covariance_mat);
     
-    P = prediction_mat;
-    A = transition_mat;
-    Q = covariance_mat;
+    S.setZero(nr_states);
+    S(0) = init_pos.x;
+    S(1) = init_pos.y;
+    S(2) = init_pos.z;
     
-    initAnchorPos();
     stdDev = 0.15f;
 }
 
@@ -81,15 +82,15 @@ void TDOA::setPredictionMat(Eigen::MatrixXf prediction_mat)
     P = prediction_mat;
 }
 
-void TDOA::setEstimationMat(Eigen::VectorXf estimation_mat)
+void TDOA::setCovarianceMat(Eigen::MatrixXf covariance_mat)
 {
-    if(estimation_mat.size() != nr_states)
+    if(covariance_mat.size() != nr_states)
     {
         // If provided transition_mat is of wrong size, ignore input
         return;
     }
 
-    S = estimation_mat;
+    Q = covariance_mat;
 }
 
 void TDOA::setAncPosition(int anc_num, vec3d_t anc_pos)
@@ -237,14 +238,3 @@ vec3d_t TDOA::getLocation(void)
     return pos;
 }
 
-void TDOA::initAnchorPos(void)
-{
-    setAncPosition(0, 0.155, 0.190, 2.390);
-    setAncPosition(1, 0.159, 0.792, 0.175);
-    setAncPosition(2, 4.495, 0.6096, 2.381);
-    setAncPosition(3, 4.498, 0.6746, 0.180);
-    setAncPosition(4, 0.155, 4.240, 2.379);
-    setAncPosition(5, 0.159, 4.360, 0.175);
-    setAncPosition(6, 4.498, 4.342, 2.374);
-    setAncPosition(7, 4.500, 4.332, 0.180);
-}
