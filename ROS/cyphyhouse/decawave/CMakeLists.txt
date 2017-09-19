@@ -99,7 +99,7 @@ catkin_package(
 include_directories(
  include
   ${catkin_INCLUDE_DIRS}
-  /usr/local/include/eigen3/
+  /usr/include/eigen3/
 )
 
 ## Add cmake target dependencies of the library

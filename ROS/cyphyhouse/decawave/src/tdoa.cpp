@@ -84,7 +84,7 @@ void TDOA::setPredictionMat(Eigen::MatrixXf prediction_mat)
 
 void TDOA::setCovarianceMat(Eigen::MatrixXf covariance_mat)
 {
-    if(covariance_mat.size() != nr_states)
+    if( (covariance_mat.rows() != nr_states) || (covariance_mat.cols() != nr_states) )
     {
         // If provided transition_mat is of wrong size, ignore input
         return;
@@ -155,11 +155,11 @@ void TDOA::scalarTDOADistUpdate(uint8_t Ar, uint8_t An, float distanceDiff)
 void TDOA::stateEstimatorScalarUpdate(Eigen::RowVectorXf H, float error, float stdMeasNoise)
 {
     // The Kalman gain as a column vector
-    static Eigen::VectorXf K(STATE_DIM);
+    static Eigen::VectorXf K(nr_states);
 
     // Temporary matrices for the covariance updates
-    static Eigen::VectorXf PHTm(STATE_DIM);
-    static Eigen::MatrixXf I = Eigen::MatrixXf::Identity(STATE_DIM, STATE_DIM);
+    static Eigen::VectorXf PHTm(nr_states);
+    static Eigen::MatrixXf I = Eigen::MatrixXf::Identity(nr_states, nr_states);
 
     // ====== INNOVATION COVARIANCE ======
     PHTm = P*H.transpose(); // PH'
@@ -204,9 +204,9 @@ void TDOA::stateEstimatorAddProcessNoise()
 void TDOA::PredictionBound()
 {
     //Ensure boundedness and symmetry of Prediction Matrix
-    for (int i=0; i<STATE_DIM; i++) 
+    for (int i=0; i<nr_states; i++) 
     {
-        for (int j=i; j<STATE_DIM; j++) 
+        for (int j=i; j<nr_states; j++) 
         {
             float p = 0.5f*P(i,j) + 0.5f*P(j,i);
             if (std::isnan(p) || (p > MAX_COVARIANCE) ) 
