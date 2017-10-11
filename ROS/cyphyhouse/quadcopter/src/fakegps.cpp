@@ -8,6 +8,8 @@
 #include <eigen_conversions/eigen_msg.h>
 #include <mavros/mavros_plugin.h>
 #include <mavros/setpoint_mixin.h>
+#include <mavconn/interface.h>
+
 
 #include "ros/ros.h"
 #include "geometry_msgs/Point.h"
@@ -16,6 +18,8 @@
 static const double lat0 = 0, lon0 = 0;
 static double old_stamp = ros::Time(0.0).toSec();
 static Eigen::Vector3d old_ecef(0,0,0);
+
+static mavconn::MAVConnInterface::Ptr ardupilot_link;
 
 static GeographicLib::Geocentric earth(GeographicLib::Constants::WGS84_a(), GeographicLib::Constants::WGS84_f());
 static GeographicLib::LocalCartesian proj(lat0, lon0, 0, earth);
@@ -62,11 +66,15 @@ void sendFakeGPS(const geometry_msgs::Point& point)
 
     old_stamp = stamp.toSec();
     old_ecef = current_ecef;
+
+    // send it
+    ardupilot_link.get()->send_message_ignore_drop(fix);
 }
 
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "fakeGPS");
+    ardupilot_link = mavconn::MAVConnInterface::open_url("udp://:14650@");
     ros::NodeHandle n;
     ros::Subscriber sub = n.subscribe("decaPos", 1, sendFakeGPS);
     ros::spin();
