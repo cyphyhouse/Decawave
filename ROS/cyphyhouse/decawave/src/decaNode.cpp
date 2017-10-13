@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
                 }
                 else
                 {
-                    printf("Unknown msg type: 0x%02X\n", serial_msg[0]);
+                    //printf("Unknown msg type: 0x%02X\n", serial_msg[0]);
                     ignoring_flag = 1;
                     RX_idx = 0;
                 }
@@ -153,8 +153,8 @@ int main(int argc, char *argv[])
                         printf("Error: Wrong checksum. Dump: ");
                         for(int i = 0; i<RX_idx; i++)
                             printf("0x%02X ", serial_msg[i]);
-                        printf(". Expected %04X", serial_checksum(serial_msg, MSG_SIZE-2));
-                        printf("\n");
+                        //printf(". Expected %04X", serial_checksum(serial_msg, MSG_SIZE-2));
+                        //printf("\n");
                     }
                     RX_idx = 0;
                 }
@@ -179,6 +179,8 @@ int main(int argc, char *argv[])
             deca_ekf.scalarTDOADistUpdate(An, Ar, tdoaDistDiff);
             
             deca_ekf.stateEstimatorFinalize();
+            
+            dist_recv = 0;
         }
     }
     
