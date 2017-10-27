@@ -4,9 +4,9 @@
     <Device manufacturerId="9" manufacturerName="ST" chipId="334" chipName="STM32F105RC" boardId="" boardName=""/>
     <BuildOption>
       <Compile>
-        <Option name="OptimizationLevel" value="3"/>
+        <Option name="OptimizationLevel" value="1"/>
         <Option name="UseFPU" value="0"/>
-        <Option name="UserEditCompiler" value="-ffunction-sections; -fdata-sections; -c; -fmessage-length=0"/>
+        <Option name="UserEditCompiler" value="-ffunction-sections; -fdata-sections; -c; -fmessage-length=0;"/>
         <Option name="SupportCPlusplus" value="0"/>
         <Includepaths>
           <Includepath path="."/>
@@ -38,8 +38,6 @@
         <Option name="LTO" value="0"/>
         <Option name="IsNewStartupCode" value="1"/>
         <Option name="Library" value="Use base C Library"/>
-        <Option name="DiscardUnusedSections" value="1"/>
-        <Option name="UserEditLinker" value="--entry=main; "/>
         <LinkedLibraries/>
         <MemoryAreas debugInFlashNotRAM="1">
           <Memory name="IROM1" type="ReadOnly" size="0x00040000" startValue="0x08000000"/>
@@ -92,8 +90,8 @@
     <File name="Libraries/CMSIS" path="" type="2"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_fsmc.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_fsmc.c" type="1"/>
     <File name="platform/stm32f10x_it.c" path="platform/stm32f10x_it.c" type="1"/>
-    <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_usart.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.c" type="1"/>
     <File name="FRT_Library/FreeRTOS/Source/queue.c" path="FRT_Library/FreeRTOS/Source/queue.c" type="1"/>
+    <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_usart.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_usart.c" type="1"/>
     <File name="FRT_Library/FreeRTOS/Source/include/mpu_wrappers.h" path="FRT_Library/FreeRTOS/Source/include/mpu_wrappers.h" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_dma.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_dma.h" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_pwr.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_pwr.c" type="1"/>
@@ -113,8 +111,8 @@
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_crc.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_crc.h" type="1"/>
     <File name="Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x" path="" type="2"/>
     <File name="FRT_Library/FreeRTOS/Source/portable/GCC/ARM_CM3/portmacro.h" path="FRT_Library/FreeRTOS/Source/portable/GCC/ARM_CM3/portmacro.h" type="1"/>
-    <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_usart.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_usart.h" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_iwdg.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_iwdg.c" type="1"/>
+    <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_usart.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_usart.h" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_adc.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_adc.h" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_rtc.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_rtc.h" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_dbgmcu.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dbgmcu.c" type="1"/>
@@ -129,14 +127,14 @@
     <File name="platform/syscalls.c" path="platform/syscalls.c" type="1"/>
     <File name="platform/deca_spi.c" path="platform/deca_spi.c" type="1"/>
     <File name="decadriver/deca_version.h" path="decadriver/deca_version.h" type="1"/>
-    <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_rtc.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rtc.c" type="1"/>
     <File name="FRT_Library/FreeRTOS/Source/include/FreeRTOS.h" path="FRT_Library/FreeRTOS/Source/include/FreeRTOS.h" type="1"/>
+    <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_rtc.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rtc.c" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_sdio.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_sdio.h" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver" path="" type="2"/>
     <File name="FRT_Library/FreeRTOS/Source/list.c" path="FRT_Library/FreeRTOS/Source/list.c" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/misc.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/misc.h" type="1"/>
-    <File name="platform/sleep.h" path="platform/sleep.h" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_rcc.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_rcc.c" type="1"/>
+    <File name="platform/sleep.h" path="platform/sleep.h" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_rcc.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_rcc.h" type="1"/>
     <File name="platform/lcd.h" path="platform/lcd.h" type="1"/>
     <File name="FRT_Library/FreeRTOS/Source/readme.txt" path="FRT_Library/FreeRTOS/Source/readme.txt" type="1"/>
@@ -151,8 +149,8 @@
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_bkp.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_bkp.c" type="1"/>
     <File name="FRT_Library/FreeRTOS" path="" type="2"/>
     <File name="src/tdoa_anc.c" path="src/tdoa_anc.c" type="1"/>
-    <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_sdio.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_sdio.c" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_cec.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_cec.c" type="1"/>
+    <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_sdio.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_sdio.c" type="1"/>
     <File name="Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/system_stm32f10x.c" path="Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/system_stm32f10x.c" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_can.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_can.h" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_pwr.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_pwr.h" type="1"/>
@@ -170,11 +168,11 @@
     <File name="FRT_Library/FreeRTOS/Source/include/queue.h" path="FRT_Library/FreeRTOS/Source/include/queue.h" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_tim.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_tim.h" type="1"/>
     <File name="platform/port_deca.h" path="platform/port_deca.h" type="1"/>
-    <File name="FRT_Library/FreeRTOS/Source/portable/readme.txt" path="FRT_Library/FreeRTOS/Source/portable/readme.txt" type="1"/>
     <File name="FRT_Library/FreeRTOS/Source/include/semphr.h" path="FRT_Library/FreeRTOS/Source/include/semphr.h" type="1"/>
+    <File name="FRT_Library/FreeRTOS/Source/portable/readme.txt" path="FRT_Library/FreeRTOS/Source/portable/readme.txt" type="1"/>
     <File name="Libraries/CMSIS/CM3/DeviceSupport" path="" type="2"/>
-    <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_gpio.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.c" type="1"/>
     <File name="FRT_Library/FreeRTOS/Source/include/projdefs.h" path="FRT_Library/FreeRTOS/Source/include/projdefs.h" type="1"/>
+    <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_gpio.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_gpio.c" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_spi.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_spi.h" type="1"/>
     <File name="FRT_Library/FreeRTOS/Source" path="" type="2"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_dac.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dac.c" type="1"/>
@@ -182,8 +180,8 @@
     <File name="inc" path="" type="2"/>
     <File name="Libraries/CMSIS/CM3/CoreSupport/core_cm3.h" path="Libraries/CMSIS/CM3/CoreSupport/core_cm3.h" type="1"/>
     <File name="platform" path="" type="2"/>
-    <File name="FRT_Library/FreeRTOS/Source/tasks.c" path="FRT_Library/FreeRTOS/Source/tasks.c" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_wwdg.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_wwdg.c" type="1"/>
+    <File name="FRT_Library/FreeRTOS/Source/tasks.c" path="FRT_Library/FreeRTOS/Source/tasks.c" type="1"/>
     <File name="stm32_flash_256k_ram_64k.ld" path="Linkers/stm32_flash_256k_ram_64k.ld" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/stm32f10x_dma.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/stm32f10x_dma.c" type="1"/>
     <File name="decadriver/deca_types.h" path="decadriver/deca_types.h" type="1"/>
@@ -193,9 +191,9 @@
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_wwdg.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_wwdg.h" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_iwdg.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_iwdg.h" type="1"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/inc/stm32f10x_dac.h" path="Libraries/STM32F10x_StdPeriph_Driver/inc/stm32f10x_dac.h" type="1"/>
-    <File name="decadriver/deca_params_init.c" path="decadriver/deca_params_init.c" type="1"/>
-    <File name="FRT_Library/FreeRTOS/Source/portable/GCC" path="" type="2"/>
     <File name="platform/deca_sleep.c" path="platform/deca_sleep.c" type="1"/>
+    <File name="FRT_Library/FreeRTOS/Source/portable/GCC" path="" type="2"/>
+    <File name="decadriver/deca_params_init.c" path="decadriver/deca_params_init.c" type="1"/>
     <File name="Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/stm32f10x.h" path="Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/stm32f10x.h" type="1"/>
     <File name="Libraries/CMSIS/CM3/DeviceSupport/ST" path="" type="2"/>
     <File name="Libraries/CMSIS/STM32F10x_StdPreiph_Driver/src/misc.c" path="Libraries/STM32F10x_StdPeriph_Driver/src/misc.c" type="1"/>

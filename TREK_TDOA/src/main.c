@@ -1,3 +1,17 @@
+/*! ----------------------------------------------------------------------------
+ *  @file    main.c
+ *  @brief   main loop for the DecaRanging application
+ *
+ * @attention
+ *
+ * Copyright 2015 (c) DecaWave Ltd, Dublin, Ireland.
+ *
+ * All rights reserved.
+ *
+ * @author DecaWave
+ */
+/* Includes */
+
 #include <stdio.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -18,6 +32,12 @@
 #include "port_deca.h"
 #include "tdoa_anc.h"
 
+
+
+extern void usb_run(void);
+extern int usb_init(void);
+extern void usb_printconfig(int, uint8*, int);
+extern void send_usbmessage(uint8*, int);
 
 #define SWS1_SHF_MODE 0x02	//short frame mode (6.81M)
 #define SWS1_CH5_MODE 0x04	//channel 5 mode
@@ -166,8 +186,8 @@ static void uwbTask(void* parameters)
 		{
 			rx_to_cb(NULL);
 			//timeout = 0xffffffffUL;
-			timeout = 10000;
-			//timeout = portMAX_DELAY;
+			//timeout = 10000;
+			timeout = portMAX_DELAY;
 		}
 	}
 }
@@ -212,7 +232,7 @@ static void main_task(void *pvParameters)
 	//char lcd_str[16];
 	//sprintf(lcd_str, "TDOA v0.51 Anc:%d", (((s1switch & 0x10) << 2) + (s1switch & 0x20) + ((s1switch & 0x40) >> 2)) >> 4);
 	//char lcd_str[16] = {'T','D','O','A',' ','v','0','.','5','2',' ','A','n','c',':','9'};
-	char lcd_str[16] = "TDOA v0.70 Anc:x";
+	char lcd_str[16] = "TDOA v0.62 Anc:x";
 	lcd_str[15] = ((((s1switch & 0x10) << 2) + (s1switch & 0x20) + ((s1switch & 0x40) >> 2)) >> 4) + 0x30; //converts to ASCII number
 	lcd_display_str(lcd_str);
 
@@ -220,6 +240,11 @@ static void main_task(void *pvParameters)
 
 	int sw_mode = 1;
 	tdoa_init(s1switch, &chConfig[sw_mode]);
+
+#ifdef USB_SUPPORT //this is defined in the port.h file
+	// Configure USB for output, (i.e. not USB to SPI)
+	usb_printconfig(16, (uint8 *)SOFTWARE_VER_STRING, s1switch);
+#endif
 
 	//sleep for 5 seconds displaying last LCD message and flashing LEDs
 	i=30;
@@ -244,6 +269,13 @@ static void main_task(void *pvParameters)
     while(1)
     {
 		//Do something
+
+#ifdef USB_SUPPORT //this is set in the port.h file
+
+        //led_on(LED_PC7);
+        usb_run();
+        //led_off(LED_PC7);
+#endif
     }
 
 }

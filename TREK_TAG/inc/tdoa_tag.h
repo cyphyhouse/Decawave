@@ -16,7 +16,7 @@ extern "C" {
 #include <math.h>
 #include "port_deca.h"
 
-#define NR_OF_ANCHORS        6
+#define NR_OF_ANCHORS        8
 #define SPEED_OF_LIGHT      (299702547.0)     // in m/s in air
 #define MASK_40BIT          (0x00FFFFFFFFFFUL)  // DW1000 counter is 40 bits
 #define MASK_TXDTS          (0x00FFFFFFFE00UL)  //The TX timestamp will snap to 8 ns resolution - mask lower 9 bits.
@@ -44,7 +44,7 @@ typedef struct {
 
 typedef struct rangePacket_s {
 	uint8 type;
-	uint8 txMaster[5];				//TX time at master
+	uint8 idx;				//TX time at master
 	uint8 timestamps[NR_OF_ANCHORS][5];	//Relevant time for anchors
 }__attribute__((packed)) rangePacket_t;
 

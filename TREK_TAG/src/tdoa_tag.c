@@ -15,8 +15,8 @@ uint8 previousAnchor;
 rangePacket_t rxPacketBuffer[NR_OF_ANCHORS];
 dwTime_t arrivals[NR_OF_ANCHORS];
 
-float frameTime_in_cl_A[NR_OF_ANCHORS];
-float clockCorrection_T_To_A[NR_OF_ANCHORS];
+uint32_t frameTime_in_cl_A[NR_OF_ANCHORS];
+double clockCorrection_T_To_A[NR_OF_ANCHORS];
 
 void tdoa_init(uint8 s1switch, dwt_config_t *config)
 {
@@ -38,12 +38,12 @@ void tdoa_init(uint8 s1switch, dwt_config_t *config)
 	usbDataReady = 0;
 }
 
-float calcClockCorrection(const float frameTime, const float previousFrameTime)
+double calcClockCorrection(const uint32_t frameTime, const uint32_t previousFrameTime)
 {
-    float clockCorrection = 1.0f;
+    double clockCorrection = 1.0;
 
-    if (frameTime != 0.0f) {
-      clockCorrection = previousFrameTime / frameTime;
+    if (frameTime != 0) {
+      clockCorrection = ((double)previousFrameTime / (double)frameTime);
     }
 
     return clockCorrection;
@@ -97,16 +97,16 @@ void rx_ok_cb(const dwt_cb_data_t *rxd)
 				statsAcceptedAnchorDataPackets++;
 
 				// Calculate clock correction from anchor to reference anchor
-				const float frameTime_in_cl_An = truncateToTimeStamp(rxAr_by_An_in_cl_An - previous_rxAr_by_An_in_cl_An);
-				const float clockCorrection_An_To_Ar = calcClockCorrection(frameTime_in_cl_An, frameTime_in_cl_A[previousAnchor]);
+				const uint32_t frameTime_in_cl_An = truncateToTimeStamp(rxAr_by_An_in_cl_An - previous_rxAr_by_An_in_cl_An);
+				const double clockCorrection_An_To_Ar = calcClockCorrection(frameTime_in_cl_An, frameTime_in_cl_A[previousAnchor]);
 
 				const int64_t rxAr_by_T_in_cl_T  = arrivals[previousAnchor].full;
 				const int64_t txAr_in_cl_Ar = timestampToUint64(rxPacketBuffer[previousAnchor].timestamps[previousAnchor]);
 
 				// Calculate distance diff
-				const int64_t tof_Ar_to_An_in_cl_Ar = (((truncateToTimeStamp(rxAr_by_An_in_cl_An - previous_txAn_in_cl_An) * clockCorrection_An_To_Ar) - truncateToTimeStamp(txAr_in_cl_Ar - rxAn_by_Ar_in_cl_Ar))) / 2;
-				const int64_t delta_txAr_to_txAn_in_cl_Ar = (tof_Ar_to_An_in_cl_Ar + truncateToTimeStamp(txAn_in_cl_An - rxAr_by_An_in_cl_An) * clockCorrection_An_To_Ar);
-				const int64_t timeDiffOfArrival_in_cl_Ar =  truncateToTimeStamp(rxAn_by_T_in_cl_T - rxAr_by_T_in_cl_T) * clockCorrection_T_To_A[previousAnchor] - delta_txAr_to_txAn_in_cl_Ar;
+				const int64_t tof_Ar_to_An_in_cl_Ar = ((((double)truncateToTimeStamp(rxAr_by_An_in_cl_An - previous_txAn_in_cl_An) * clockCorrection_An_To_Ar) - (double)truncateToTimeStamp(txAr_in_cl_Ar - rxAn_by_Ar_in_cl_Ar))) / 2.0;
+				const int64_t delta_txAr_to_txAn_in_cl_Ar = (tof_Ar_to_An_in_cl_Ar + (double)truncateToTimeStamp(txAn_in_cl_An - rxAr_by_An_in_cl_An) * clockCorrection_An_To_Ar);
+				const float timeDiffOfArrival_in_cl_Ar =  (double)truncateToTimeStamp(rxAn_by_T_in_cl_T - rxAr_by_T_in_cl_T) * clockCorrection_T_To_A[previousAnchor] - delta_txAr_to_txAn_in_cl_Ar;
 
 				const float tdoaDistDiff = timeDiffOfArrival_in_cl_Ar * 0.004690356867864f; //SPEED_OF_LIGHT * timeDiffOfArrival_in_cl_Ar * DWT_TIME_UNITS
 
@@ -125,7 +125,7 @@ void rx_ok_cb(const dwt_cb_data_t *rxd)
 		}
 
 		// Calculate clock correction for tag to anchor
-		const float frameTime_in_T = truncateToTimeStamp(rxAn_by_T_in_cl_T - previous_rxAn_by_T_in_cl_T);
+		const uint32_t frameTime_in_T = truncateToTimeStamp(rxAn_by_T_in_cl_T - previous_rxAn_by_T_in_cl_T);
 		frameTime_in_cl_A[anchor] = truncateToTimeStamp(txAn_in_cl_An - previous_txAn_in_cl_An);
 		clockCorrection_T_To_A[anchor] = calcClockCorrection(frameTime_in_T, frameTime_in_cl_A[anchor]);
 

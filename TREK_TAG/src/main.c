@@ -233,7 +233,7 @@ int main(void)
 	}
 
 	/* Display application name on LCD. */
-	char lcd_str[16] = "TDOA v0.40 TAG:x";
+	char lcd_str[16] = "TDOA v0.45 TAG:x";
 	lcd_str[15] = ((((s1switch & 0x10) << 2) + (s1switch & 0x20) + ((s1switch & 0x40) >> 2)) >> 4) + 0x30; //converts to ASCII number
 	lcd_display_str(lcd_str);
 
