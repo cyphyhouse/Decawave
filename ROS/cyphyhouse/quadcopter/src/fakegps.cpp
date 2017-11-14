@@ -17,7 +17,6 @@
 
 static const double lat0 = 40.116, lon0 = -88.224;	// IRL GPS coords
 static ros::Time old_stamp = ros::Time(0.0);
-static ros::NodeHandle n;
 static ros::ServiceClient client;
 static Eigen::Vector3d old_ecef(0,0,0);
 
@@ -80,8 +79,8 @@ void sendFakeGPS(const geometry_msgs::PoseStamped::ConstPtr& pose)
 
 void sendWP(const geometry_msgs::Point& point)
 {
-    mavros_msgs::WaypointPush waypoint_msg;
-    mavros_msgs::Waypoint waypoint;
+    mavros_msgs::WaypointPush waypoint_msg {};
+    mavros_msgs::Waypoint waypoint {};
     double lat, lon, h;
     proj.Reverse(point.y, -point.x, point.z, lat, lon, h);
     waypoint_msg.request.start_index = 0;
@@ -97,8 +96,8 @@ void sendWP(const geometry_msgs::Point& point)
     waypoint.y_long = lon;
     waypoint.z_alt = h;
 
-    // populate waypoint table with waypoint message
-    waypoint_msg.request.waypoints[0] = waypoint;
+    // populate waypoint table with waypoint message (it's a vector)
+    waypoint_msg.request.waypoints.push_back(waypoint);
 
     // send it using service
     client.call(waypoint_msg);
@@ -108,6 +107,7 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "fakeGPS");
     ardupilot_link = mavconn::MAVConnInterface::open_url("udp://127.0.0.1:14550@");
+    ros::NodeHandle n;
     client = n.serviceClient<mavros_msgs::WaypointPush>("/mavros/mission/push");
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/cyphyhousecopter/pose", 1, sendFakeGPS);
     ros::Subscriber waypoint = n.subscribe("/starl/waypoints", 1, sendWP);  // second parameter is num of buffered messages
