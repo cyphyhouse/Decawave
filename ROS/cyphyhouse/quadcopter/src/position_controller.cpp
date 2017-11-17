@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 
+#include <eigen_conversions/eigen_msg.h>
 
 #include "ros/ros.h"
 #include "geometry_msgs/PoseStamped.h"
@@ -9,12 +10,6 @@
 
 Eigen::Vector3d current_pos, velSetpoint;
 
-PID pidX(2,0,0,10,1.1);
-PID pidY(2,0,0,10,1.1);
-PID pidZ(2,0.5,0,10,1.1);
-PID pidVX(25,1,0,10,22);
-PID pidVY(25,1,0,10,22);
-PID pidVZ(25,15,0,10,1);
 
 class PID
 {
@@ -41,7 +36,7 @@ public:
 		integ += error*dt;
 		integ = fmax(fmin(integ, integralLimit), -integralLimit);
 		
-		output = kp*error + kd*dInput + ki*integ;
+		double output = kp*error + kd*dInput + ki*integ;
 		output = fmax(fmin(output, outputLimit), -outputLimit);
 	}
 	void setSetpoint(double _setpoint)
@@ -52,7 +47,15 @@ private:
     //variables
     double kp, ki, kd, dt, samplingRate, integralLimit, outputLimit;
 	double lastMeasured, integ;
+    double setpoint;
 };
+
+PID pidX(2,0,0,10,1.1);
+PID pidY(2,0,0,10,1.1);
+PID pidZ(2,0.5,0,10,1.1);
+PID pidVX(25,1,0,10,22);
+PID pidVY(25,1,0,10,22);
+PID pidVZ(25,15,0,10,1);
 
 void getPosition(const geometry_msgs::PoseStamped::ConstPtr& pose)
 {
