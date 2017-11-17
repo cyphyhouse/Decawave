@@ -7,8 +7,10 @@
 #include "ros/ros.h"
 #include "geometry_msgs/PoseStamped.h"
 #include "ros/package.h"
+#include "std_msgs/Float64.h"
+#include "geometry_msgs/Point.h"
 
-Eigen::Vector3d current_pos, velSetpoint;
+geometry_msgs::Point current_pos, velSetpoint;
 
 
 class PID
@@ -59,9 +61,9 @@ PID pidVZ(25,15,0,10,1);
 
 void getPosition(const geometry_msgs::PoseStamped::ConstPtr& pose)
 {
-    current_pos.x = point.x;
-	current_pos.y = point.y;
-	current_pos.z = point.z;
+    current_pos.x = pose.x;
+	current_pos.y = pose.y;
+	current_pos.z = pose.z;
 }
 
 void getWaypoint(const geometry_msgs::Point& point)
