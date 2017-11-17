@@ -19,7 +19,6 @@
 static const double lat0 = 40.116, lon0 = -88.224;	// IRL GPS coords
 ros::Time old_stamp = ros::Time(0.0);
 ros::ServiceClient client;
-Eigen::Vector3d old_ecef(0,0,0);
 geometry_msgs::Vector3 current_vel;
 static GeographicLib::Geoid egm96_5("egm96-5", "", true, true);
 
@@ -40,7 +39,6 @@ void sendFakeGPS(const geometry_msgs::PoseStamped::ConstPtr& pose)
     geometry_msgs::Point point = pose->pose.position;
     mavlink::common::msg::HIL_GPS fix {};
     ros::Time stamp = ros::Time::now();
-    Eigen::Vector3d current_ecef(point.x, point.y, point.z);
 
     if ((stamp - old_stamp) < ros::Duration(0.1))   // throttle incoming messages to 10 Hz
         return;
@@ -49,9 +47,6 @@ void sendFakeGPS(const geometry_msgs::PoseStamped::ConstPtr& pose)
     ROS_INFO("x: %f, y: %f, z: %f\n", point.x, point.y, point.z);
     proj.Reverse(point.y, -point.x, point.z, lat, lon, h);
     ROS_INFO("latitude: %f, longitude: %f, altitude: %f", lat, lon, (h + GeographicLib::Geoid::ELLIPSOIDTOGEOID * egm96_5(lat, lon)));
-
-    // compute velocity (borrowed from mavros)
-    // Eigen::Vector3d vel = ((current_ecef - old_ecef) / (stamp.toSec() - old_stamp.toSec())) * 1e2;
 
     // compute course over ground (borrowed from mavros)
     double cog;
