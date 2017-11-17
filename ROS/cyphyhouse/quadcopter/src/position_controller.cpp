@@ -14,7 +14,7 @@ PID pidY(2,0,0,10,1.1);
 PID pidZ(2,0.5,0,10,1.1);
 PID pidVX(25,1,0,10,22);
 PID pidVY(25,1,0,10,22);
-PID pidVZ(25,15,0,10,32.7675);
+PID pidVZ(25,15,0,10,1);
 
 class PID
 {
@@ -83,7 +83,17 @@ void sendAttitude()
 	pitchRaw = pidVY.pidUpdate(current_vel.y);
 	
 	thrustRaw = pidVZ.pidUpdate(current_vel.z);
-	thrustRaw /= 32.7675;
+	
+	//q = AngleAxisf(rollRaw, Vector3f::UnitX())* AngleAxisf(pitchRaw, Vector3f::UnitY())* AngleAxisf(0, Vector3f::UnitZ());
+	
+	geometry_msgs::PoseStamped attmsg;
+	attmsg.header.stamp = ros::Time::now().toNSec() / 1000;
+	attmsg.pose.pose.x = fmax(fmin(rollRaw,20),-20);
+	attmsg.pose.pose.y = fmax(fmin(pitchRaw,20),-20);
+	attmsg.pose.pose.z = 0;
+	attPub.publish(attmsg);
+	std_msgs::Float64 thrustmsg = thrustRaw;
+	thrustPub.publish(thrustmsg);
 }
 
 int main(int argc, char **argv)
@@ -95,7 +105,8 @@ int main(int argc, char **argv)
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/cyphyhousecopter/pose", 1, getPosition);
     ros::Subscriber waypoint = n.subscribe("/starl/waypoints", 1, getWaypoint);  // second parameter is num of buffered messages
 	
-	ros::Publisher attPub = n.advertise<geometry_msgs::PoseStamped>("attitude",1)
+	ros::Publisher attPub = n.advertise<geometry_msgs::PoseStamped>("attitude",1);
+	ros::Publisher thrustPub = n.advertise<std_msgs::Float64>("att_throttle ",1);
 	
 	//TODO: Add arming, takeoff, and land commands
 	
