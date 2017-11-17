@@ -72,6 +72,7 @@ public:
     
     // Get functions
     vec3d_t getLocation();
+	vec3d_t getVelocity();
     vec3d_t getAncPosition(int anc_num);
     
 private:

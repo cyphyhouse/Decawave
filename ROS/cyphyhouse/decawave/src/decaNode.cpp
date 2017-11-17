@@ -6,6 +6,8 @@
 #include <csignal>
 #include <iostream>
 #include <fstream>
+#include <chrono>
+#include <thread>
 
 #include "ros/ros.h"
 #include "geometry_msgs/Point.h"
@@ -31,6 +33,7 @@
 
 #define SERIAL_BUF_SIZE 32
 
+#define SLEEP_TIME_MICROS 10
 
 uint8_t ignoring_flag = 0;
 uint8_t RX_idx;
@@ -95,6 +98,7 @@ int main(int argc, char *argv[])
     ros::NodeHandle nh;
     ros::NodeHandle private_handle("~");
     ros::Publisher decaPos_pub = nh.advertise<geometry_msgs::Point>("decaPos", 1);
+	ros::Publisher decaVel_pub = nh.advertise<geometry_msgs::Point>("decaVel", 1);
     
     std::string device_port;
     private_handle.getParam("deca_port", device_port);
@@ -147,12 +151,40 @@ int main(int argc, char *argv[])
                         Ar = serial_msg[ANCR_BYTE];
                         tdoaDistDiff = to_float(&serial_msg[DATA_BYTE]);
                         dist_recv = 1;
-                    }
+			if(dist_recv) //Received distance measurement. Can calculate stuff now
+			{
+			    if(Ar == 0)
+			    {
+				deca_ekf.stateEstimatorPredict();
+				vec3d_t pos = deca_ekf.getLocation();
+				geometry_msgs::Point pos_msg;
+				pos_msg.x = pos.x;
+				pos_msg.y = pos.y;
+				pos_msg.z = pos.z;
+				decaPos_pub.publish(pos_msg);
+				vec3d_t vel = deca_ekf.getVelocity();
+				geometry_msgs::Point vel_msg;
+				vel_msg.x = vel.x;
+				vel_msg.y = vel.y;
+				vel_msg.z = vel.z;
+				decaVel_pub.publish(vel_msg);
+			    }
+			    
+			    deca_ekf.stateEstimatorAddProcessNoise();
+			    
+			    deca_ekf.scalarTDOADistUpdate(An, Ar, tdoaDistDiff);
+			    
+			    deca_ekf.stateEstimatorFinalize();
+			    
+			    dist_recv = 0;
+			}
+		    }
+                    
                     else
                     {
-                        printf("Error: Wrong checksum. Dump: ");
-                        for(int i = 0; i<RX_idx; i++)
-                            printf("0x%02X ", serial_msg[i]);
+                        //printf("Error: Wrong checksum. Dump: ");
+                        //for(int i = 0; i<RX_idx; i++)
+                        //    printf("0x%02X ", serial_msg[i]);
                         //printf(". Expected %04X", serial_checksum(serial_msg, MSG_SIZE-2));
                         //printf("\n");
                     }
@@ -160,30 +192,12 @@ int main(int argc, char *argv[])
                 }
             }
         }
+	else
+	{
+		std::this_thread::sleep_for(std::chrono::microseconds(SLEEP_TIME_MICROS));
+	}
         
-        if(dist_recv) //Received distance measurement. Can calculate stuff now
-        {
-            if(Ar == 0)
-            {
-                deca_ekf.stateEstimatorPredict();
-                vec3d_t pos = deca_ekf.getLocation();
-                geometry_msgs::Point pos_msg;
-                pos_msg.x = pos.x;
-                pos_msg.y = pos.y;
-                pos_msg.z = pos.z;
-                decaPos_pub.publish(pos_msg);
-            }
-            
-            deca_ekf.stateEstimatorAddProcessNoise();
-            
-            deca_ekf.scalarTDOADistUpdate(An, Ar, tdoaDistDiff);
-            
-            deca_ekf.stateEstimatorFinalize();
-            
-            dist_recv = 0;
-        }
     }
-    
     my_serial.close();
     std::cout << "Closed serial" << std::endl;
 }

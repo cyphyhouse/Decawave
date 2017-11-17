@@ -238,3 +238,13 @@ vec3d_t TDOA::getLocation(void)
     return pos;
 }
 
+vec3d_t TDOA::getVelocity(void)
+{
+    vec3d_t vel;
+    vel.x = S(STATE_VX);
+    vel.y = S(STATE_VY);
+    vel.z = S(STATE_VZ);
+
+    return vel;
+}
+
