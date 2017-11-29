@@ -1,7 +1,7 @@
 1. connect to drone using ssh, run tmux sesh, split into 4 panes
 2. pane 1: sudo systemctl start arducopter
 3. pane 2: roscore
-4. pane 3: rosrun mavros mavros_node _fcu_url:=udp://:14650@ _gcs_url:=udp://@127.0.0.1:14550 
+4. pane 3: rosrun mavros mavros_node _fcu_url:=udp://:14650@ _gcs_url:=udp://@127.0.0.1:14550
 5. pane 4: cd catkin_ws; source devel/setup.bash; rosrun quadcopter fakeGPS_node
 
 pub pose: rostopic pub /vrpn_client_node/cyphyhousecopter/pose geometry_msgs/PoseStamped -r 5 -- '{header: auto, pose: {position: [0,0,0], orientation: [0,0,0,0]}}'
