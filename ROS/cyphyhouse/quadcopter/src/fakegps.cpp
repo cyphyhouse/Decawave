@@ -10,9 +10,9 @@
 #include <mavros/setpoint_mixin.h>
 #include <mavconn/interface.h>
 
-#include <mavros_msgs/CommandInt.h>
 #include <mavros_msgs/CommandTOL.h>
 #include <mavros_msgs/CommandBool.h>
+#include <mavros_msgs/CommandHome.h>
 #include <mavros_msgs/SetMode.h>
 
 #include "ros/ros.h"
@@ -26,13 +26,15 @@ double current_lat, current_lon, current_h = 0;
 
 ros::Time old_stamp = ros::Time(0.0);
 
-ros::ServiceClient cmd_client;
 ros::ServiceClient arming_client;
 ros::ServiceClient takeoff_client;
 ros::ServiceClient land_client;
 ros::ServiceClient mode_client;
 
+ros::Publisher postarget_pub;
+
 geometry_msgs::Vector3 current_vel;
+geometry_msgs::Point deca_position;
 
 static mavconn::MAVConnInterface::Ptr ardupilot_link;
 
@@ -45,6 +47,11 @@ void getVelocity(const geometry_msgs::TwistStamped& twist)
     current_vel.x = twist.twist.linear.x;
     current_vel.y = twist.twist.linear.y;
     current_vel.z = twist.twist.linear.z;
+}
+
+void getDecaPosition(const geometry_msgs::Point& point)
+{
+    deca_position = point;
 }
 
 void sendFakeGPS(const geometry_msgs::PoseStamped::ConstPtr& pose)
@@ -60,6 +67,13 @@ void sendFakeGPS(const geometry_msgs::PoseStamped::ConstPtr& pose)
     // ROS_INFO("x: %f, y: %f, z: %f\n", point.x, point.y, point.z);
     proj.Reverse(point.y, -point.x, point.z, lat, lon, h);
     // ROS_INFO("latitude: %f, longitude: %f, altitude: %f", lat, lon, h);
+
+    std::ofstream positionFile;
+    positionFile.open ("/home/pi/copterpos.txt", std::ios::app);
+    positionFile << stamp.toNSec() / 1000 << ", ";
+    positionFile << point.x << ", " << point.y << ", " << point.z << "\n";
+    positionFile << deca_position.x << ", " << deca_position.y << ", " << deca_position.z << ", ";
+    positionFile.close();
 
     current_lat = lat;
     current_lon = lon;
@@ -99,8 +113,8 @@ void sendFakeGPS(const geometry_msgs::PoseStamped::ConstPtr& pose)
 void sendWP(const geometry_msgs::PointStamped& stamped_point)
 {
     mavros_msgs::SetMode mode_msg;
-    mode_msg.request.base_mode = 216;
-    mode_msg.request.custom_mode = "";
+    mode_msg.request.base_mode = 0;
+    mode_msg.request.custom_mode = "GUIDED";
     mode_client.call(mode_msg);
     geometry_msgs::Point point = stamped_point.point;
     std::string stamp = stamped_point.header.frame_id;
@@ -145,23 +159,15 @@ void sendWP(const geometry_msgs::PointStamped& stamped_point)
     }
     else
     {
-        mavros_msgs::CommandInt cmd_msg {};
-        double lat, lon, h;
-        proj.Reverse(point.y, -point.x, point.z, lat, lon, h);
-        cmd_msg.request.frame = 0;   // not sure if this does anything
-        cmd_msg.request.command = 192;  // enum MAV_CMD_NAV_WAYPOINT
-        cmd_msg.request.current = 1;   // apparently doesn't matter
-        cmd_msg.request.autocontinue = 1;
-        cmd_msg.request.param1 = -1;    // hold time in secs
-        cmd_msg.request.param2 = 1;  // acceptance radius in meters
-        //cmd_msg.request.param3 = 0;    // pass through waypoint
-        cmd_msg.request.param4 = NAN;  // yaw angle (don't need it so NaN)
-        cmd_msg.request.x = lat * 1E7;
-        cmd_msg.request.y = lon * 1E7;
-        cmd_msg.request.z = h;
+        geometry_msgs::PoseStamped postarget_msg;
+        postarget_msg.header.stamp = ros::Time::now();
+        postarget_msg.header.frame_id = '0';
+        postarget_msg.pose.position.x = point.y;
+        postarget_msg.pose.position.y = -point.x;
+        postarget_msg.pose.position.z = point.z;
 
-        // send it using service
-        cmd_client.call(cmd_msg);
+        // publish it
+        postarget_pub.publish(postarget_msg);
     }
 }
 
@@ -171,15 +177,24 @@ int main(int argc, char **argv)
     ardupilot_link = mavconn::MAVConnInterface::open_url("udp://127.0.0.1:14550@");
     ros::NodeHandle n;
 
-    cmd_client = n.serviceClient<mavros_msgs::CommandInt>("/mavros/cmd/command_int");
     arming_client = n.serviceClient<mavros_msgs::CommandBool>("/mavros/cmd/arming");
     takeoff_client = n.serviceClient<mavros_msgs::CommandTOL>("/mavros/cmd/takeoff");
     land_client = n.serviceClient<mavros_msgs::CommandTOL>("/mavros/cmd/land");
     mode_client = n.serviceClient<mavros_msgs::SetMode>("/mavros/set_mode");
 
+    postarget_pub = n.advertise<geometry_msgs::PoseStamped>("/mavros/setpoint_position/local", 1);
+
     ros::Subscriber vel_sub = n.subscribe("/vrpn_client_node/cyphyhousecopter/twist", 1, getVelocity);
+    ros::Subscriber deca_pos = n.subscribe("/decaPos", 1, getDecaPosition);
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/cyphyhousecopter/pose", 1, sendFakeGPS);
     ros::Subscriber waypoint = n.subscribe("/starl/waypoints", 1, sendWP);  // second parameter is num of buffered messages
+
+    ros::ServiceClient sethome_client = n.serviceClient<mavros_msgs::CommandHome>("/mavros/cmd/set_home");
+    mavros_msgs::CommandHome sethome_msg;
+    sethome_msg.request.current_gps = false;
+    sethome_msg.request.latitude = lat0;
+    sethome_msg.request.longitude = lon0;
+    sethome_msg.request.altitude = 0;
 
     ros::spin();
     return 0;
