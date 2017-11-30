@@ -193,6 +193,25 @@ void TDOA::stateEstimatorPredict(double dt)
     S[STATE_Z] += S[STATE_VZ] * dt;
 }
 
+void TDOA::stateEstimatorPredictAcc(double dt, vec3d_t acc)
+{
+    A(STATE_X,STATE_VX) = A(STATE_X,STATE_X) * dt;
+    A(STATE_Y,STATE_VY) = A(STATE_Y,STATE_Y) * dt;
+    A(STATE_Z,STATE_VZ) = A(STATE_Z,STATE_Z) * dt;
+    // Covariance update
+    P = A*P*A.transpose();
+    
+    // Prediction Step
+    // Assume acc is already rotated from body to global frame
+    dt2 = dt*dt;
+    S[STATE_X] += S[STATE_VX] * dt + acc.x*dt2/2.0;
+    S[STATE_Y] += S[STATE_VY] * dt + acc.y*dt2/2.0;
+    S[STATE_Z] += S[STATE_VZ] * dt + (acc.z - GRAVITY_MAGNITUDE)*dt2/2.0;
+    S[STATE_VX] += acc.x*dt;
+    S[STATE_VY] += acc.y*dt;
+    S[STATE_VZ] += (acc.z - GRAVITY_MAGNITUDE)*dt;
+}
+
 void TDOA::stateEstimatorFinalize()
 {
     // So far nothing happens here
@@ -201,10 +220,17 @@ void TDOA::stateEstimatorFinalize()
     PredictionBound();
 }
 
-void TDOA::stateEstimatorAddProcessNoise()
+void TDOA::stateEstimatorAddProcessNoise(double dt, double acc_noise)
 {
     // Covariance update
-    P += Q;
+    P += Q ;
+    
+    P(STATE_X, STATE_X) += pow(acc_noise*dt*dt,2);
+    P(STATE_Y, STATE_Y) += pow(acc_noise*dt*dt,2);
+    P(STATE_Z, STATE_Z) += pow(acc_noise*dt*dt,2);
+    P(STATE_VX, STATE_VX) += pow(acc_noise*dt,2);
+    P(STATE_VY, STATE_VY) += pow(acc_noise*dt,2);
+    P(STATE_VZ, STATE_VZ) += pow(acc_noise*dt,2);
     
     PredictionBound();
 }

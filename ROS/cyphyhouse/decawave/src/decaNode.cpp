@@ -12,6 +12,7 @@
 #include "ros/ros.h"
 #include "geometry_msgs/Point.h"
 #include "ros/package.h"
+#include <sensor_msgs/Imu.h>
 
 #include "Eigen/Dense"
 #include "tdoa.h"
@@ -77,8 +78,14 @@ uint16_t serial_checksum(const uint8_t *data, size_t len)
 
 void initAnchors(TDOA &ekf)
 {
-    std::string path = ros::package::getPath("decawave");
+    std::string path;
+#ifdef NAVIO2
+    path = "/home/pi/catkin_ws/src/decawave";
+#else
+    path = ros::package::getPath("decawave");
+#endif
     std::ifstream file( path+"/config/anchorPos.txt");
+    
     std::string str;
     float x, y, z;
     int i = 0;
@@ -90,6 +97,23 @@ void initAnchors(TDOA &ekf)
     }
 }
 
+#ifdef NAVIO2
+vec3d_t acc;
+void getImu(const sensor_msgs::Imu& imu)
+{
+    double qx, qy, qz, qw;
+    Eigen::Matrix3d R;
+    Eigen::Vector3d imu_acc, acc_temp;
+    
+    R = imu.Quaternion.toRotationMatrix();
+    imu_acc = imu.linear_acceleration;
+    acc_temp = R*imu_acc;
+    acc.x = acc_temp(1);
+    acc.y = -acc_temp(0);
+    acc.z = acc_temp(2);
+}
+#endif
+
 void initRobotMatrices(std::string type);
 
 int main(int argc, char *argv[])
@@ -99,6 +123,10 @@ int main(int argc, char *argv[])
     ros::NodeHandle private_handle("~");
     ros::Publisher decaPos_pub = nh.advertise<geometry_msgs::Point>("decaPos", 1);
     ros::Publisher decaVel_pub = nh.advertise<geometry_msgs::Point>("decaVel", 1);
+    
+#ifdef NAVIO2
+    ros::Subscriber imu_sub = n.subscribe("/mavros/imu/data", 1, getImu);
+#endif
     
     std::string device_port;
     private_handle.getParam("deca_port", device_port);
@@ -158,7 +186,13 @@ int main(int argc, char *argv[])
                             ros::Duration t = ros::time::now() - last_pub;
                             if(t.toSec() >= 0.01)
                             {
+                            #ifdef NAVIO2
+                                deca_ekf.stateEstimatorPredictAcc(t.toSec(), acc);
+                                deca_ekf.stateEstimatorAddProcessNoise(t.toSec(), 0.5);
+                            #else
                                 deca_ekf.stateEstimatorPredict(t.toSec());
+                                deca_ekf.stateEstimatorAddProcessNoise(t.toSec(), 0);
+                            #endif
                                 
                                 vec3d_t pos = deca_ekf.getLocation();
                                 geometry_msgs::Point pos_msg;
@@ -176,11 +210,11 @@ int main(int argc, char *argv[])
                                 decaVel_pub.publish(vel_msg);
                             }
                             
-                            deca_ekf.stateEstimatorAddProcessNoise();
+                            
                             
                             deca_ekf.scalarTDOADistUpdate(An, Ar, tdoaDistDiff);
                             
-                            deca_ekf.stateEstimatorFinalize();
+                            //deca_ekf.stateEstimatorFinalize();
                             
                             dist_recv = 0;
                         }
