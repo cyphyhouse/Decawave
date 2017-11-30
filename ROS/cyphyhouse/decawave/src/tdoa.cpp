@@ -203,7 +203,7 @@ void TDOA::stateEstimatorPredictAcc(double dt, vec3d_t acc)
     
     // Prediction Step
     // Assume acc is already rotated from body to global frame
-    dt2 = dt*dt;
+    double dt2 = dt*dt;
     S[STATE_X] += S[STATE_VX] * dt + acc.x*dt2/2.0;
     S[STATE_Y] += S[STATE_VY] * dt + acc.y*dt2/2.0;
     S[STATE_Z] += S[STATE_VZ] * dt + (acc.z - GRAVITY_MAGNITUDE)*dt2/2.0;

@@ -13,8 +13,10 @@
 #include "geometry_msgs/Point.h"
 #include "ros/package.h"
 #include <sensor_msgs/Imu.h>
+#include <mavros/mavros_plugin.h>
 
 #include "Eigen/Dense"
+#include <Eigen/Geometry>
 #include "tdoa.h"
 #include "serial/serial.h"
 
@@ -99,15 +101,12 @@ void initAnchors(TDOA &ekf)
 
 #ifdef NAVIO2
 vec3d_t acc;
-void getImu(const sensor_msgs::Imu& imu)
+void getImu(const sensor_msgs::Imu::ConstPtr& imu)
 {
-    double qx, qy, qz, qw;
-    Eigen::Matrix3d R;
-    Eigen::Vector3d imu_acc, acc_temp;
-    
-    R = imu.Quaternion.toRotationMatrix();
-    imu_acc = imu.linear_acceleration;
-    acc_temp = R*imu_acc;
+    Eigen::Quaterniond Q(imu->orientation.w, imu->orientation.x, imu->orientation.y, imu->orientation.z);
+    Eigen::Matrix3d R = Q.toRotationMatrix();
+    Eigen::Vector3d imu_acc = Eigen::Vector3d(imu->linear_acceleration.x, imu->linear_acceleration.y, imu->linear_acceleration.z);
+    Eigen::Vector3d acc_temp = R*imu_acc;
     acc.x = acc_temp(1);
     acc.y = -acc_temp(0);
     acc.z = acc_temp(2);
@@ -125,7 +124,7 @@ int main(int argc, char *argv[])
     ros::Publisher decaVel_pub = nh.advertise<geometry_msgs::Point>("decaVel", 1);
     
 #ifdef NAVIO2
-    ros::Subscriber imu_sub = n.subscribe("/mavros/imu/data", 1, getImu);
+    ros::Subscriber imu_sub = nh.subscribe("/mavros/imu/data", 1, getImu);
 #endif
     
     std::string device_port;
@@ -183,7 +182,8 @@ int main(int argc, char *argv[])
                         dist_recv = 1;
                         if(dist_recv) //Received distance measurement. Can calculate stuff now
                         {
-                            ros::Duration t = ros::time::now() - last_pub;
+                            ros::time t_now = ros::Time::now()
+                            ros::Duration t = t_now - last_pub;
                             if(t.toSec() >= 0.01)
                             {
                             #ifdef NAVIO2
@@ -208,6 +208,7 @@ int main(int argc, char *argv[])
                                 
                                 decaPos_pub.publish(pos_msg);
                                 decaVel_pub.publish(vel_msg);
+                                last_pub = t_now;
                             }
                             
                             
