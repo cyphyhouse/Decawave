@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
     ros::NodeHandle nh;
     ros::NodeHandle private_handle("~");
     ros::Publisher decaPos_pub = nh.advertise<geometry_msgs::Point>("decaPos", 1);
-	ros::Publisher decaVel_pub = nh.advertise<geometry_msgs::Point>("decaVel", 1);
+    ros::Publisher decaVel_pub = nh.advertise<geometry_msgs::Point>("decaVel", 1);
     
     std::string device_port;
     private_handle.getParam("deca_port", device_port);
@@ -113,11 +113,13 @@ int main(int argc, char *argv[])
     private_handle.getParam("robot_type", robot_type);
     initRobotMatrices(robot_type);
     
-    vec3d_t initial_position = {0,0,0};
+    vec3d_t initial_position = {5.0,5.0,0.0};
     
     TDOA deca_ekf(A, P, Q, initial_position);
     
     initAnchors(deca_ekf);
+    
+    ros::Time last_pub = ros::Time::now();
 
     while(ros::ok())
     {
@@ -151,35 +153,38 @@ int main(int argc, char *argv[])
                         Ar = serial_msg[ANCR_BYTE];
                         tdoaDistDiff = to_float(&serial_msg[DATA_BYTE]);
                         dist_recv = 1;
-			if(dist_recv) //Received distance measurement. Can calculate stuff now
-			{
-			    if(Ar == 0)
-			    {
-				deca_ekf.stateEstimatorPredict();
-				vec3d_t pos = deca_ekf.getLocation();
-				geometry_msgs::Point pos_msg;
-				pos_msg.x = pos.x;
-				pos_msg.y = pos.y;
-				pos_msg.z = pos.z;
-				decaPos_pub.publish(pos_msg);
-				vec3d_t vel = deca_ekf.getVelocity();
-				geometry_msgs::Point vel_msg;
-				vel_msg.x = vel.x;
-				vel_msg.y = vel.y;
-				vel_msg.z = vel.z;
-				decaVel_pub.publish(vel_msg);
-			    }
-			    
-			    deca_ekf.stateEstimatorAddProcessNoise();
-			    
-			    deca_ekf.scalarTDOADistUpdate(An, Ar, tdoaDistDiff);
-			    
-			    deca_ekf.stateEstimatorFinalize();
-			    
-			    dist_recv = 0;
-			}
-		    }
-                    
+                        if(dist_recv) //Received distance measurement. Can calculate stuff now
+                        {
+                            ros::Duration t = ros::time::now() - last_pub;
+                            if(t.toSec() >= 0.01)
+                            {
+                                deca_ekf.stateEstimatorPredict(t.toSec());
+                                
+                                vec3d_t pos = deca_ekf.getLocation();
+                                geometry_msgs::Point pos_msg;
+                                pos_msg.x = pos.x;
+                                pos_msg.y = pos.y;
+                                pos_msg.z = pos.z;
+                                
+                                vec3d_t vel = deca_ekf.getVelocity();
+                                geometry_msgs::Point vel_msg;
+                                vel_msg.x = vel.x;
+                                vel_msg.y = vel.y;
+                                vel_msg.z = vel.z;
+                                
+                                decaPos_pub.publish(pos_msg);
+                                decaVel_pub.publish(vel_msg);
+                            }
+                            
+                            deca_ekf.stateEstimatorAddProcessNoise();
+                            
+                            deca_ekf.scalarTDOADistUpdate(An, Ar, tdoaDistDiff);
+                            
+                            deca_ekf.stateEstimatorFinalize();
+                            
+                            dist_recv = 0;
+                        }
+                    }
                     else
                     {
                         //printf("Error: Wrong checksum. Dump: ");
@@ -192,11 +197,10 @@ int main(int argc, char *argv[])
                 }
             }
         }
-	else
-	{
-		std::this_thread::sleep_for(std::chrono::microseconds(SLEEP_TIME_MICROS));
-	}
-        
+        else
+        {
+            std::this_thread::sleep_for(std::chrono::microseconds(SLEEP_TIME_MICROS));
+        }
     }
     my_serial.close();
     std::cout << "Closed serial" << std::endl;
@@ -207,8 +211,6 @@ void initRobotMatrices(std::string type)
     if (type == "car")
     {
         A.setIdentity(6,6);
-        A(3,3) = 0.016;
-        A(4,4) = 0.016;
         A(2,2) = 0;
         A(5,5) = 0;
         
@@ -225,9 +227,6 @@ void initRobotMatrices(std::string type)
     else if (type == "quadcopter")
     {
         A.setIdentity(6,6);
-        A(3,3) = 0.016;
-        A(4,4) = 0.016;
-        A(5,5) = 0.016;
         
         P.setZero(6,6);
         P(0,0) = 10000;
@@ -242,9 +241,6 @@ void initRobotMatrices(std::string type)
     else
     {
         A.setIdentity(6,6);
-        A(3,3) = 0.016;
-        A(4,4) = 0.016;
-        A(5,5) = 0.016;
         
         P.setZero(6,6);
         P(0,0) = 10000;

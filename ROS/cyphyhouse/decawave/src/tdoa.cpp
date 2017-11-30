@@ -177,12 +177,20 @@ void TDOA::stateEstimatorScalarUpdate(Eigen::RowVectorXf H, float error, float s
     PredictionBound();
 }
 
-void TDOA::stateEstimatorPredict()
+void TDOA::stateEstimatorPredict(double dt)
 {
+    A(STATE_X,STATE_VX) = A(STATE_X,STATE_X) * dt;
+    A(STATE_Y,STATE_VY) = A(STATE_Y,STATE_Y) * dt;
+    A(STATE_Z,STATE_VZ) = A(STATE_Z,STATE_Z) * dt;
     // Covariance update
     P = A*P*A.transpose();
     
+    // Prediction Step
     // If we had info from IMU, we would add it here
+    
+    S[STATE_X] += S[STATE_VX] * dt;
+    S[STATE_Y] += S[STATE_VY] * dt;
+    S[STATE_Z] += S[STATE_VZ] * dt;
 }
 
 void TDOA::stateEstimatorFinalize()

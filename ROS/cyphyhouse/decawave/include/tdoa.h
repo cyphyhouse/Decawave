@@ -65,7 +65,7 @@ public:
     
     // Update functions
     void scalarTDOADistUpdate(uint8_t Ar, uint8_t An, float distanceDiff);
-    void stateEstimatorPredict();
+    void stateEstimatorPredict(double dt);
     void stateEstimatorFinalize();
     void stateEstimatorAddProcessNoise();
     
