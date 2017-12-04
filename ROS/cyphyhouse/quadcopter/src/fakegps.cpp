@@ -195,6 +195,7 @@ int main(int argc, char **argv)
     sethome_msg.request.latitude = lat0;
     sethome_msg.request.longitude = lon0;
     sethome_msg.request.altitude = 0;
+    sethome_client.call(sethome_msg);
 
     ros::spin();
     return 0;
