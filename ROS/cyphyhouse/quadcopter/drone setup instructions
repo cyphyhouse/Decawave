@@ -6,4 +6,5 @@
 
 pub pose: rostopic pub /vrpn_client_node/cyphyhousecopter/pose geometry_msgs/PoseStamped -r 5 -- '{header: auto, pose: {position: [0,0,0], orientation: [0,0,0,0]}}'
 pub waypoint: rostopic pub /starl/waypoints geometry_msgs/Point "x: 0.0, y: 0.0, z: 0.5"
-setup vrpn: roslaunch vrpn_client_ros sample.launch server:=192.168.1.3 
+setup vrpn: roslaunch vrpn_client_ros sample.launch server:=192.168.1.3
+"If you don't use GCS, but want to get data from rostopic then you need to enter the following command for setting the stream rate:" rosservice call /mavros/set_stream_rate 0 10 1
