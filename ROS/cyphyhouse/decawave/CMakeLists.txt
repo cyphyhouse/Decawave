@@ -13,6 +13,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   roslib
+  sensor_msgs
+  mavros
 )
 
 ## System dependencies are found with CMake's conventions

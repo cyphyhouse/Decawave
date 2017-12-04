@@ -15,18 +15,17 @@
 <part id="3"/>
 <part id="2"/>
 <part id="4"/>
-<part id="5"/>
 </presentation>
 </folder>
 </info>
 </editorArea>
 <editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="tdoa_tag.c" partName="tdoa_tag.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/src/tdoa_tag.c" title="tdoa_tag.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/src/tdoa_tag.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TAG/src/tdoa_tag.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="5134" selectionTopPixel="2328"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="2296" selectionTopPixel="1208"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="tdoa_tag.h" partName="tdoa_tag.h" path="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/inc/tdoa_tag.h" title="tdoa_tag.h" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/inc/tdoa_tag.h" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TAG/inc/tdoa_tag.h"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="181" selectionTopPixel="1040"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="181" selectionTopPixel="587"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="port_deca.c" partName="port_deca.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/platform/port_deca.c" title="port_deca.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/platform/port_deca.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TAG/platform/port_deca.c"/>
@@ -38,11 +37,7 @@
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" partName="main.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/src/main.c" title="main.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/src/main.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TAG/src/main.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="5900" selectionTopPixel="3819"/>
-</editor>
-<editor id="org.coocox.builder.ui.editors.ConfigEditor" name="" partName="Configuration" title="Configuration" tooltip="" workbook="DefaultEditorWorkbook">
-<input factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory">&#x0A;<org.coocox.builder.ui.editors.ConfigEditor horizontalPosition="0" subTagIndex="1" verticalPosition="0"/>
-</input>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="4806" selectionTopPixel="3128"/>
 </editor>
 </editors>
 <views>
@@ -252,9 +247,6 @@
 <workingSets/>
 <navigationHistory>
 <editors>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TAG/src/main.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TAG/inc/tdoa_tag.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TAG/src/tdoa_tag.c"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TAG/inc/tdoa_tag.h"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TAG/src/tdoa_tag.c"/>
 <editor factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="C:\Program Files (x86)\GNU Tools ARM Embedded\5.4 2016q3\arm-none-eabi\include\stdint.h" project="TREK_TAG"/>
@@ -271,152 +263,154 @@
 <org.coocox.builder.ui.editors.ConfigEditor horizontalPosition="0" subTagIndex="1" verticalPosition="0"/>
 </editor>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TAG/inc/tdoa_tag.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TAG/inc/tdoa_tag.h"/>
+<editor factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory" id="org.coocox.builder.ui.editors.ConfigEditor">
+<org.coocox.builder.ui.editors.ConfigEditor/>
+</editor>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TAG/src/main.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TAG/src/tdoa_tag.c"/>
 </editors>
-<item historyLabel="tdoa_tag.h" index="1">
-<position info="not_deleted" x="1681" y="0"/>
-</item>
-<item historyLabel="main.c" index="0">
-<position info="not_deleted" x="6605" y="0"/>
-</item>
-<item historyLabel="tdoa_tag.c" index="2">
-<position info="not_deleted" x="4265" y="0"/>
-</item>
-<item historyLabel="tdoa_tag.h" index="3">
-<position info="not_deleted" x="1673" y="0"/>
-</item>
-<item historyLabel="tdoa_tag.c" index="4">
-<position info="not_deleted" x="43" y="0"/>
-</item>
-<item historyLabel="tdoa_tag.c" index="4">
-<position info="not_deleted" x="3009" y="0"/>
-</item>
-<item historyLabel="tdoa_tag.c" index="4">
-<position info="not_deleted" x="942" y="19"/>
-</item>
-<item historyLabel="tdoa_tag.c" index="4">
-<position info="not_deleted" x="3015" y="0"/>
-</item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="stdint.h" index="2">
 <position/>
 </item>
-<item historyLabel="stdint.h" index="5">
-<position/>
-</item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="2758" y="0"/>
 </item>
-<item historyLabel="stdint.h" index="5">
+<item historyLabel="stdint.h" index="2">
 <position info="not_deleted" x="1954" y="12"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="4508" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="320" y="17"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="3012" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="1168" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.h" index="3">
+<item historyLabel="tdoa_tag.h" index="0">
 <position info="not_deleted" x="181" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="1168" y="0"/>
 </item>
-<item historyLabel="main.c" index="6">
+<item historyLabel="main.c" index="3">
 <position info="not_deleted" x="6690" y="0"/>
 </item>
-<item historyLabel="main.c" index="6">
+<item historyLabel="main.c" index="3">
 <position info="not_deleted" x="4806" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="2515" y="0"/>
 </item>
-<item historyLabel="deca_usb.c" index="7">
+<item historyLabel="deca_usb.c" index="4">
 <position info="not_deleted" x="3205" y="27"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="2515" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="2735" y="0"/>
 </item>
-<item historyLabel="Configuration" index="8"/>
-<item historyLabel="main.c" index="6">
+<item historyLabel="Configuration" index="5"/>
+<item historyLabel="main.c" index="3">
 <position info="not_deleted" x="4806" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="4164" y="0"/>
 </item>
-<item historyLabel="startup_stm32f10x_cl.S" index="9">
+<item historyLabel="startup_stm32f10x_cl.S" index="6">
 <position/>
 </item>
-<item historyLabel="main.c" index="10">
+<item historyLabel="main.c" index="7">
 <position info="not_deleted" x="4820" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="3603" y="0"/>
 </item>
-<item historyLabel="startup_stm32f10x_cl.S" index="9">
+<item historyLabel="startup_stm32f10x_cl.S" index="6">
 <position/>
 </item>
-<item historyLabel="main.c" index="11">
+<item historyLabel="main.c" index="8">
 <position info="not_deleted" x="4820" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="3603" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="1117" y="0"/>
 </item>
-<item historyLabel="startup_stm32f10x_cl.S" index="9">
+<item historyLabel="startup_stm32f10x_cl.S" index="6">
 <position info="not_deleted" x="0" y="0"/>
 </item>
-<item historyLabel="main.c" index="12">
+<item historyLabel="main.c" index="9">
 <position info="not_deleted" x="4820" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="1117" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="4164" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="3809" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="363" y="22"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="3169" y="13"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="1480" y="0"/>
 </item>
-<item historyLabel="Configuration" index="13"/>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="Configuration" index="10"/>
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="1480" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.h" index="14">
+<item historyLabel="tdoa_tag.h" index="11">
 <position info="not_deleted" x="181" y="0"/>
 </item>
-<item historyLabel="main.c" index="12">
+<item historyLabel="main.c" index="9">
 <position info="not_deleted" x="5900" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="1480" y="0"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="1319" y="17"/>
 </item>
-<item historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="3012" y="0"/>
 </item>
-<item active="true" historyLabel="tdoa_tag.c" index="4">
+<item historyLabel="tdoa_tag.c" index="1">
 <position info="not_deleted" x="945" y="19"/>
+</item>
+<item historyLabel="tdoa_tag.h" index="12">
+<position info="not_deleted" x="181" y="0"/>
+</item>
+<item historyLabel="tdoa_tag.c" index="1">
+<position info="not_deleted" x="5134" y="0"/>
+</item>
+<item historyLabel="Configuration" index="13"/>
+<item historyLabel="tdoa_tag.c" index="1">
+<position info="not_deleted" x="6164" y="0"/>
+</item>
+<item historyLabel="Configuration" index="13"/>
+<item historyLabel="tdoa_tag.c" index="1">
+<position info="not_deleted" x="6164" y="0"/>
+</item>
+<item historyLabel="main.c" index="14">
+<position info="not_deleted" x="5900" y="0"/>
+</item>
+<item historyLabel="main.c" index="14">
+<position info="not_deleted" x="4806" y="0"/>
+</item>
+<item active="true" historyLabel="tdoa_tag.c" index="15">
+<position info="not_deleted" x="6164" y="0"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>
@@ -425,11 +419,11 @@
 <actionBarAdvisor/>
 </window>
 <mruList>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" tooltip="TREK_TAG/src/main.c">
-<persistable path="/TREK_TAG/src/main.c"/>
-</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.asm.AsmEditor" name="startup_stm32f10x_cl.S" tooltip="TREK_TAG/Libraries/CMSIS/CM3/DeviceSupport/ST/STMF10x/startup/startup_stm32f10x_cl.S">
 <persistable path="/TREK_TAG/Libraries/CMSIS/CM3/DeviceSupport/ST/STMF10x/startup/startup_stm32f10x_cl.S"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" tooltip="TREK_TAG/src/main.c">
+<persistable path="/TREK_TAG/src/main.c"/>
 </file>
 <file factoryID="org.eclipse.cdt.ui.ExternalEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stdint.h" tooltip="C:\Program Files (x86)\GNU Tools ARM Embedded\5.4 2016q3\arm-none-eabi\include\stdint.h">
 <persistable path="C:\Program Files (x86)\GNU Tools ARM Embedded\5.4 2016q3\arm-none-eabi\include\stdint.h" project="TREK_TAG"/>
@@ -458,14 +452,14 @@
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="core_cm3.h" tooltip="TREK_TDOA/Libraries/CMSIS/CM3/CoreSupport/core_cm3.h">
 <persistable path="/TREK_TDOA/Libraries/CMSIS/CM3/CoreSupport/core_cm3.h"/>
 </file>
-<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x.h" tooltip="TREK_TDOA/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/stm32f10x.h">
-<persistable path="/TREK_TDOA/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/stm32f10x.h"/>
-</file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" tooltip="TREK_TAG/src/main.c">
 <persistable path="/TREK_TAG/src/main.c"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.asm.AsmEditor" name="startup_stm32f10x_cl.S" tooltip="TREK_TAG/Libraries/CMSIS/CM3/DeviceSupport/ST/STMF10x/startup/startup_stm32f10x_cl.S">
 <persistable path="/TREK_TAG/Libraries/CMSIS/CM3/DeviceSupport/ST/STMF10x/startup/startup_stm32f10x_cl.S"/>
+</file>
+<file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" tooltip="TREK_TAG/src/main.c">
+<persistable path="/TREK_TAG/src/main.c"/>
 </file>
 <file factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x.h" tooltip="TREK_TDOA/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/stm32f10x.h">
 <persistable path="/TREK_TDOA/Libraries/CMSIS/CM3/DeviceSupport/ST/STM32F10x/stm32f10x.h"/>
