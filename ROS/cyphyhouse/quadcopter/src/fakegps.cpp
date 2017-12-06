@@ -82,14 +82,15 @@ void sendFakeGPS(const geometry_msgs::PoseStamped::ConstPtr& pose)
 
     if (starl_flag)
     {
-        std_msgs::String wp_reached;
-        if (sqrt(pow(point.x - current_waypoint.x,2) + pow(point.y - current_waypoint.y,2)
-            + pow(point.z - current_waypoint.z,2)) < 0.5)  // tell STARL if waypoint is reached
+        if (sqrt(.4 * pow(point.x - current_waypoint.x,2) + .4 * pow(point.y - 
+            current_waypoint.y,2) + .2 * pow(point.z - current_waypoint.z,2)) < 0.3)
+            // tell STARL if waypoint is reached
+        {
+            std_msgs::String wp_reached;
             wp_reached.data = "TRUE";
-        else
-            wp_reached.data = "FALSE";
-        starl_flag = false;
-        reached_pub.publish(wp_reached);
+            starl_flag = false;
+            reached_pub.publish(wp_reached);
+        }
     }
 
     double lat, lon, h;
@@ -141,12 +142,14 @@ void sendFakeGPS(const geometry_msgs::PoseStamped::ConstPtr& pose)
 
 void sendWP(const geometry_msgs::PointStamped& stamped_point)
 {
+    double lat, lon, h;
     mavros_msgs::SetMode mode_msg;
     mode_msg.request.base_mode = 0;
     mode_msg.request.custom_mode = "GUIDED";
     mode_client.call(mode_msg);
     geometry_msgs::Point point = stamped_point.point;
     std::string stamp = stamped_point.header.frame_id;
+    proj.Reverse(point.y, -point.x, point.z, lat, lon, h);
     starl_flag = true;
     if (stamp == "0")    // takeoff
     {
@@ -159,17 +162,14 @@ void sendWP(const geometry_msgs::PointStamped& stamped_point)
             ROS_INFO("arming failed");
         takeoff_msg.request.min_pitch = 0; //have no idea about this
         takeoff_msg.request.yaw = 0;
-        takeoff_msg.request.latitude = current_lat; // This is either the first waypoint or whatever the initial position is
-        takeoff_msg.request.longitude = current_lon;
-        takeoff_msg.request.altitude = current_h + 1;
+        takeoff_msg.request.latitude = lat; // This is either the first waypoint or whatever the initial position is
+        takeoff_msg.request.longitude = lon;
+        takeoff_msg.request.altitude = h;
 
         if (takeoff_client.call(takeoff_msg))
             ROS_INFO("takeoff success");
         else
             ROS_INFO("takeoff failed");
-        current_waypoint.x = point.y;
-        current_waypoint.y = -point.x;
-        current_waypoint.z = point.z;
         takeoff_flag = true;
     }
     else if (stamp == "2")   // land
@@ -178,8 +178,8 @@ void sendWP(const geometry_msgs::PointStamped& stamped_point)
         mavros_msgs::CommandTOL land_msg;
         land_msg.request.min_pitch = 0;
         land_msg.request.yaw = 0;
-        land_msg.request.latitude = current_lat;
-        land_msg.request.longitude = current_lon;
+        land_msg.request.latitude = lat;
+        land_msg.request.longitude = lon;
         land_msg.request.altitude = 0;
         if (land_client.call(land_msg))
             ROS_INFO("landing success");
@@ -199,13 +199,13 @@ void sendWP(const geometry_msgs::PointStamped& stamped_point)
         postarget_msg.pose.position.x = point.y;
         postarget_msg.pose.position.y = -point.x;
         postarget_msg.pose.position.z = point.z;
-        current_waypoint.x = point.y;
-        current_waypoint.y = -point.x;
-        current_waypoint.z = point.z;
 
         // publish it
         postarget_pub.publish(postarget_msg);
     }
+    current_waypoint.x = point.x;
+    current_waypoint.y = point.y;
+    current_waypoint.z = point.z;
 }
 
 int main(int argc, char **argv)
