@@ -26,17 +26,31 @@
 
 /* Tick timer count. */
 volatile unsigned long time32_incr;
+volatile unsigned long last_event;
 
-/*void SysTick_Handler(void)
+void SysTick_Handler(void)
 {
     time32_incr++;
-}*/
-
-void vApplicationTickHook(void)
-{
-	time32_incr++;
 }
 
-
+/*! ------------------------------------------------------------------------------------------------------------------
+ * @fn EXTI9_5_IRQHandler()
+ *
+ * @brief Handler for DW1000 IRQ.
+ *
+ * @param none
+ *
+ * @return none
+ */
+void EXTI9_5_IRQHandler(void)
+{
+	last_event = time32_incr;
+    do
+    {
+        port_deca_isr();
+    } while (port_CheckEXT_IRQ() == 1);
+    /* Clear EXTI Line 5 Pending Bit */
+    EXTI_ClearITPendingBit(DECAIRQ_EXTI);
+}
 
 /******************* (C) COPYRIGHT 2010 STMicroelectronics *****END OF FILE****/

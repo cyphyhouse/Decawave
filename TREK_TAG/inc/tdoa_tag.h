@@ -22,6 +22,7 @@ extern "C" {
 #define MASK_TXDTS          (0x00FFFFFFFE00UL)  //The TX timestamp will snap to 8 ns resolution - mask lower 9 bits.
 #define PACKET_TYPE_RANGE    0x21
 #define MAX_DISTANCE_DIFF   (10.0f)
+#define LOCODECK_TS_FREQ    (499.2e6 * 128)
 
 typedef union dwTime_u {
 	uint8 raw[5];
@@ -44,8 +45,9 @@ typedef struct {
 
 typedef struct rangePacket_s {
 	uint8 type;
-	uint8 idx;				//TX time at master
-	uint8 timestamps[NR_OF_ANCHORS][5];	//Relevant time for anchors
+	uint8 Idx;				//TX time at master
+	uint32_t timestamps[NR_OF_ANCHORS];	//Relevant time for anchors
+	uint16_t distances[NR_OF_ANCHORS];
 }__attribute__((packed)) rangePacket_t;
 
 typedef struct packet_s {

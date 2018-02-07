@@ -35,6 +35,8 @@ port_deca_isr_t port_deca_isr = NULL;
 /* System tick 32 bit variable defined by the platform */
 extern __IO unsigned long time32_incr;
 
+extern __IO unsigned long last_event;
+
 /* Internal functions prototypes. */
 static void LCD_Configuration(void);
 static void spi_peripheral_init(void);
@@ -47,6 +49,11 @@ int No_Configuration(void)
 unsigned long portGetTickCnt(void)
 {
 	return time32_incr;
+}
+
+unsigned long portGetLastEvent(void)
+{
+	return last_event;
 }
 
 int SysTick_Configuration(void)
@@ -990,18 +997,13 @@ static void spi_peripheral_init(void)
  *
  * @return none
  */
-void clock_init()
-{
-	rcc_init();
-	systick_init();
-}
 
 void peripherals_init (void)
 {
-	//rcc_init();
+	rcc_init();
 	gpio_init();
 	interrupt_init();
-	//systick_init();
+	systick_init();
 	spi_peripheral_init();
 	lcd_init();
 #ifdef USART_SUPPORT

@@ -17,6 +17,7 @@ void tdoa_init(uint8 s1switch, dwt_config_t *config)
 	dwt_setsmarttxpower(1);
 
 	dwt_setleds(1);
+	dwt_setrxtimeout(RECEIVE_TIMEOUT);
 
 	int anc_addr = (((s1switch & 0x10) << 2) + (s1switch & 0x20) + ((s1switch & 0x40) >> 2)) >> 4;
 	ctx.anchorId = anc_addr;
@@ -24,26 +25,76 @@ void tdoa_init(uint8 s1switch, dwt_config_t *config)
 	ctx.slot = NSLOTS-1;
 	ctx.nextSlot = 0;
 	ctx.msg_index = 0;
-	memset(ctx.timestamps, 0, sizeof(ctx.timestamps));
+	ctx.A0_sync = 0;
+	memset(ctx.rxTimestamps, 0, sizeof(ctx.rxTimestamps));
+	memset(ctx.txTimestamps, 0, sizeof(ctx.txTimestamps));
+	memset(ctx.distances, 0, sizeof(ctx.distances));
+	memset(ctx.packetIds, 0, sizeof(ctx.packetIds));
 
 	anc_prf = config->prf;
 	anc_chan = config->chan;
 }
 
+void txKalman(dwTime_t *time)
+{
+	double xhat_temp[2];
+	dwTime_t xout = { .full = 0 };
+
+	xout.full = 0.495122939878641*ctx.xhat[0] + 0.504877060121359*(double)time->full;
+
+	xhat_temp[0] = 0.490151653861331*ctx.xhat[0] + 0.002100512820513*ctx.xhat[1] + 0.509848346138669*(double)time->full;
+	xhat_temp[1] = 2.366701106873675*((double)time->full - ctx.xhat[0]) + ctx.xhat[1];
+
+	ctx.xhat[0] = (uint64_t)xhat_temp[0] & MASK_40BIT;
+	ctx.xhat[1] = xhat_temp[1];
+
+	if ((ctx.A0_sync == 0) && (abs(((int64_t)time->full - (int64_t)xout.full)) < KF_SYNC))
+	{
+		ctx.A0_sync = 1;
+	}
+	else if (ctx.A0_sync)
+	{
+		time->full = xout.full;
+	}
+
+}
+
+void calculateDistance(uint8_t slot, uint8_t newId, uint32_t remoteTx, uint32_t remoteRx, uint32_t ts)
+{
+	// Check that the 2 last packets are consecutive packets
+	if (ctx.packetIds[slot] == (newId-1))
+	{
+		int64_t tround1 = remoteRx - ctx.txTimestamps[ctx.slot];
+		int64_t treply1 = ctx.txTimestamps[ctx.anchorId] - ctx.rxTimestamps[ctx.slot];
+		int64_t tround2 = ts - ctx.txTimestamps[ctx.anchorId];
+		int64_t treply2 = remoteTx - remoteRx;
+
+		uint32_t distance = ((tround2 * tround1)-(treply1 * treply2)) / (2*(treply1 + tround2));
+		ctx.distances[slot] = distance & 0xFFFFUL;
+	}
+	else
+	{
+		ctx.distances[slot] = 0;
+	}
+}
+
 void setupTx()
 {
-	ctx.timestamps[ctx.anchorId] = transmitTimeForSlot(ctx.nextSlot);
-
 	if(ctx.anchorId == 0) ctx.msg_index++;
+
+	dwTime_t txTime = transmitTimeForSlot(ctx.nextSlot);
+	ctx.txTimestamps[ctx.anchorId] = txTime.low32;
 
 	setTxData();
 	dwt_writetxfctrl(MAC802154_HEADER_LENGTH + sizeof(rangePacket_t) + FRAME_CRC, 0, 0);
-//	uint8 delayBytes[5];
-//	memcpy(delayBytes, ctx.timestamps[ctx.anchorId].raw, sizeof(ctx.timestamps[ctx.anchorId].raw));
-//	delayBytes[1] &= 0xFE;
-//	dwt_writetodevice(DX_TIME_ID,1,4,&delayBytes[1]);
-	dwt_setdelayedtrxtime(ctx.timestamps[ctx.anchorId].high32);
-	dwt_starttx(DWT_START_TX_DELAYED);
+
+	dwt_setdelayedtrxtime(txTime.high32);
+	if(dwt_starttx(DWT_START_TX_DELAYED)) //delayed tx
+	{
+		//if the delayed TX failed then go back to listening
+		dwt_setrxtimeout(RECEIVE_TIMEOUT); //reconfigure the timeout before enable
+		dwt_rxenable(DWT_START_RX_IMMEDIATE);
+	}
 }
 
 void setupRx()
@@ -55,19 +106,13 @@ void setupRx()
 	
 	dwt_setrxtimeout(RECEIVE_TIMEOUT);
 
-//	uint8 delayBytes[5];
-//	memcpy(delayBytes, receiveTime.raw, sizeof(receiveTime.raw));
-//	delayBytes[1] &= 0xFE;
-//	dwt_writetodevice(DX_TIME_ID,1,4,&delayBytes[1]);
 	dwt_setdelayedtrxtime(receiveTime.high32);
 	if(dwt_rxenable(DWT_START_RX_DELAYED)) //delayed rx
 	{
 		//if the delayed RX failed - time has passed - do immediate enable
-		//led_on(LED_PC9);
 		dwt_setrxtimeout(RECEIVE_TIMEOUT); //reconfigure the timeout before enable
 		//longer timeout as we cannot do delayed receive... so receiver needs to stay on for longer
 		dwt_rxenable(DWT_START_RX_IMMEDIATE);
-		//led_off(LED_PC9);
 	}
 }
 
@@ -95,6 +140,15 @@ void setTxData()
 	
 	if(firstEntry)
 	{
+		txPacket.fcf_s.type = 1;
+		txPacket.fcf_s.security = 0;
+		txPacket.fcf_s.framePending = 0;
+		txPacket.fcf_s.ack = 0;
+		txPacket.fcf_s.ipan = 1;
+		txPacket.fcf_s.destAddrMode = 3;
+		txPacket.fcf_s.version = 1;
+		txPacket.fcf_s.srcAddrMode = 3;
+
 		memcpy(txPacket.sourceAddress, base_address, 8);
 		txPacket.sourceAddress[0] = ctx.anchorId;
 		memcpy(txPacket.destAddress, base_address, 8);
@@ -110,18 +164,13 @@ void setTxData()
 	rangePacket->idx = ctx.msg_index;
 	for(int i=0; i<NSLOTS; i++)
 	{
-		memcpy(rangePacket->timestamps[i], ctx.timestamps[i].raw, 5);
+		memcpy(rangePacket->timestamps[i], &ctx.rxTimestamps[i], TS_TX_SIZE);
 	}
-	
+	memcpy(rangePacket->timestamps[ctx.anchorId], &ctx.txTimestamps[ctx.anchorId], TS_TX_SIZE);
+	memcpy(rangePacket->distances, ctx.distances, sizeof(ctx.distances));
+
 	//dwSetData
 	dwt_writetxdata(MAC802154_HEADER_LENGTH + sizeof(rangePacket_t) + FRAME_CRC, (uint8*)&txPacket, 0);
-}
-
-uint32 adjustRxTime(dwTime_t *time)
-{
-	uint32 added = (1<<9) - (time->low32 & ((1<<9)-1));
-	time->low32 = (time->low32 & ~((1<<9)-1)) + (1<<9);
-	return added;
 }
 
 //#pragma GCC optimize ("O1")
@@ -132,11 +181,10 @@ dwTime_t transmitTimeForSlot(int slot)
 	//calculate start of the slot
 	transmitTime.full = ctx.tdmaFrameStart.full + slot*TDMA_SLOT_LEN;
 	// Add guard and preamble time
-	transmitTime.full += TDMA_GUARD_LENGTH;
-	transmitTime.full += PREAMBLE_LENGTH;
+	//transmitTime.full += TDMA_GUARD_LENGTH;
+	//transmitTime.full += PREAMBLE_LENGTH;
 	
 	// DW1000 can only schedule time with 9 LSB at 0, adjust for it
-	//adjustRxTime(&transmitTime);
 	transmitTime.low32 = (transmitTime.low32 & ~((1<<9)-1)) + (1<<9);
 	
 	return transmitTime;
@@ -160,7 +208,9 @@ void slotStep(const dwt_cb_data_t *cb_data, eventState_e event)
 
 				if(cb_data->datalength == 0 || rxPacket.payload[0] != PACKET_TYPE_RANGE || rxPacket.sourceAddress[0] != ctx.slot)
 				{
-					ctx.timestamps[ctx.slot].full = 0;
+					//start of handleFailedRx
+					ctx.rxTimestamps[ctx.slot] = 0;
+					ctx.distances[ctx.slot] = 0;
 
 					// Failed TDMA sync, keeps track of the number of fail so that the TDMA
 					// watchdog can take decision as of TDMA resynchronisation
@@ -168,20 +218,31 @@ void slotStep(const dwt_cb_data_t *cb_data, eventState_e event)
 					{
 						ctx.state = syncTdmaState;
 					}
+					//end of handleFailedRx
 				}
 				else
 				{
-					ctx.timestamps[ctx.slot] = rxTime;
+					rangePacket_t * rangePacket = (rangePacket_t *)rxPacket.payload;
+
+					uint32_t remoteTx, remoteRx;
+					memcpy(&remoteTx, rangePacket->timestamps[ctx.slot], TS_TX_SIZE);
+					memcpy(&remoteRx, rangePacket->timestamps[ctx.anchorId], TS_TX_SIZE);
+
+					calculateDistance(ctx.slot, rangePacket->idx, remoteTx, remoteRx, rxTime.low32);
+
+					ctx.packetIds[ctx.slot] = rangePacket->idx;
+					ctx.rxTimestamps[ctx.slot] = rxTime.low32;
+					memcpy(&ctx.txTimestamps[ctx.slot], &rangePacket->timestamps[ctx.slot], TS_TX_SIZE);
 
 					// Resync and save useful anchor 0 information
 					if(ctx.slot == 0)
 					{
-						rangePacket_t * rangePacket = (rangePacket_t *)rxPacket.payload;
+						//txKalman(&rxTime);
 
 						//Resync local frame start to packet from anchor 0
 						dwTime_t pkTxTime = { .full = 0 };
-						memcpy(&pkTxTime, rangePacket->timestamps[ctx.slot], 5);
-						ctx.tdmaFrameStart.full = rxTime.full - (pkTxTime.full - TDMA_LAST_FRAME(pkTxTime.full));
+						memcpy(&pkTxTime, rangePacket->timestamps[ctx.slot], TS_TX_SIZE); //ctx.slot = 0
+						ctx.tdmaFrameStart.full = rxTime.full;// - (pkTxTime.full - TDMA_LAST_FRAME(pkTxTime.full));
 
 						ctx.msg_index = rangePacket->idx;
 					}
@@ -190,16 +251,17 @@ void slotStep(const dwt_cb_data_t *cb_data, eventState_e event)
 			}
 			else
 			{
-				// start of handleFailedRx(dev)
-				ctx.timestamps[ctx.slot].full = 0;
+				//start of handleFailedRx
+				ctx.rxTimestamps[ctx.slot] = 0;
+				ctx.distances[ctx.slot] = 0;
 
-				// Failed TDMA sync, keeps track of the number of fails so that the TDMA
-				// watchdog can take decision as of TDMA resynchronization
-				if(ctx.slot == 0)
+				// Failed TDMA sync, keeps track of the number of fail so that the TDMA
+				// watchdog can take decision as of TDMA resynchronisation
+				if (ctx.slot == 0)
 				{
 					ctx.state = syncTdmaState;
 				}
-				// end of handleFailedRx
+				//end of handleFailedRx
 			}
 
 			// Quickly setup transfer to next slot
@@ -256,15 +318,19 @@ void rx_ok_cb(const dwt_cb_data_t *cb_data)
 			if((rxPacket.sourceAddress[0] == 0) && (rxPacket.payload[0] == PACKET_TYPE_RANGE))
 			{
 				rangePacket_t * rangePacket = (rangePacket_t *)rxPacket.payload;
+
+				//txKalman(&rxTime);
+
 				dwTime_t pkTxTime = { .full = 0 };
-				memcpy(&pkTxTime, rangePacket->timestamps[0], 5);
-				ctx.tdmaFrameStart.full = rxTime.full - (pkTxTime.full - TDMA_LAST_FRAME(pkTxTime.full));
+				memcpy(&pkTxTime, rangePacket->timestamps[0], TS_TX_SIZE);
+				ctx.tdmaFrameStart.full = rxTime.full;// - (pkTxTime.full - TDMA_LAST_FRAME(pkTxTime.full));
 				
 				ctx.tdmaFrameStart.full += TDMA_FRAME_LEN;
 				
 				ctx.msg_index = rangePacket->idx; //last sync index
 
 				setupTx();
+
 				ctx.slotState = slotRxDone;
 				ctx.state = synchronizedState;
 				updateSlot();

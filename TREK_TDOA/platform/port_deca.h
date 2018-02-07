@@ -220,6 +220,7 @@ void spi_set_rate_low (void);
 void spi_set_rate_high (void);
 
 unsigned long portGetTickCnt(void);
+unsigned long portGetLastEvent(void);
 
 #define portGetTickCount() 			portGetTickCnt()
 

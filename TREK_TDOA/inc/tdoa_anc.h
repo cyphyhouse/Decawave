@@ -12,6 +12,7 @@ extern "C" {
 #include "deca_device_api.h"
 #include "deca_regs.h"
 #include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 #include <math.h>
 #include "port_deca.h"
@@ -35,6 +36,10 @@ extern "C" {
 #define RECEIVE_TIMEOUT		250
 
 #define MASK_TXDTS			(0x00FFFFFFFE00)  //The TX timestamp will snap to 8 ns resolution - mask lower 9 bits.
+#define MASK_40BIT			(0x00FFFFFFFFFF)  // DW1000 counter is 40 bits
+
+#define KF_SYNC             10
+#define TS_TX_SIZE          4
 
 #define MAC802154_HEADER_LENGTH 21
 #define FRAME_CRC               2
@@ -85,23 +90,25 @@ struct ctx_s {
 	
 	// TDMA start of frame in local clock
 	dwTime_t tdmaFrameStart;
+
 	
-	// List of timestamps for last frame
-	dwTime_t timestamps[NSLOTS];
-	
-	// Variable to achieve clock synchronization with Anchor 0
-	double skew;	//Clock skew/drift with anchor 0;
-	uint32 range;	//Range to anchor 0 in timer tick
-	dwTime_t T0tx0[2];
-	dwTime_t TNtxn[2];
+	uint8_t packetIds[NSLOTS];
+	uint32_t rxTimestamps[NSLOTS];
+	uint32_t txTimestamps[NSLOTS];
+	uint16_t distances[NSLOTS];
+
+	//Kalman Filter vars
+	double xhat[2];
+	uint8_t A0_sync;
 } ctx;
 
 #define PACKET_TYPE_RANGE 0x21
 
 typedef struct rangePacket_s {
-	uint8 type;
-	uint8 idx;				//index at master
-	uint8 timestamps[NSLOTS][5];	//Relevant time for anchors
+	uint8_t type;
+	uint8_t idx;				//index at master
+	uint8_t timestamps[NSLOTS][TS_TX_SIZE];	//Relevant time for anchors
+	uint16_t distances[NSLOTS];
 }__attribute__((packed)) rangePacket_t;
 
 typedef struct packet_s {
