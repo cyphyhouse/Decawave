@@ -101,8 +101,8 @@ void sendFakeGPS(const geometry_msgs::PoseStamped::ConstPtr& pose)
     std::ofstream positionFile;
     positionFile.open ("/home/pi/copterpos.txt", std::ios::app);
     positionFile << stamp.toNSec() / 1000 << ", ";
-    positionFile << point.x << ", " << point.y << ", " << point.z << "\n";
-    positionFile << deca_position.x << ", " << deca_position.y << ", " << deca_position.z << ", ";
+    positionFile << point.x << ", " << point.y << ", " << point.z << ", ";
+    positionFile << deca_position.x << ", " << deca_position.y << ", " << deca_position.z << "\n";
     positionFile.close();
 
     current_lat = lat;
