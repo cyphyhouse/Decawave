@@ -24,7 +24,7 @@
 </editorArea>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="tdoa_anc.h" partName="tdoa_anc.h" path="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/inc/tdoa_anc.h" title="tdoa_anc.h" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/inc/tdoa_anc.h" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/inc/tdoa_anc.h"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="1136" selectionTopPixel="312"/>
+<editorState selectionHorizontalPixel="0" selectionLength="11" selectionOffset="2835" selectionTopPixel="1752"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="port_deca.c" partName="port_deca.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/platform/port_deca.c" title="port_deca.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/platform/port_deca.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/platform/port_deca.c"/>
@@ -40,7 +40,7 @@
 </editor>
 <editor activePart="true" focus="true" id="org.eclipse.cdt.ui.editor.CEditor" name="tdoa_anc.c" partName="tdoa_anc.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/src/tdoa_anc.c" title="tdoa_anc.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/src/tdoa_anc.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/src/tdoa_anc.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="10117" selectionTopPixel="6388"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="6911" selectionTopPixel="3633"/>
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="stm32f10x_it.c" partName="stm32f10x_it.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/platform/stm32f10x_it.c" title="stm32f10x_it.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/platform/stm32f10x_it.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/platform/stm32f10x_it.c"/>
@@ -48,7 +48,7 @@
 </editor>
 <editor id="org.eclipse.cdt.ui.editor.CEditor" name="main.c" partName="main.c" path="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/src/main.c" title="main.c" tooltip="C:/Users/JanschPortoJoaoPaulo/Documents/CoIDE_workspace/TREK_TDOA/src/main.c" workbook="DefaultEditorWorkbook">
 <input factoryID="org.eclipse.ui.part.FileEditorInputFactory" path="/TREK_TDOA/src/main.c"/>
-<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="5114" selectionTopPixel="2998"/>
+<editorState selectionHorizontalPixel="0" selectionLength="0" selectionOffset="5752" selectionTopPixel="2850"/>
 </editor>
 <editor id="org.coocox.builder.ui.editors.ConfigEditor" name="" partName="Configuration" title="Configuration" tooltip="" workbook="DefaultEditorWorkbook">
 <input factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory">&#x0A;<org.coocox.builder.ui.editors.ConfigEditor horizontalPosition="0" subTagIndex="1" verticalPosition="0"/>
@@ -262,26 +262,6 @@
 <workingSets/>
 <navigationHistory>
 <editors>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/inc/tdoa_anc.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/tdoa_anc.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/platform/port_deca.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/main.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/main.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/tdoa_anc.c"/>
-<editor factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory" id="org.coocox.builder.ui.editors.ConfigEditor">
-<org.coocox.builder.ui.editors.ConfigEditor horizontalPosition="0" subTagIndex="1" verticalPosition="0"/>
-</editor>
-<editor factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory" id="org.coocox.builder.ui.editors.ConfigEditor">
-<org.coocox.builder.ui.editors.ConfigEditor/>
-</editor>
-<editor factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory" id="org.coocox.builder.ui.editors.ConfigEditor">
-<org.coocox.builder.ui.editors.ConfigEditor/>
-</editor>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/inc/tdoa_anc.h"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/tdoa_anc.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/main.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/tdoa_anc.c"/>
-<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/decadriver/deca_regs.h"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/main.c"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/tdoa_anc.c"/>
 <editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/tdoa_anc.c"/>
@@ -292,148 +272,160 @@
 <editor factoryID="org.coocox.builder.ui.persistent.PersistentElementFactory" id="org.coocox.builder.ui.editors.ConfigEditor">
 <org.coocox.builder.ui.editors.ConfigEditor horizontalPosition="0" subTagIndex="1" verticalPosition="0"/>
 </editor>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/main.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/inc/tdoa_anc.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/main.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/tdoa_anc.c"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/inc/tdoa_anc.h"/>
+<editor factoryID="org.eclipse.ui.part.FileEditorInputFactory" id="org.eclipse.cdt.ui.editor.CEditor" path="/TREK_TDOA/src/tdoa_anc.c"/>
 </editors>
-<item historyLabel="tdoa_anc.h" index="0">
-<position info="not_deleted" x="1136" y="0"/>
-</item>
-<item historyLabel="tdoa_anc.c" index="1">
-<position info="not_deleted" x="2557" y="0"/>
-</item>
-<item historyLabel="tdoa_anc.h" index="0">
-<position info="not_deleted" x="1136" y="0"/>
-</item>
-<item historyLabel="port_deca.c" index="2">
-<position info="not_deleted" x="1367" y="14"/>
-</item>
-<item historyLabel="tdoa_anc.c" index="1">
-<position info="not_deleted" x="2521" y="23"/>
-</item>
-<item historyLabel="tdoa_anc.h" index="0">
-<position info="not_deleted" x="1136" y="0"/>
-</item>
-<item historyLabel="main.c" index="3">
-<position info="not_deleted" x="5181" y="0"/>
-</item>
-<item historyLabel="port_deca.c" index="2">
-<position info="not_deleted" x="1367" y="14"/>
-</item>
-<item historyLabel="tdoa_anc.c" index="1">
-<position info="not_deleted" x="2866" y="0"/>
-</item>
-<item historyLabel="main.c" index="3">
-<position info="not_deleted" x="5181" y="0"/>
-</item>
-<item historyLabel="tdoa_anc.c" index="1">
-<position info="not_deleted" x="11590" y="0"/>
-</item>
-<item historyLabel="tdoa_anc.h" index="0">
-<position info="not_deleted" x="2039" y="9"/>
-</item>
-<item historyLabel="tdoa_anc.c" index="1">
-<position info="not_deleted" x="11590" y="0"/>
-</item>
-<item historyLabel="main.c" index="4">
-<position info="not_deleted" x="5181" y="0"/>
-</item>
-<item historyLabel="tdoa_anc.c" index="5">
-<position info="not_deleted" x="1672" y="0"/>
-</item>
-<item historyLabel="Configuration" index="6"/>
-<item historyLabel="Configuration" index="7"/>
-<item historyLabel="Configuration" index="8"/>
-<item historyLabel="tdoa_anc.h" index="9">
-<position info="not_deleted" x="2039" y="9"/>
-</item>
-<item historyLabel="tdoa_anc.c" index="10">
-<position info="not_deleted" x="2337" y="0"/>
-</item>
-<item historyLabel="main.c" index="11">
-<position info="not_deleted" x="5137" y="0"/>
-</item>
-<item historyLabel="main.c" index="11">
-<position info="not_deleted" x="4691" y="0"/>
-</item>
-<item historyLabel="main.c" index="11">
-<position info="not_deleted" x="5309" y="36"/>
-</item>
-<item historyLabel="main.c" index="11">
-<position info="not_deleted" x="5307" y="0"/>
-</item>
-<item historyLabel="main.c" index="11">
-<position info="not_deleted" x="5423" y="42"/>
-</item>
-<item historyLabel="main.c" index="11">
-<position info="not_deleted" x="5786" y="0"/>
-</item>
-<item historyLabel="main.c" index="11">
-<position info="not_deleted" x="5733" y="22"/>
-</item>
-<item historyLabel="main.c" index="11">
-<position info="not_deleted" x="5440" y="0"/>
-</item>
-<item historyLabel="tdoa_anc.c" index="12">
-<position info="not_deleted" x="14814" y="0"/>
-</item>
-<item historyLabel="deca_regs.h" index="13">
-<position info="not_deleted" x="22820" y="11"/>
-</item>
-<item historyLabel="tdoa_anc.c" index="12">
-<position info="not_deleted" x="14814" y="0"/>
-</item>
-<item historyLabel="main.c" index="14">
-<position info="not_deleted" x="2510" y="0"/>
-</item>
-<item historyLabel="tdoa_anc.c" index="15">
-<position info="not_deleted" x="15330" y="8"/>
-</item>
-<item historyLabel="tdoa_anc.c" index="15">
-<position info="not_deleted" x="993" y="8"/>
-</item>
-<item historyLabel="main.c" index="14">
-<position info="not_deleted" x="5843" y="0"/>
-</item>
-<item historyLabel="main.c" index="14">
-<position info="not_deleted" x="4667" y="0"/>
-</item>
-<item historyLabel="main.c" index="14">
+<item historyLabel="main.c" index="0">
 <position info="not_deleted" x="3584" y="0"/>
 </item>
-<item historyLabel="tdoa_anc.c" index="15">
+<item historyLabel="tdoa_anc.c" index="1">
 <position info="not_deleted" x="993" y="8"/>
 </item>
-<item historyLabel="main.c" index="14">
+<item historyLabel="main.c" index="0">
 <position info="not_deleted" x="3584" y="0"/>
 </item>
-<item historyLabel="tdoa_anc.c" index="16">
+<item historyLabel="tdoa_anc.c" index="2">
 <position info="not_deleted" x="993" y="8"/>
 </item>
-<item historyLabel="main.c" index="17">
+<item historyLabel="main.c" index="3">
 <position info="not_deleted" x="5114" y="0"/>
 </item>
-<item historyLabel="tdoa_anc.c" index="16">
+<item historyLabel="tdoa_anc.c" index="2">
 <position info="not_deleted" x="2313" y="0"/>
 </item>
-<item historyLabel="tdoa_anc.h" index="18">
+<item historyLabel="tdoa_anc.h" index="4">
 <position info="not_deleted" x="2480" y="0"/>
 </item>
-<item historyLabel="tdoa_anc.c" index="16">
+<item historyLabel="tdoa_anc.c" index="2">
 <position info="not_deleted" x="5085" y="0"/>
 </item>
-<item historyLabel="main.c" index="19">
+<item historyLabel="main.c" index="5">
 <position info="not_deleted" x="5114" y="0"/>
 </item>
-<item historyLabel="tdoa_anc.c" index="16">
+<item historyLabel="tdoa_anc.c" index="2">
 <position info="not_deleted" x="5238" y="0"/>
 </item>
-<item historyLabel="tdoa_anc.h" index="20">
+<item historyLabel="tdoa_anc.h" index="6">
 <position info="not_deleted" x="1136" y="0"/>
 </item>
-<item historyLabel="tdoa_anc.c" index="16">
+<item historyLabel="tdoa_anc.c" index="2">
 <position info="not_deleted" x="4359" y="0"/>
 </item>
-<item historyLabel="Configuration" index="21"/>
-<item active="true" historyLabel="tdoa_anc.c" index="16">
+<item historyLabel="Configuration" index="7"/>
+<item historyLabel="tdoa_anc.c" index="2">
 <position info="not_deleted" x="4359" y="0"/>
+</item>
+<item historyLabel="main.c" index="8">
+<position info="not_deleted" x="5114" y="0"/>
+</item>
+<item historyLabel="main.c" index="8">
+<position info="not_deleted" x="4665" y="0"/>
+</item>
+<item historyLabel="main.c" index="8">
+<position info="not_deleted" x="5844" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="494" y="0"/>
+</item>
+<item historyLabel="main.c" index="8">
+<position info="not_deleted" x="6188" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="494" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.h" index="9">
+<position info="not_deleted" x="1227" y="4"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="9937" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.h" index="9">
+<position info="not_deleted" x="539" y="15"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="9934" y="15"/>
+</item>
+<item historyLabel="tdoa_anc.h" index="9">
+<position info="not_deleted" x="1232" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="9934" y="15"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="10039" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="2442" y="12"/>
+</item>
+<item historyLabel="tdoa_anc.h" index="9">
+<position info="not_deleted" x="2438" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="2442" y="12"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="2494" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="2478" y="5"/>
+</item>
+<item historyLabel="tdoa_anc.h" index="9">
+<position info="not_deleted" x="1227" y="4"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="2478" y="5"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="10991" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="5481" y="8"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="8108" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="2878" y="7"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="8171" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="3486" y="10"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="6646" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="2">
+<position info="not_deleted" x="7226" y="14"/>
+</item>
+<item historyLabel="tdoa_anc.h" index="9">
+<position info="not_deleted" x="1227" y="4"/>
+</item>
+<item historyLabel="main.c" index="10">
+<position info="not_deleted" x="6188" y="0"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="11">
+<position info="not_deleted" x="7226" y="14"/>
+</item>
+<item historyLabel="tdoa_anc.h" index="12">
+<position info="not_deleted" x="2835" y="11"/>
+</item>
+<item historyLabel="tdoa_anc.c" index="11">
+<position info="not_deleted" x="7226" y="14"/>
+</item>
+<item historyLabel="tdoa_anc.h" index="12">
+<position info="not_deleted" x="2835" y="11"/>
+</item>
+<item historyLabel="main.c" index="10">
+<position info="not_deleted" x="6188" y="0"/>
+</item>
+<item active="true" historyLabel="tdoa_anc.c" index="13">
+<position info="not_deleted" x="7222" y="14"/>
 </item>
 </navigationHistory>
 <input factoryID="org.eclipse.ui.internal.model.ResourceFactory" path="/" type="8"/>

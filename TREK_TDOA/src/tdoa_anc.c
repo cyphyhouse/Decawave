@@ -181,8 +181,8 @@ dwTime_t transmitTimeForSlot(int slot)
 	//calculate start of the slot
 	transmitTime.full = ctx.tdmaFrameStart.full + slot*TDMA_SLOT_LEN;
 	// Add guard and preamble time
-	//transmitTime.full += TDMA_GUARD_LENGTH;
-	//transmitTime.full += PREAMBLE_LENGTH;
+	transmitTime.full += TDMA_GUARD_LENGTH;
+	transmitTime.full += PREAMBLE_LENGTH;
 	
 	// DW1000 can only schedule time with 9 LSB at 0, adjust for it
 	transmitTime.low32 = (transmitTime.low32 & ~((1<<9)-1)) + (1<<9);
@@ -242,7 +242,7 @@ void slotStep(const dwt_cb_data_t *cb_data, eventState_e event)
 						//Resync local frame start to packet from anchor 0
 						dwTime_t pkTxTime = { .full = 0 };
 						memcpy(&pkTxTime, rangePacket->timestamps[ctx.slot], TS_TX_SIZE); //ctx.slot = 0
-						ctx.tdmaFrameStart.full = rxTime.full;// - (pkTxTime.full - TDMA_LAST_FRAME(pkTxTime.full));
+						ctx.tdmaFrameStart.full = rxTime.full - (pkTxTime.full - TDMA_LAST_FRAME(pkTxTime.full));
 
 						ctx.msg_index = rangePacket->idx;
 					}
@@ -323,7 +323,7 @@ void rx_ok_cb(const dwt_cb_data_t *cb_data)
 
 				dwTime_t pkTxTime = { .full = 0 };
 				memcpy(&pkTxTime, rangePacket->timestamps[0], TS_TX_SIZE);
-				ctx.tdmaFrameStart.full = rxTime.full;// - (pkTxTime.full - TDMA_LAST_FRAME(pkTxTime.full));
+				ctx.tdmaFrameStart.full = rxTime.full - (pkTxTime.full - TDMA_LAST_FRAME(pkTxTime.full));
 				
 				ctx.tdmaFrameStart.full += TDMA_FRAME_LEN;
 				
