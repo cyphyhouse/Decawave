@@ -58,6 +58,17 @@ static uint8 isSeqNrConsecutive(uint8_t prevSeqNr, uint8_t currentSeqNr) {
 	return (currentSeqNr == ((prevSeqNr + 1) & 0xFF));
 }
 
+static uint8 isSameFrame(const uint8_t Ar, const uint8_t An, const uint8_t packetIdx) {
+    if (Ar < An)
+    {
+      return (rxPacketBuffer[Ar].Idx == packetIdx);
+    }
+    else
+    {
+      return (rxPacketBuffer[Ar].Idx == (packetIdx - 1));
+    }
+}
+
 static uint8 calcClockCorrection(double* clockCorrection, const uint8_t anchor, const rangePacket_t* packet, const dwTime_t* arrival) {
 	if (! isSeqNrConsecutive(rxPacketBuffer[anchor].Idx, packet->Idx)) {
 		return 0;
@@ -75,17 +86,21 @@ static uint8 calcClockCorrection(double* clockCorrection, const uint8_t anchor, 
 }
 
 static uint8 calcDistanceDiff(float* tdoaDistDiff, const uint8_t previousAnchor, const uint8_t anchor, const rangePacket_t* packet, const dwTime_t* arrival) {
+	if (! isSameFrame(previousAnchor, anchor, packet->Idx))
+	{
+		return 0;
+	}
+
 	const int64_t rxAn_by_T_in_cl_T  = arrival->full;
 	const int64_t rxAr_by_An_in_cl_An = packet->timestamps[previousAnchor];
 	const int64_t tof_Ar_to_An_in_cl_An = packet->distances[previousAnchor];
 	const double clockCorrection = clockCorrection_T_To_A[anchor];
 
-	const uint8 isSeqNrInAnchorOk = isSeqNrConsecutive(sequenceNrs[anchor], packet->Idx);
 	const uint8 isAnchorDistanceOk = isValidTimeStamp(tof_Ar_to_An_in_cl_An);
 	const uint8 isRxTimeInTagOk = isValidTimeStamp(rxAr_by_An_in_cl_An);
 	const uint8 isClockCorrectionOk = (clockCorrection != 0.0);
 
-	if (! (isSeqNrInAnchorOk && isAnchorDistanceOk && isRxTimeInTagOk && isClockCorrectionOk)) {
+	if (! (isAnchorDistanceOk && isRxTimeInTagOk && isClockCorrectionOk)) {
 		return 0;
 	}
 
