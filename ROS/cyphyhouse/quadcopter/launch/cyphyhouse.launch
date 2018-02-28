@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="server" default="192.168.1.2" />
+
+  <!-- run vrpn -->
+  <include file="$(find vrpn_client_ros)/launch/sample.launch"/>
+  <node pkg="vrpn_client_ros" name="vrpn" output="screen" type="vrpn_client_node">
+    <rosparam subst_value="true">
+      server: $(arg server)
+      port: 3883
+      update_frequency: 100.0
+      frame_id: world
+      use_server_time: false
+      broadcast_tf: true
+      refresh_tracker_frequency: 1.0
+    </rosparam>
+  </node>
+  
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
+  <node name="rosbridge_websocket" pkg="rosbridge_server" type="bridge" />
+  
+  <node pkg="mavros" name="mavros_node" output="screen" type="mavros_node">
+    <rosparam subst_value="true">
+      _fcu_url: "udp://:14650@"
+      _gcs_url: "udp://@127.0.0.1:14550"
+    </rosparam>
+  </node>
+  
+  <node name="fakeGPS_node" pkg="quadcopter" type="fakegps" />
+
+</launch>
