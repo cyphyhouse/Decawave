@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
                         dist_recv = 1;
                         if(dist_recv) //Received distance measurement. Can calculate stuff now
                         {
-                            ros::time t_now = ros::Time::now()
+                            ros::Time t_now = ros::Time::now();
                             ros::Duration t = t_now - last_pub;
                             if(t.toSec() >= 0.01)
                             {
