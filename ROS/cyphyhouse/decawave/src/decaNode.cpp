@@ -12,11 +12,8 @@
 #include "ros/ros.h"
 #include "geometry_msgs/Point.h"
 #include "ros/package.h"
-#include <sensor_msgs/Imu.h>
-#include <mavros/mavros_plugin.h>
 
 #include "Eigen/Dense"
-#include <Eigen/Geometry>
 #include "tdoa.h"
 #include "serial/serial.h"
 
@@ -80,14 +77,8 @@ uint16_t serial_checksum(const uint8_t *data, size_t len)
 
 void initAnchors(TDOA &ekf)
 {
-    std::string path;
-#ifdef NAVIO2
-    path = "/home/pi/catkin_ws/src/decawave";
-#else
-    path = ros::package::getPath("decawave");
-#endif
+    std::string path = ros::package::getPath("decawave");
     std::ifstream file( path+"/config/anchorPos.txt");
-    
     std::string str;
     float x, y, z;
     int i = 0;
@@ -99,20 +90,6 @@ void initAnchors(TDOA &ekf)
     }
 }
 
-#ifdef NAVIO2
-vec3d_t acc;
-void getImu(const sensor_msgs::Imu::ConstPtr& imu)
-{
-    Eigen::Quaterniond Q(imu->orientation.w, imu->orientation.x, imu->orientation.y, imu->orientation.z);
-    Eigen::Matrix3d R = Q.toRotationMatrix();
-    Eigen::Vector3d imu_acc = Eigen::Vector3d(imu->linear_acceleration.x, imu->linear_acceleration.y, imu->linear_acceleration.z);
-    Eigen::Vector3d acc_temp = R*imu_acc;
-    acc.x = acc_temp(1);
-    acc.y = -acc_temp(0);
-    acc.z = acc_temp(2);
-}
-#endif
-
 void initRobotMatrices(std::string type);
 
 int main(int argc, char *argv[])
@@ -121,11 +98,7 @@ int main(int argc, char *argv[])
     ros::NodeHandle nh;
     ros::NodeHandle private_handle("~");
     ros::Publisher decaPos_pub = nh.advertise<geometry_msgs::Point>("decaPos", 1);
-    ros::Publisher decaVel_pub = nh.advertise<geometry_msgs::Point>("decaVel", 1);
-    
-#ifdef NAVIO2
-    ros::Subscriber imu_sub = nh.subscribe("/mavros/imu/data", 1, getImu);
-#endif
+	ros::Publisher decaVel_pub = nh.advertise<geometry_msgs::Point>("decaVel", 1);
     
     std::string device_port;
     private_handle.getParam("deca_port", device_port);
@@ -140,7 +113,7 @@ int main(int argc, char *argv[])
     private_handle.getParam("robot_type", robot_type);
     initRobotMatrices(robot_type);
     
-    vec3d_t initial_position = {5.0,5.0,0.0};
+    vec3d_t initial_position = {0,0,0};
     
     TDOA deca_ekf(A, P, Q, initial_position);
     
@@ -179,47 +152,38 @@ int main(int argc, char *argv[])
                         An = serial_msg[ANCN_BYTE];
                         Ar = serial_msg[ANCR_BYTE];
                         tdoaDistDiff = to_float(&serial_msg[DATA_BYTE]);
-                        dist_recv = 1;
-                        if(dist_recv) //Received distance measurement. Can calculate stuff now
+
+			            ros::Time t_now = ros::Time::now();
+                        ros::Duration t = t_now - last_pub;
+                        if(t.toSec() >= 0.01)
                         {
-                            ros::Time t_now = ros::Time::now();
-                            ros::Duration t = t_now - last_pub;
-                            if(t.toSec() >= 0.01)
-                            {
-                            #ifdef NAVIO2
-                                deca_ekf.stateEstimatorPredictAcc(t.toSec(), acc);
-                                deca_ekf.stateEstimatorAddProcessNoise(t.toSec(), 0.5);
-                            #else
-                                deca_ekf.stateEstimatorPredict(t.toSec());
-                                deca_ekf.stateEstimatorAddProcessNoise(t.toSec(), 0);
-                            #endif
-                                
-                                vec3d_t pos = deca_ekf.getLocation();
-                                geometry_msgs::Point pos_msg;
-                                pos_msg.x = pos.x;
-                                pos_msg.y = pos.y;
-                                pos_msg.z = pos.z;
-                                
-                                vec3d_t vel = deca_ekf.getVelocity();
-                                geometry_msgs::Point vel_msg;
-                                vel_msg.x = vel.x;
-                                vel_msg.y = vel.y;
-                                vel_msg.z = vel.z;
-                                
-                                decaPos_pub.publish(pos_msg);
-                                decaVel_pub.publish(vel_msg);
-                                last_pub = t_now;
-                            }
+                            vec3d_t pos = deca_ekf.getLocation();
+                            geometry_msgs::Point pos_msg;
+                            pos_msg.x = pos.x;
+                            pos_msg.y = pos.y;
+                            pos_msg.z = pos.z;
+                            decaPos_pub.publish(pos_msg);
                             
+                            vec3d_t vel = deca_ekf.getVelocity();
+                            geometry_msgs::Point vel_msg;
+                            vel_msg.x = vel.x;
+                            vel_msg.y = vel.y;
+                            vel_msg.z = vel.z;
+                            decaVel_pub.publish(vel_msg);
                             
-                            
-                            deca_ekf.scalarTDOADistUpdate(An, Ar, tdoaDistDiff);
-                            
-                            //deca_ekf.stateEstimatorFinalize();
-                            
-                            dist_recv = 0;
-                        }
-                    }
+                            last_pub = t_now;
+                            deca_ekf.stateEstimatorPredict(t.toSec());
+			            }
+			            
+			            deca_ekf.stateEstimatorAddProcessNoise();
+			            
+			            deca_ekf.scalarTDOADistUpdate(An, Ar, tdoaDistDiff);
+			            
+			            deca_ekf.stateEstimatorFinalize();
+			            
+
+		            }
+                    
                     else
                     {
                         //printf("Error: Wrong checksum. Dump: ");
@@ -232,10 +196,11 @@ int main(int argc, char *argv[])
                 }
             }
         }
-        else
-        {
-            std::this_thread::sleep_for(std::chrono::microseconds(SLEEP_TIME_MICROS));
-        }
+	else
+	{
+		std::this_thread::sleep_for(std::chrono::microseconds(SLEEP_TIME_MICROS));
+	}
+        
     }
     my_serial.close();
     std::cout << "Closed serial" << std::endl;
@@ -288,3 +253,4 @@ void initRobotMatrices(std::string type)
         Q.setZero(6,6);
     }
 }
+

@@ -38,8 +38,6 @@
 #define MAX_COVARIANCE 100
 #define MIN_COVARIANCE 1e-6f
 
-#define GRAVITY_MAGNITUDE 9.81
-
 typedef struct vec3d_s
 {
     float   x;
@@ -68,9 +66,8 @@ public:
     // Update functions
     void scalarTDOADistUpdate(uint8_t Ar, uint8_t An, float distanceDiff);
     void stateEstimatorPredict(double dt);
-    void stateEstimatorPredictAcc(double dt, vec3d_t acc);
     void stateEstimatorFinalize();
-    void stateEstimatorAddProcessNoise(double dt, double acc_noise);
+    void stateEstimatorAddProcessNoise();
     
     
     // Get functions
@@ -101,3 +98,4 @@ private:
 };
 
 #endif
+
