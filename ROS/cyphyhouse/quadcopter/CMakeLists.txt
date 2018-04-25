@@ -134,7 +134,6 @@ include_directories(include ${catkin_INCLUDE_DIRS} /usr/include/GeographicLib/)
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/quadcopter_node.cpp)
 add_executable(fakeGPS_node src/fakegps.cpp)
-add_executable(positionctrl_node src/position_controller.cpp)
 add_executable(decaFakeGPS_node src/fakegpsdecawave.cpp)
 
 ## Rename C++ executable without prefix
@@ -148,9 +147,6 @@ add_executable(decaFakeGPS_node src/fakegpsdecawave.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(fakeGPS_node
-  ${catkin_LIBRARIES}
-)
-target_link_libraries(positionctrl_node
   ${catkin_LIBRARIES}
 )
 target_link_libraries(decaFakeGPS_node
