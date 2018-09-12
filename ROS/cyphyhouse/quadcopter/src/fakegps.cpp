@@ -66,7 +66,10 @@ void sendFakeGPS(const geometry_msgs::PoseStamped::ConstPtr& pose)
     ros::Time stamp = ros::Time::now();
 
     if ((stamp - old_stamp) < ros::Duration(0.1))   // throttle incoming messages to 10 Hz
+    {
         return;
+    }
+    old_stamp = stamp;
 
     if (sqrt(pow(point.z - current_waypoint.z,2)) < 0.3 && takeoff_flag)
     {
