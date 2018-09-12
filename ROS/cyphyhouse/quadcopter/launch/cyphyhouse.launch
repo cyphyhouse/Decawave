@@ -17,7 +17,6 @@
   </node>
   
   <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
-  <node name="rosbridge_websocket" pkg="rosbridge_server" type="bridge" />
   
   <node pkg="mavros" name="mavros_node" output="screen" type="mavros_node">
     <rosparam subst_value="true">
@@ -26,6 +25,6 @@
     </rosparam>
   </node>
   
-  <node name="fakeGPS_node" pkg="quadcopter" type="fakegps" />
+  <node name="fakeGPS_node" pkg="quadcopter" type="fakeGPS_node" />
 
 </launch>
