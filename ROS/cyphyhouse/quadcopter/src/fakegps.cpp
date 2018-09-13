@@ -27,6 +27,8 @@ double current_lat, current_lon, current_h = 0;
 bool takeoff_flag = false;
 bool starl_flag = false;
 
+std::string bot_num, vicon_obj;
+
 ros::Time old_stamp = ros::Time(0.0);
 
 ros::ServiceClient arming_client;
@@ -217,6 +219,9 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "fakeGPS");
     ardupilot_link = mavconn::MAVConnInterface::open_url("udp://127.0.0.1:14550@");
     ros::NodeHandle n;
+    
+    n.param<std::string>("vicon_obj", vicon_obj, "cyphyhousecopter");
+    n.param<std::string>("bot_num", bot_num, "bot1");
 
     arming_client = n.serviceClient<mavros_msgs::CommandBool>("/mavros/cmd/arming");
     takeoff_client = n.serviceClient<mavros_msgs::CommandTOL>("/mavros/cmd/takeoff");
@@ -226,10 +231,10 @@ int main(int argc, char **argv)
     postarget_pub = n.advertise<geometry_msgs::PoseStamped>("/mavros/setpoint_position/local", 1);
     reached_pub = n.advertise<std_msgs::String>("/Reached", 1);
 
-    ros::Subscriber vel_sub = n.subscribe("/vrpn_client_node/cyphyhousecopter/twist", 1, getVelocity);
+    ros::Subscriber vel_sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/twist", 1, getVelocity);
     ros::Subscriber deca_pos = n.subscribe("/decaPos", 1, getDecaPosition);
-    ros::Subscriber sub = n.subscribe("/vrpn_client_node/cyphyhousecopter/pose", 1, sendFakeGPS);
-    ros::Subscriber waypoint = n.subscribe("/Waypoint_bot0", 1, sendWP);  // second parameter is num of buffered messages
+    ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, sendFakeGPS);
+    ros::Subscriber waypoint = n.subscribe("/Waypoint_"+bot_num, 1, sendWP);  // second parameter is num of buffered messages
 
     ros::ServiceClient sethome_client = n.serviceClient<mavros_msgs::CommandHome>("/mavros/cmd/set_home");
     mavros_msgs::CommandHome sethome_msg;
