@@ -3,8 +3,7 @@
   <arg name="server" default="192.168.1.2" />
 
   <!-- run vrpn -->
-  <include file="$(find vrpn_client_ros)/launch/sample.launch"/>
-  <node pkg="vrpn_client_ros" name="vrpn" output="screen" type="vrpn_client_node">
+  <node pkg="vrpn_client_ros" name="vrpn_client_node" output="screen" type="vrpn_client_node">
     <rosparam subst_value="true">
       server: $(arg server)
       port: 3883
@@ -25,6 +24,6 @@
     </rosparam>
   </node>
   
-  <node name="fakeGPS_node" pkg="quadcopter" type="fakeGPS_node" />
+  <node name="fakeGPS_node" pkg="quadcopter" type="fakeGPS_node" output="screen" />
 
 </launch>
