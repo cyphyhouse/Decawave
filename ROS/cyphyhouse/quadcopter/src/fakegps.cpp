@@ -78,8 +78,8 @@ void sendFakeGPS(const geometry_msgs::PoseStamped::ConstPtr& pose)
         geometry_msgs::PoseStamped postarget_msg;
         postarget_msg.header.stamp = ros::Time::now();
         postarget_msg.header.frame_id = '0';
-        postarget_msg.pose.position.x = current_waypoint.x;
-        postarget_msg.pose.position.y = current_waypoint.y;
+        postarget_msg.pose.position.x = current_waypoint.y;
+        postarget_msg.pose.position.y = -current_waypoint.x;
         postarget_msg.pose.position.z = current_waypoint.z;
         postarget_pub.publish(postarget_msg);
         takeoff_flag = false;
