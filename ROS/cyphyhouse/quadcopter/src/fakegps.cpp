@@ -22,6 +22,8 @@
 #include "geometry_msgs/PointStamped.h"
 #include "ros/package.h"
 
+#define GPS_RATE 0.1
+
 static const double lat0 = 40.116, lon0 = -88.224;	// IRL GPS coords
 double current_lat, current_lon, current_h = 0;
 bool takeoff_flag = false;
@@ -67,7 +69,7 @@ void sendFakeGPS(const geometry_msgs::PoseStamped::ConstPtr& pose)
     mavlink::common::msg::HIL_GPS fix {};
     ros::Time stamp = ros::Time::now();
 
-    if ((stamp - old_stamp) < ros::Duration(0.1))   // throttle incoming messages to 10 Hz
+    if ((stamp - old_stamp) < ros::Duration(GPS_RATE))   // throttle incoming messages to 10 Hz
     {
         return;
     }
