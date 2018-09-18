@@ -40,7 +40,6 @@ ros::ServiceClient land_client;
 
 geometry_msgs::Vector3 current_vel;
 geometry_msgs::Point vicon_position;
-int8_t wpEnum;  // 0 = takeoff, 1 = loiter, 2 = land
 
 static mavconn::MAVConnInterface::Ptr ardupilot_link;
 
@@ -216,7 +215,7 @@ int main(int argc, char **argv)
     current_waypoint.x = current_waypoint.y = current_waypoint.z = 0;
     ros::init(argc, argv, "fakeGPS");
     ardupilot_link = mavconn::MAVConnInterface::open_url("udp://127.0.0.1:14550@");
-    ros::NodeHandle n;
+    ros::NodeHandle n("~");
     
     n.param<std::string>("vicon_obj", vicon_obj, "cyphyhousecopter");
     n.param<std::string>("bot_num", bot_num, "bot1");

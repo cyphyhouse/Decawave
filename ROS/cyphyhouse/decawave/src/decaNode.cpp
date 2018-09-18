@@ -45,6 +45,8 @@ Eigen::MatrixXf P;
 Eigen::MatrixXf A;
 Eigen::MatrixXf Q;
 
+std::string device_port, robot_type;
+
 
 float to_float(uint8_t* buff)
 {
@@ -95,22 +97,20 @@ void initRobotMatrices(std::string type);
 int main(int argc, char *argv[])
 {   
     ros::init(argc, argv, "decaNode");
-    ros::NodeHandle nh;
-    ros::NodeHandle private_handle("~");
+    ros::NodeHandle nh("~");
     ros::Publisher decaPos_pub = nh.advertise<geometry_msgs::Point>("decaPos", 1);
 	ros::Publisher decaVel_pub = nh.advertise<geometry_msgs::Point>("decaVel", 1);
     
-    std::string device_port;
-    private_handle.getParam("deca_port", device_port);
+    n.param<std::string>("deca_port", device_port, "/dev/ttyACM0");
+    n.param<std::string>("robot_type", robot_type, "quadcopter");
+    
     serial::Serial my_serial(device_port, SPEED, serial::Timeout::simpleTimeout(1000));
 
     int bytes_avail;
 
     RX_idx = 0;
     dist_recv = 0;
-    
-    std::string robot_type;
-    private_handle.getParam("robot_type", robot_type);
+
     initRobotMatrices(robot_type);
     
     vec3d_t initial_position = {0,0,0};
