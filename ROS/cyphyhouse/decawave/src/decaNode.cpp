@@ -42,7 +42,7 @@
 uint8_t An, Ar, dist_recv;
 float tdoaDistDiff;
 
-TDOA deca_ekf
+TDOA deca_ekf;
 std::mutex ekf_mutex;
 std::thread serial_thread;
 
@@ -107,6 +107,9 @@ void serial_comm()
     uint8_t RX_idx = 0;
     uint8_t serial_msg[SERIAL_BUF_SIZE];
     bool ignoring_flag = false;
+    int bytes_avail;
+
+    serial::Serial my_serial(device_port, SPEED, serial::Timeout::simpleTimeout(1000));
 
     while(ros::ok())
     {
@@ -181,15 +184,10 @@ int main(int argc, char *argv[])
     decaPos_pub = nh.advertise<geometry_msgs::Point>("decaPos", 1);
 	decaVel_pub = nh.advertise<geometry_msgs::Point>("decaVel", 1);
     
-    n.param<std::string>("deca_port", device_port, "/dev/ttyACM0");
-    n.param<std::string>("robot_type", robot_type, "quadcopter");
+    nh.param<std::string>("deca_port", device_port, "/dev/ttyACM0");
+    nh.param<std::string>("robot_type", robot_type, "quadcopter");
+
     
-    serial::Serial my_serial(device_port, SPEED, serial::Timeout::simpleTimeout(1000));
-
-    int bytes_avail;
-
-    RX_idx = 0;
-    dist_recv = 0;
 
     initRobotMatrices(robot_type);
     
@@ -217,7 +215,7 @@ int main(int argc, char *argv[])
         vec3d_t vel = deca_ekf.getVelocity();
         ekf_mutex.unlock();
         
-        pub_state(const vec3d_t pos, const vec3d_t vel);
+        pub_state(pos, vel);
         
         r.sleep();
     }
