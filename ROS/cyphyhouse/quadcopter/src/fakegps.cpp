@@ -130,7 +130,7 @@ void sendFakeGPS(const geometry_msgs::PoseStamped::ConstPtr& pose)
     fix.time_usec = stamp.toNSec() / 1000;
     fix.lat = lat * 1e7;
     fix.lon = lon * 1e7;
-    fix.alt = h * 1e3;
+    fix.alt = h * 1e2;
     fix.vel = sqrt(current_vel.x * current_vel.x + current_vel.y * current_vel.y + current_vel.z * current_vel.z) * 100;
     fix.vn = -current_vel.x * 100;
     fix.ve = current_vel.y * 100;
