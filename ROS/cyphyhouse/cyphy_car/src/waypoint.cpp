@@ -2,9 +2,13 @@
 #include <iostream>
 #include <cmath>
 #include <thread>
+#include <ctime>
+#include <cstdbool>
+#include <fstream>
 
 
 #include "ros/ros.h"
+#include <std_msgs/String.h>
 #include "geometry_msgs/PoseStamped.h"
 #include "geometry_msgs/PointStamped.h"
 #include <ackermann_msgs/AckermannDriveStamped.h>
@@ -13,7 +17,7 @@
 #define WP_RATE 100 //Hz
 #define PRINT_RATE 100 //Hz
 
-#define DELTA_DIRECTION  0.05
+#define DELTA_DIRECTION  0.01
 #define DELTA_SPEED      0.25
 #define EPSILON_RADIUS   0.25
 #define EPSILON_ANGLE    0.1
@@ -22,18 +26,20 @@ bool starl_flag = false;
 bool isDriving = false;
 bool gotWP = false;
 
-double speed = 0; direction = 0;
+double speed = 0, direction = 0;
+geometry_msgs::Point prev_loc, curr_loc;
 
 std::string bot_num, vicon_obj;
 
 
-ros::Publisher postarget_pub;
+ros::Publisher drive_pub;
 ros::Publisher reached_pub;
 
 geometry_msgs::Point deca_position, vicon_position;
 geometry_msgs::Point current_waypoint;  // VICON coords
 
-
+std::string dir_path;
+char time_buffer[80];
 std::thread gps_thread, print_thread;
 
 void getDecaPosition(const geometry_msgs::Point& point)
@@ -46,7 +52,7 @@ void getViconPosition(const geometry_msgs::PoseStamped& pose)
     vicon_position = pose.pose.position;
 }
 
-void get_angle_between_3_pts(geometry_msgs::Point center, geometry_msgs::Point waypoint, geometry_msgs::Point next_pos)
+double get_angle_between_3_pts(geometry_msgs::Point center, geometry_msgs::Point waypoint, geometry_msgs::Point next_pos)
 {
     double n_waypoint[2], n_next_pos[2];
     n_waypoint[0] = waypoint.x - center.x;
@@ -58,13 +64,14 @@ void get_angle_between_3_pts(geometry_msgs::Point center, geometry_msgs::Point w
 
 void drive()
 {
-    ros::Rate r(GPS_RATE);
+    ros::Rate r(WP_RATE);
 
     while(ros::ok())
     {
         
         prev_loc = curr_loc;
         curr_loc = vicon_position;
+        double a_error = 0;
         
         // Acknowledge that we reached the desired waypoint
         if (starl_flag)
@@ -83,24 +90,24 @@ void drive()
             }
         }
 
-        ROS_INFO("x: %f, y: %f, z: %f\n", point.x, point.y, point.z);
+        //ROS_INFO("x: %f, y: %f, z: %f\n", curr_loc.x, curr_loc.y, curr_loc.z);
 
         if (gotWP)
         {
-            double a_error = get_angle_between_3_pts(prev_loc, waypoint, curr_loc);
-            if (a_error > PI) a_error -= 2*PI;
-            if (a_error < -PI) a_error += 2*PI;
+            a_error = get_angle_between_3_pts(prev_loc, current_waypoint, curr_loc);
+            if (a_error > M_PI) a_error -= 2*M_PI;
+            if (a_error < -M_PI) a_error += 2*M_PI;
             
             //d_target = sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2));
             
             speed += DELTA_SPEED;
             if ( a_error < EPSILON_ANGLE)
             {
-                direction += DELTA_DIRECTION;
+                direction -= DELTA_DIRECTION;
             }
             else if (a_error > EPSILON_ANGLE)
             {
-                direction -= DELTA_DIRECTION;
+                direction += DELTA_DIRECTION;
             }
             
             speed = fmax(fmin(speed, 2), -2);
@@ -111,9 +118,14 @@ void drive()
         drive_msg.drive.speed = speed;
         drive_msg.drive.steering_angle = direction;
         drive_pub.publish(drive_msg);
-        
+        ROS_INFO("speed: %f, steering: %f, a_error: %f", speed, direction, a_error);
         r.sleep();
     }
+    
+    ackermann_msgs::AckermannDriveStamped drive_msg;
+    drive_msg.drive.speed = 0;
+    drive_msg.drive.steering_angle = 0;
+    drive_pub.publish(drive_msg);
 }
 
 void printToFile()
@@ -134,7 +146,7 @@ void printToFile()
     {
         ros::Duration time_since_start = ros::Time::now() - time_start;
         positionFile << time_since_start.toNSec() / 1000 << ", "; //Print time in useconds
-        positionFile << point.x << ", " << point.y << ", " << point.z << ", ";
+        positionFile << vicon_position.x << ", " << vicon_position.y << ", " << vicon_position.z << ", ";
         positionFile << deca_position.x << ", " << deca_position.y << ", " << deca_position.z << "\r\n";
         
         printrate.sleep();
@@ -163,14 +175,13 @@ int main(int argc, char **argv)
 {
     current_waypoint.x = current_waypoint.y = current_waypoint.z = 0;
     ros::init(argc, argv, "waypoint");
-    ardupilot_link = mavconn::MAVConnInterface::open_url("udp://127.0.0.1:14550@");
     ros::NodeHandle n("~");
     
     n.param<std::string>("vicon_obj", vicon_obj, "f1car");
     n.param<std::string>("bot_num", bot_num, "bot0");
 
     reached_pub = n.advertise<std_msgs::String>("/Reached", 1);
-    drive_pub = n.advertise<ackermann_msgs::AckermannDriveStamped>("ackermann_cmd", 1);
+    drive_pub = n.advertise<ackermann_msgs::AckermannDriveStamped>("/ackermann_cmd", 1);
 
     ros::Subscriber deca_pos = n.subscribe("/decaPos", 1, getDecaPosition);
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getViconPosition);
@@ -184,6 +195,11 @@ int main(int argc, char **argv)
     struct tm * timeinfo;
     timeinfo = localtime(&rawtime);
     strftime(time_buffer, 80, "%G%m%dT%H%M%S", timeinfo);
+
+    prev_loc.x = 0;
+    prev_loc.y = 0;
+    curr_loc.x = 0;
+    curr_loc.y = 0;
     
     gps_thread = std::thread(drive);
     //print_thread = std::thread(printToFile);
@@ -192,5 +208,11 @@ int main(int argc, char **argv)
     
     gps_thread.join();
     //print_thread.join();
+    
+    ackermann_msgs::AckermannDriveStamped drive_msg;
+    drive_msg.drive.speed = 0;
+    drive_msg.drive.steering_angle = 0;
+    drive_pub.publish(drive_msg);
+    
     return 0;
 }
