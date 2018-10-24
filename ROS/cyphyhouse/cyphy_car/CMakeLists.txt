@@ -100,6 +100,7 @@ catkin_package(
 include_directories(
  include
   ${catkin_INCLUDE_DIRS}
+  /usr/include/eigen3/
 )
 
 ## Add cmake target dependencies of the library
@@ -111,6 +112,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(waypoint_node src/waypoint.cpp)
+add_executable(estimator_node src/estimator.cpp src/ekf_car.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -124,6 +126,10 @@ add_executable(waypoint_node src/waypoint.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(waypoint_node
+  ${catkin_LIBRARIES}
+)
+
+target_link_libraries(estimator_node
   ${catkin_LIBRARIES}
 )
 
