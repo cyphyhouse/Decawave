@@ -32,6 +32,7 @@ bool starl_flag = false;
 bool isFlying = false;
 
 std::string bot_num, vicon_obj;
+bool use_deca;
 
 ros::ServiceClient arming_client;
 ros::ServiceClient takeoff_client;
@@ -41,8 +42,7 @@ ros::ServiceClient mode_client;
 ros::Publisher postarget_pub;
 ros::Publisher reached_pub;
 
-geometry_msgs::Vector3 current_vel;
-geometry_msgs::Point deca_position, vicon_position;
+geometry_msgs::Point deca_position, vicon_position, deca_vel, vicon_vel;
 geometry_msgs::Point current_waypoint;  // VICON coords
 
 static mavconn::MAVConnInterface::Ptr ardupilot_link;
@@ -53,21 +53,29 @@ static GeographicLib::LocalCartesian proj(lat0, lon0, 0, earth);
 
 std::thread gps_thread, print_thread;
 
-void getVelocity(const geometry_msgs::TwistStamped& twist)
-{
-    current_vel.x = twist.twist.linear.x;
-    current_vel.y = twist.twist.linear.y;
-    current_vel.z = twist.twist.linear.z;
-}
 
 void getDecaPosition(const geometry_msgs::Point& point)
 {
     deca_position = point;
 }
 
+void getDecaVelocity(const geometry_msgs::Point& velocity)
+{
+    deca_vel.x = velocity.x;
+    deca_vel.y = velocity.y;
+    deca_vel.z = velocity.z;
+}
+
 void getViconPosition(const geometry_msgs::PoseStamped& pose)
 {
     vicon_position = pose.pose.position;
+}
+
+void getViconVelocity(const geometry_msgs::TwistStamped& twist)
+{
+    vicon_vel.x = twist.twist.linear.x;
+    vicon_vel.y = twist.twist.linear.y;
+    vicon_vel.z = twist.twist.linear.z;
 }
 
 void sendFakeGPS()
@@ -77,6 +85,18 @@ void sendFakeGPS()
 
     while(ros::ok())
     {
+        geometry_msgs::Point point, current_vel;
+        if(use_deca)
+        {
+            point = deca_position;
+            current_vel = deca_vel;
+        }
+        else
+        {
+            point = vicon_position;
+            current_vel = vicon_vel;
+        }
+         
         // Have to resend first waypoint
         if (sqrt(pow(point.z - current_waypoint.z,2)) < 0.3 && takeoff_flag)
         {
@@ -93,10 +113,9 @@ void sendFakeGPS()
         // Acknowledge that we reached the desired waypoint
         if (starl_flag)
         {
-            if (sqrt(.4 * pow(point.x - current_waypoint.x,2) + .4 * pow(point.y - 
-                current_waypoint.y,2) + .2 * pow(point.z - current_waypoint.z,2)) < 0.3)
-                // tell STARL if waypoint is reached
+            if (sqrt(pow(point.x - current_waypoint.x,2) + pow(point.y - current_waypoint.y,2) + pow(point.z - current_waypoint.z,2)) < 0.3)
             {
+                // tell STARL if waypoint is reached
                 std_msgs::String wp_reached;
                 wp_reached.data = "TRUE";
                 starl_flag = false;
@@ -123,7 +142,7 @@ void sendFakeGPS()
         }
 
         // populate GPS message
-        fix.time_usec = stamp.toNSec() / 1000;
+        fix.time_usec = ros::Time::now().toNSec() / 1000;
         fix.lat = lat * 1e7;
         fix.lon = lon * 1e7;
         fix.alt = h * 1e2;
@@ -146,6 +165,7 @@ void sendFakeGPS()
 
 void printToFile()
 {
+    // TODO: look into getcwd() to get current directory
     std::ofstream positionFile;
     positionFile.open ("/home/pi/copterpos.txt", std::ios::app);
     
@@ -162,7 +182,7 @@ void printToFile()
     {
         ros::Duration time_since_start = ros::Time::now() - time_start;
         positionFile << time_since_start.toNSec() / 1000 << ", "; //Print time in useconds
-        positionFile << point.x << ", " << point.y << ", " << point.z << ", ";
+        positionFile << vicon_position.x << ", " << vicon_position.y << ", " << vicon_position.z << ", ";
         positionFile << deca_position.x << ", " << deca_position.y << ", " << deca_position.z << "\r\n";
         
         printrate.sleep();
@@ -201,7 +221,7 @@ void sendWP(const geometry_msgs::PointStamped& stamped_point)
         else
             ROS_INFO("takeoff failed");
         takeoff_flag = true;
-        isFlying = True;
+        isFlying = true;
     }
     else if (stamp == "2")   // land
     {
@@ -248,6 +268,7 @@ int main(int argc, char **argv)
     
     n.param<std::string>("vicon_obj", vicon_obj, "cyphyhousecopter");
     n.param<std::string>("bot_num", bot_num, "bot1");
+    n.param<bool>("use_deca", use_deca, false);
 
     arming_client = n.serviceClient<mavros_msgs::CommandBool>("/mavros/cmd/arming");
     takeoff_client = n.serviceClient<mavros_msgs::CommandTOL>("/mavros/cmd/takeoff");
@@ -256,11 +277,13 @@ int main(int argc, char **argv)
 
     postarget_pub = n.advertise<geometry_msgs::PoseStamped>("/mavros/setpoint_position/local", 1);
     reached_pub = n.advertise<std_msgs::String>("/Reached", 1);
-
-    ros::Subscriber vel_sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/twist", 1, getVelocity);
-    ros::Subscriber deca_pos = n.subscribe("/decaPos", 1, getDecaPosition);
+ 
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getViconPosition);
-    ros::Subscriber waypoint = n.subscribe("/Waypoint_"+bot_num, 1, sendWP);  // second parameter is num of buffered messages
+    ros::Subscriber vel_sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/twist", 1, getViconVelocity);
+    ros::Subscriber deca_pos = n.subscribe("/decaPos", 1, getDecaPosition);
+    ros::Subscriber deca_vel = n.subscribe("/decaVel", 1, getDecaVelocity);
+    
+    ros::Subscriber waypoint = n.subscribe("/Waypoint_"+bot_num, 1, sendWP);
 
     ros::ServiceClient sethome_client = n.serviceClient<mavros_msgs::CommandHome>("/mavros/cmd/set_home");
     mavros_msgs::CommandHome sethome_msg;
