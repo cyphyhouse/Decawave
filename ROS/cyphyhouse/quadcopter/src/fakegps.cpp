@@ -87,10 +87,9 @@ void sendFakeGPS(const geometry_msgs::PoseStamped::ConstPtr& pose)
 
     if (starl_flag)
     {
-        if (sqrt(.4 * pow(point.x - current_waypoint.x,2) + .4 * pow(point.y - 
-            current_waypoint.y,2) + .2 * pow(point.z - current_waypoint.z,2)) < 0.3)
-            // tell STARL if waypoint is reached
+        if (sqrt(pow(point.x - current_waypoint.x,2) + pow(point.y - current_waypoint.y,2) + pow(point.z - current_waypoint.z,2)) < 0.3)
         {
+            // tell STARL if waypoint is reached
             std_msgs::String wp_reached;
             wp_reached.data = "TRUE";
             starl_flag = false;
