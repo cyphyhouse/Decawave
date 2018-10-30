@@ -14,8 +14,8 @@
 #include <ackermann_msgs/AckermannDriveStamped.h>
 #include "ros/package.h"
 
-#define WP_RATE 100 //Hz
-#define PRINT_RATE 100 //Hz
+#define WP_RATE 100.0 //Hz
+#define PRINT_RATE 100.0 //Hz
 
 #define DELTA_DIRECTION  0.01
 #define DELTA_SPEED      0.25
@@ -59,8 +59,39 @@ double get_angle_between_3_pts(geometry_msgs::Point center, geometry_msgs::Point
     n_waypoint[1] = waypoint.y - center.y;
     n_next_pos[0] = next_pos.x - center.x;
     n_next_pos[1] = next_pos.y - center.y;
-    return atan2(n_waypoint[1], n_waypoint[0]) - atan2(n_next_pos[1], n_next_pos[0]);
+    if (fabs(n_next_pos[0]) < 0.001 && fabs(n_next_pos[1]) < 0.001)
+    {
+        return 0;
+    }
+    else
+    {
+        return atan2(n_waypoint[1], n_waypoint[0]) - atan2(n_next_pos[1], n_next_pos[0]);
+    }
 }
+
+double get_pid_distance(double d_err_curr, double d_err_prev, double d_err_integral)
+{
+    static double Kp = 1.2;
+    static double Kd = 0.01;
+    static double Ki = 0.001;
+    
+    return Kp*d_err_curr + Kd*(d_err_curr - d_err_prev)*WP_RATE + Ki*d_err_integral;
+}
+
+double get_pid_angle(double a_err_curr, double a_err_prev, double a_err_integral)
+{
+    static double Kp = 1;
+    static double Kd = 0.1;
+    static double Ki = 0.01;
+    return Kp*a_err_curr + Kd*(a_err_curr - a_err_prev)*WP_RATE + Ki*a_err_integral;
+}
+
+double a_error = 0;
+double a_integral = 0;
+double a_prev = 0;
+double d_target = 0;
+double d_prev = 0;
+double d_integral = 0;
 
 void drive()
 {
@@ -71,12 +102,11 @@ void drive()
         
         prev_loc = curr_loc;
         curr_loc = vicon_position;
-        double a_error = 0;
         
         // Acknowledge that we reached the desired waypoint
         if (starl_flag)
         {
-            if (sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < 0.3)
+            if (sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < 0.1)
                 // tell STARL if waypoint is reached
             {
                 std_msgs::String wp_reached;
@@ -87,6 +117,12 @@ void drive()
                 gotWP = false;
                 speed = 0;
                 direction = 0;
+                a_error = 0;
+                a_integral = 0;
+                a_prev = 0;
+                d_target = 0;
+                d_prev = 0;
+                d_integral = 0;
             }
         }
 
@@ -98,17 +134,20 @@ void drive()
             if (a_error > M_PI) a_error -= 2*M_PI;
             if (a_error < -M_PI) a_error += 2*M_PI;
             
-            //d_target = sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2));
+            d_target = sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2));
             
-            speed += DELTA_SPEED;
-            if ( a_error < EPSILON_ANGLE)
-            {
-                direction -= DELTA_DIRECTION;
-            }
-            else if (a_error > EPSILON_ANGLE)
-            {
-                direction += DELTA_DIRECTION;
-            }
+            double vel_pid = get_pid_distance(d_target,d_prev,d_integral);
+            double ang_pid = get_pid_angle(a_error, a_prev, a_integral);
+            
+            //Update error terms for PID
+            d_prev = d_target;
+            d_integral += d_target*(1.0/WP_RATE);
+            a_prev = a_error;
+            a_integral += a_error*(1.0/WP_RATE);
+            
+            speed = vel_pid;
+            direction = ang_pid;
+            ROS_INFO("d_target: %f, speed: %f, a_error: %f, direction: %f", d_target, vel_pid, a_error, ang_pid);
             
             speed = fmax(fmin(speed, 2), -2);
             direction = fmax(fmin(direction, 0.35), -0.35);
@@ -118,7 +157,7 @@ void drive()
         drive_msg.drive.speed = speed;
         drive_msg.drive.steering_angle = direction;
         drive_pub.publish(drive_msg);
-        ROS_INFO("speed: %f, steering: %f, a_error: %f", speed, direction, a_error);
+        //ROS_INFO("speed: %f, steering: %f, a_error: %f", speed, direction, a_error);
         r.sleep();
     }
     
