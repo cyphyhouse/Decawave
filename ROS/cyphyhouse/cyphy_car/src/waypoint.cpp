@@ -69,29 +69,46 @@ double get_angle_between_3_pts(geometry_msgs::Point center, geometry_msgs::Point
     }
 }
 
-double get_pid_distance(double d_err_curr, double d_err_prev, double d_err_integral)
-{
-    static double Kp = 1.2;
-    static double Kd = 0.01;
-    static double Ki = 0.001;
-    
-    return Kp*d_err_curr + Kd*(d_err_curr - d_err_prev)*WP_RATE + Ki*d_err_integral;
-}
-
-double get_pid_angle(double a_err_curr, double a_err_prev, double a_err_integral)
-{
-    static double Kp = 1;
-    static double Kd = 0.1;
-    static double Ki = 0.01;
-    return Kp*a_err_curr + Kd*(a_err_curr - a_err_prev)*WP_RATE + Ki*a_err_integral;
-}
-
 double a_error = 0;
 double a_integral = 0;
 double a_prev = 0;
 double d_target = 0;
 double d_prev = 0;
 double d_integral = 0;
+double a_diff = 0;
+double d_diff = 0;
+
+double get_pid_distance(double d_err_curr, double d_err_prev)
+{
+    static double Kp = 1.2;
+    static double Kd = 0.01;
+    static double Ki = 0.001;
+    static double i_limit = 1.0;
+    d_integral += d_err_curr*(1.0/WP_RATE);
+    d_integral = fmin(d_integral,i_limit);
+    
+    double diff = (d_err_curr - d_err_prev)*WP_RATE;
+    d_diff = 0.2*d_diff + 0.8*diff;
+    
+    return Kp*d_err_curr + Kd*d_diff + Ki*d_integral;
+}
+
+double get_pid_angle(double a_err_curr, double a_err_prev)
+{
+    static double Kp = 1;
+    static double Kd = 0.1;
+    static double Ki = 0.01;
+    static double a_limit = 0.2;
+    a_integral += a_err_curr*(1.0/WP_RATE);
+    a_integral = fmin(fmax(a_integral,-a_limit),a_limit);
+    
+    double diff = (a_err_curr - a_err_prev)*WP_RATE;
+    a_diff = 0.3*a_diff + 0.7*diff;
+    
+    return Kp*a_err_curr + Kd*a_diff + Ki*a_integral;
+}
+
+
 
 void drive()
 {
@@ -136,14 +153,12 @@ void drive()
             
             d_target = sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2));
             
-            double vel_pid = get_pid_distance(d_target,d_prev,d_integral);
-            double ang_pid = get_pid_angle(a_error, a_prev, a_integral);
+            double vel_pid = get_pid_distance(d_target,d_prev);
+            double ang_pid = get_pid_angle(a_error, a_prev);
             
             //Update error terms for PID
             d_prev = d_target;
-            d_integral += d_target*(1.0/WP_RATE);
             a_prev = a_error;
-            a_integral += a_error*(1.0/WP_RATE);
             
             speed = vel_pid;
             direction = ang_pid;
