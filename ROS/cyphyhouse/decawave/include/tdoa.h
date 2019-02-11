@@ -51,21 +51,23 @@ public:
     
     // Contructor
     TDOA();
-    TDOA(Eigen::MatrixXf transition_mat, Eigen::MatrixXf prediction_mat, Eigen::MatrixXf covariance_mat, vec3d_t init_pos);
+    TDOA(const Eigen::MatrixXf transition_mat, const Eigen::MatrixXf prediction_mat, const Eigen::MatrixXf covariance_mat, const vec3d_t init_pos);
     
     // Set Functions
-    void setTransitionMat(Eigen::MatrixXf transition_mat);
-    void setPredictionMat(Eigen::MatrixXf prediction_mat);
-    void setCovarianceMat(Eigen::MatrixXf covariance_mat);
+    void setTransitionMat(const Eigen::MatrixXf transition_mat);
+    void setPredictionMat(const Eigen::MatrixXf prediction_mat);
+    void setCovarianceMat(const Eigen::MatrixXf covariance_mat);
     
-    void setAncPosition(int anc_num, vec3d_t anc_pos);
-    void setAncPosition(int anc_num, float x, float y, float z);
+    void setAncPosition(const int anc_num, const vec3d_t anc_pos);
+    void setAncPosition(const int anc_num, const float x, const float y, const float z);
+    
+    void setInitPos(vec3d_t init_pos);
     
     void setStdDev(float sdev);
     
     // Update functions
     void scalarTDOADistUpdate(uint8_t Ar, uint8_t An, float distanceDiff);
-    void stateEstimatorPredict(double dt);
+    void stateEstimatorPredict(const double dt);
     void stateEstimatorFinalize();
     void stateEstimatorAddProcessNoise();
     
@@ -73,7 +75,7 @@ public:
     // Get functions
     vec3d_t getLocation();
 	vec3d_t getVelocity();
-    vec3d_t getAncPosition(int anc_num);
+    vec3d_t getAncPosition(const int anc_num);
     
 private:
     
