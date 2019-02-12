@@ -114,6 +114,8 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(decaPos_node src/decaNode.cpp src/tdoa.cpp)
 
+add_executable(tdoa_node src/saveTDOA.cpp)
+
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -126,6 +128,10 @@ add_executable(decaPos_node src/decaNode.cpp src/tdoa.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(decaPos_node
+  ${catkin_LIBRARIES}
+)
+
+target_link_libraries(tdoa_node
   ${catkin_LIBRARIES}
 )
 
