@@ -21,7 +21,7 @@
 
 
 #define DEVICE        "/dev/ttyACM0"
-#define SPEED         115200
+#define SPEED         1152000
 #define MSG_SIZE      9
 
 #define MSG_TYPE_BYTE 0
@@ -40,16 +40,16 @@
 bool is_init;
 uint8_t An, Ar, tdoa_recv;
 float tdoaDistDiff;
-float[8] tdoaVec;
+float tdoaVec[8];
 
 std::thread serial_thread;
 
 std::ofstream positionFile;
-ros::Time time_start
+ros::Time time_start;
 
-std::string device_port, robot_type;
+std::string device_port, robot_type, vicon_obj;
 
-geometry_msgs::Point vicon_position
+geometry_msgs::Point vicon_position;
 
 //Function prototypes
 
@@ -97,6 +97,7 @@ void serial_comm()
         bytes_avail = my_serial.available();
         if(bytes_avail > 0)
         {
+            //std::cout << bytes_avail << std::endl;
             my_serial.read(&serial_msg[RX_idx], 1);
             if(RX_idx == MSG_TYPE_BYTE)
             {
@@ -123,6 +124,7 @@ void serial_comm()
                         An = serial_msg[ANCN_BYTE]; //curr_anc
                         tdoaDistDiff = to_float(&serial_msg[DATA_BYTE]);
                         
+                        
                         if (!is_init && (An == 0))
                         {
                             is_init = true;
@@ -130,15 +132,15 @@ void serial_comm()
                         
                         if (is_init)
                         {
-                            if (Ar == An-1)  //Check if sequential
+                            if (((Ar+1) & 0x7) == An)  //Check if sequential
                             {
                                 tdoaVec[An] = tdoaDistDiff;
                                 if(An == 7) //got last anchor
                                 {
                                     ros::Duration time_since_start = ros::Time::now() - time_start;
                                     positionFile << time_since_start.toNSec() / 1000 << ", "; //Print time in useconds
-                                    positionFile << vicon_position.x << ", " << vicon_position.y << ", " << vicon_position.z << ", ";
-                                    positionFile << tdoaVec[0] << ", " << tdoaVec[1] << ", " <<  tdoaVec[2] << ", " <<  tdoaVec[3] << ", " <<  tdoaVec[4] << ", " <<  tdoaVec[5] << ", " <<  tdoaVec[6] << ", " <<  tdoaVec[7] << "\r\n"
+                                    positionFile << std::setprecision(8) << vicon_position.x << ", " << vicon_position.y << ", " << vicon_position.z << ", ";
+                                    positionFile << std::setprecision(8) << tdoaVec[0] << ", " << tdoaVec[1] << ", " <<  tdoaVec[2] << ", " <<  tdoaVec[3] << ", " <<  tdoaVec[4] << ", " <<  tdoaVec[5] << ", " <<  tdoaVec[6] << ", " <<  tdoaVec[7] << "\r\n";
                                 }
                             }
                             else
@@ -146,6 +148,7 @@ void serial_comm()
                                 //Lost a package, delete all data so far
                                 memset(tdoaVec, 0, sizeof(tdoaVec));
                                 is_init = false;
+                                std::cout << "Lost package " << +Ar << ", " << +An << std::endl;
                             }
                         }
 			            
@@ -178,8 +181,9 @@ int main(int argc, char *argv[])
     
     nh.param<std::string>("deca_port", device_port, "/dev/ttyACM0");
     nh.param<std::string>("robot_type", robot_type, "quadcopter");
+    nh.param<std::string>("vicon_obj", vicon_obj, "cyphyhousecopter");
 
-    ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getViconPosition);
+    ros::Subscriber sub = nh.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getViconPosition);
     
     // Gets the current time so we can add to data output
     char time_buffer[80];
@@ -191,7 +195,9 @@ int main(int argc, char *argv[])
     
     is_init = false;
 
-    positionFile.open("/home/pi"+"/tdoaData_"+time_buffer+".txt", std::ios::app);
+    std::cout << "Starting" << std::endl;
+
+    positionFile.open (std::string("/home/pi/tdoaData_")+time_buffer+".txt", std::ios::app);
     time_start = ros::Time::now();
     
     serial_thread = std::thread(serial_comm);
