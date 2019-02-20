@@ -25,12 +25,11 @@
 bool starl_flag = false;
 bool isDriving = false;
 bool gotWP = false;
-
 double speed = 0, direction = 0;
 geometry_msgs::Point prev_loc, curr_loc;
 
 std::string bot_num, vicon_obj;
-
+global std::vector<geometry_msgs::Point> waypoints
 
 ros::Publisher drive_pub;
 ros::Publisher reached_pub;
@@ -211,10 +210,10 @@ void printToFile()
 void getWP(const geometry_msgs::PointStamped& stamped_point)
 {
     geometry_msgs::Point point = stamped_point.point;
-    
-    current_waypoint.x = point.x;
-    current_waypoint.y = point.y;
-    current_waypoint.z = point.z;
+    waypoints.push_back(point)
+    current_waypoint.x = waypoints.front()->x;
+    current_waypoint.y = waypoints.front()->y;
+    current_waypoint.z = waypoints.front()->z;
     
     gotWP = true;
     starl_flag = true;
@@ -222,6 +221,10 @@ void getWP(const geometry_msgs::PointStamped& stamped_point)
     if(!isDriving)
     {
         isDriving = true;
+    }
+    if(wp_reached.data = "TRUE")
+    {
+        waypoints.pop_back(point)
     }
 }
 
