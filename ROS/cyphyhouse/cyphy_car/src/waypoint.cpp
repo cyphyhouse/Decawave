@@ -5,6 +5,7 @@
 #include <ctime>
 #include <cstdbool>
 #include <fstream>
+#include <vector>
 
 
 #include "ros/ros.h"
@@ -39,7 +40,7 @@ geometry_msgs::Point current_waypoint;  // VICON coords
 
 std::string dir_path;
 char time_buffer[80];
-std::thread gps_thread, print_thread;
+std::thread drive_thread, print_thread;
 
 void getDecaPosition(const geometry_msgs::Point& point)
 {
@@ -123,22 +124,33 @@ void drive()
         if (starl_flag)
         {
             if (sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < 0.1)
-                // tell STARL if waypoint is reached
             {
-                std_msgs::String wp_reached;
-                wp_reached.data = "TRUE";
-                starl_flag = false;
-                reached_pub.publish(wp_reached);
+                waypoints.erase(waypoints.begin()); //delete first element
                 
-                gotWP = false;
-                speed = 0;
-                direction = 0;
-                a_error = 0;
-                a_integral = 0;
-                a_prev = 0;
-                d_target = 0;
-                d_prev = 0;
-                d_integral = 0;
+                if(waypoints.size() == 0) //reached last point
+                {
+                    // tell STARL if waypoint is reached
+                    // for now assume we only do that once we reach the final dest
+                    std_msgs::String wp_reached;
+                    wp_reached.data = "TRUE";
+                    starl_flag = false;
+                    reached_pub.publish(wp_reached);
+                    
+                    gotWP = false;
+                    speed = 0;
+                    direction = 0;
+                    a_error = 0;
+                    a_integral = 0;
+                    a_prev = 0;
+                    d_target = 0;
+                    d_prev = 0;
+                    d_integral = 0;
+                }
+                else
+                {
+                    current_waypoint = waypoints.front();
+                    //might also need to reset the angle errors
+                }
             }
         }
 
@@ -161,7 +173,7 @@ void drive()
             
             speed = vel_pid;
             direction = ang_pid;
-            ROS_INFO("d_target: %f, speed: %f, a_error: %f, direction: %f", d_target, vel_pid, a_error, ang_pid);
+            //ROS_INFO("d_target: %f, speed: %f, a_error: %f, direction: %f", d_target, vel_pid, a_error, ang_pid);
             
             speed = fmax(fmin(speed, 2), -2);
             direction = fmax(fmin(direction, 0.35), -0.35);
@@ -210,10 +222,15 @@ void printToFile()
 void getWP(const geometry_msgs::PointStamped& stamped_point)
 {
     geometry_msgs::Point point = stamped_point.point;
-    waypoints.push_back(point)
-    current_waypoint.x = waypoints.front()->x;
-    current_waypoint.y = waypoints.front()->y;
-    current_waypoint.z = waypoints.front()->z;
+    
+    if (waypoints.size() == 0)
+    {
+        current_waypoint.x = point.x;
+        current_waypoint.y = point.y;
+        current_waypoint.z = point.z;
+    }
+    
+    waypoints.push_back(point);
     
     gotWP = true;
     starl_flag = true;
@@ -221,10 +238,6 @@ void getWP(const geometry_msgs::PointStamped& stamped_point)
     if(!isDriving)
     {
         isDriving = true;
-    }
-    if(wp_reached.data = "TRUE")
-    {
-        waypoints.pop_back(point)
     }
 }
 
@@ -242,7 +255,7 @@ int main(int argc, char **argv)
 
     ros::Subscriber deca_pos = n.subscribe("/decaPos", 1, getDecaPosition);
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getViconPosition);
-    ros::Subscriber waypoint = n.subscribe("/Waypoint_"+bot_num, 1, getWP);  // second parameter is num of buffered messages
+    ros::Subscriber waypoint = n.subscribe("/Waypoint_"+bot_num, 10, getWP);  // second parameter is num of buffered messages
 
     dir_path = ros::package::getPath("cyphy_car");
     
@@ -258,12 +271,14 @@ int main(int argc, char **argv)
     curr_loc.x = 0;
     curr_loc.y = 0;
     
-    gps_thread = std::thread(drive);
+    std::cout << "Starting waypoint follower"
+    
+    drive_thread = std::thread(drive);
     //print_thread = std::thread(printToFile);
 
     ros::spin();
     
-    gps_thread.join();
+    drive_thread.join();
     //print_thread.join();
     
     ackermann_msgs::AckermannDriveStamped drive_msg;
