@@ -30,7 +30,7 @@ double speed = 0, direction = 0;
 geometry_msgs::Point prev_loc, curr_loc;
 
 std::string bot_num, vicon_obj;
-global std::vector<geometry_msgs::Point> waypoints
+std::vector<geometry_msgs::Point> waypoints;
 
 ros::Publisher drive_pub;
 ros::Publisher reached_pub;
@@ -82,7 +82,7 @@ double get_pid_distance(double d_err_curr, double d_err_prev)
 {
     static double Kp = 1.2;
     static double Kd = 0.01;
-    static double Ki = 0.001;
+    static double Ki = 0.01;
     static double i_limit = 1.0;
     d_integral += d_err_curr*(1.0/WP_RATE);
     d_integral = fmin(d_integral,i_limit);
@@ -123,7 +123,7 @@ void drive()
         // Acknowledge that we reached the desired waypoint
         if (starl_flag)
         {
-            if (sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < 0.1)
+            if (sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < 0.25)
             {
                 waypoints.erase(waypoints.begin()); //delete first element
                 
@@ -227,13 +227,17 @@ void getWP(const geometry_msgs::PointStamped& stamped_point)
     {
         current_waypoint.x = point.x;
         current_waypoint.y = point.y;
-        current_waypoint.z = point.z;
+        //current_waypoint.z = point.z;
     }
     
     waypoints.push_back(point);
     
-    gotWP = true;
-    starl_flag = true;
+    // wait until we get the final point
+    if(stamped_point.header.frame_id == "1")
+    {
+        gotWP = true;
+        starl_flag = true;
+    }
     
     if(!isDriving)
     {
@@ -247,9 +251,11 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "waypoint");
     ros::NodeHandle n("~");
     
-    n.param<std::string>("vicon_obj", vicon_obj, "f1car");
-    n.param<std::string>("bot_num", bot_num, "bot0");
+    n.param<std::string>("vicon_obj", vicon_obj, "hotdec_car");
+    n.param<std::string>("bot_num", bot_num, "bot1");
 
+    std::cout << "Vicon Object: " << vicon_obj << ", bot_num: " << bot_num << std::endl;
+    
     reached_pub = n.advertise<std_msgs::String>("/Reached", 1);
     drive_pub = n.advertise<ackermann_msgs::AckermannDriveStamped>("/ackermann_cmd", 1);
 
@@ -271,7 +277,7 @@ int main(int argc, char **argv)
     curr_loc.x = 0;
     curr_loc.y = 0;
     
-    std::cout << "Starting waypoint follower"
+    std::cout << "Starting waypoint follower" << std::endl;
     
     drive_thread = std::thread(drive);
     //print_thread = std::thread(printToFile);

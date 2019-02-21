@@ -3,7 +3,7 @@
   <arg name="racecar_version" value="racecar-v2" />
   <arg name="imu_model" default="$(optenv RACECAR_IMU razor_imu_m0)" doc="imu sensor types [razor_imu, razor_imu_m0]" />
   <arg name="run_camera" default="false"/>
-  <arg name="server" default="192.168.1.2" />
+  <arg name="server" default="192.168.1.6" />
 
   <!-- vehicle geometry parameters, footprint, and static transforms -->
   <include file="$(find racecar)/launch/includes/common/vehicle_geometry.launch.xml">
@@ -43,6 +43,13 @@
     </rosparam>
   </node>
   
-  <node name="waypoint_node" pkg="cyphy_car" type="waypoint_node" output="screen" />
+  <node name="waypoint_node" pkg="cyphy_car" type="waypoint_node" output="screen" >
+    <rosparam subst_value="true">
+      vicon_obj: hotdec_car
+      bot_num: 1
+    </rosparam>
+  </node>
+
+  <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch"/>
 
 </launch>
