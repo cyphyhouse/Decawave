@@ -3,6 +3,11 @@
 #include <cppad/ipopt/solve.hpp>
 #include "Eigen/Dense"
 #include <cmath>
+#include "geometry_msgs/PoseStamped.h"
+#include "geometry_msgs/PointStamped.h"
+
+//Variables from waypoint script
+extern geometry_msgs::Point current_waypoint;
 
 using CppAD::AD;
 
@@ -11,11 +16,11 @@ size_t N = 10;
 double dt = 0.1;
 
 //Geometric parameters of car
-const double lr = //MEASURE
+//const double lr = //MEASURE
 
 //Arena boundaries
-const double x_bound = //CHOOSE
-const double y_bound = //CHOOSE
+const double x_bound = 1;
+const double y_bound = 2;
 
 //Define target states
 double x_ref = current_waypoint.x;
@@ -49,9 +54,9 @@ public:
         //Set up the cost function
         for (unsigned int t = 0; t < N; ++t){
             //Penalize x-distance from waypoint and boundary
-            fg[0] += x_weight * CppAD::pow(vars[x_start + t] - x_ref, 2) + 1 / pow(abs(vars[x_start + t]) - x_bound),2);
+            fg[0] += x_weight * CppAD::pow(vars[x_start + t] - x_ref, 2) + 1 / pow(abs(vars[x_start + t]) - x_bound,2);
             //Penalize y-distance from waypoint and boundary
-            fg[0] += y_weight * CppAD::pow(vars[y_start + t] - y_ref, 2) + 1 / pow(abs(vars[y_start + t]) - y_bound),2);
+            fg[0] += y_weight * CppAD::pow(vars[y_start + t] - y_ref, 2) + 1 / pow(abs(vars[y_start + t]) - y_bound,2);
         }
 
         //Minimize inputs
@@ -89,7 +94,7 @@ public:
             //Set up the SS model constraints for time steps [1,N]
             fg[1 + x_start + t] = x1 - (x0 + v0 * CppAD::cos(psi0) * dt);
             fg[1 + y_start + t] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
-            fg[1 + psi_start + t] = psi1 - (psi0 + v0 * delta0 / lr * dt);
+            fg[1 + psi_start + t] = psi1 - (psi0 + v0 * delta0 * dt);
         }
     }
 };
@@ -141,7 +146,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state) {
 
     // Velocity upper and lower limits [m/s]
     for (unsigned int i = v_start; i < n_vars; ++i) {
-        vars_lowerbound[i] = -2.0;
+        vars_lowerbound[i] = 0.0;
         vars_upperbound[i] = 2.0;
     }
 
@@ -149,8 +154,8 @@ vector<double> MPC::Solve(Eigen::VectorXd state) {
     Dvector constraints_lowerbound(n_constraints);
     Dvector constraints_upperbound(n_constraints);
     for (unsigned int i = 0; i < n_constraints; ++i) {
-        constraints_lowerbound[i] = 0;
-        constraints_upperbound[i] = 0;
+        constraints_lowerbound[i] = 0.0;
+        constraints_upperbound[i] = 0.0;
     }
 
     //Initial states constrained to last measured value
@@ -202,8 +207,11 @@ vector<double> MPC::Solve(Eigen::VectorXd state) {
 
     result.push_back(solution.x[delta_start]);
     result.push_back(solution.x[v_start]);
+    
+    for (int i = 0; i < N-1; i++) {
+        result.push_back(solution.x[x_start + i + 1]);
+        result.push_back(solution.x[y_start + i + 1]);
+    }
 
-}
-
-return result;
+    return result;
 }

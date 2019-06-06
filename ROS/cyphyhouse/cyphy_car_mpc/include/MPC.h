@@ -6,7 +6,6 @@
 #define MPC_MPC_H
 
 #include <vector>
-#include <eigen3/Eigen/src/Core/Matrix.h>
 #include "Eigen/Dense"
 
 using namespace std;

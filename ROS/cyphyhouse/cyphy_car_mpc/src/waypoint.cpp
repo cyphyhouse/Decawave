@@ -29,6 +29,7 @@ bool isDriving = false;
 bool gotWP = false;
 double speed = 0, direction = 0;
 geometry_msgs::Point prev_loc, curr_loc;
+double curr_ang = 0;
 
 std::string bot_num, vicon_obj;
 std::vector<geometry_msgs::Point> waypoints;
@@ -72,8 +73,8 @@ void drive()
 
         prev_loc = curr_loc;
         curr_loc = vicon_position;
-        curr_ang = atan2(2 * (quat.x * quat.y + quat.w * quat.z), quat.w**2 + quat.x**2 - quat.y**2 - quat.z**2);
-                state << curr_loc.x, curr_loc.y, curr_ang
+        curr_ang = atan2(2 * (quat.x * quat.y + quat.w * quat.z), pow(quat.w,2) + pow(quat.x,2) - pow(quat.y,2) - pow(quat.z,2));
+        state << curr_loc.x, curr_loc.y, curr_ang;
 
         // Acknowledge that we reached the desired waypoint
         if (starl_flag)
