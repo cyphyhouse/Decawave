@@ -19,8 +19,8 @@ double dt = 0.1;
 //const double lr = //MEASURE
 
 //Arena boundaries
-const double x_bound = 1;
-const double y_bound = 2;
+const double x_bound = 3.5;
+const double y_bound = 4;
 
 //Define target states
 double x_ref = current_waypoint.x;
@@ -42,14 +42,14 @@ public:
         fg[0] = 0;
 
         //State cost weights
-        const int x_weight = 1;
-        const int y_weight = 1;
+        const int x_weight = 10;
+        const int y_weight = 10;
 
         //Input/input derivative cost weights
-        const int delta_weight = 1;
-        const int delta_rate_weight = 1;
-        const int v_weight = 1;
-        const int v_rate_weight = 1;
+        const int delta_weight = 0.5;
+        const int delta_rate_weight = 0.25;
+        const int v_weight = 0.5;
+        const int v_rate_weight = 0.25;
 
         //Set up the cost function
         for (unsigned int t = 0; t < N; ++t){
@@ -94,7 +94,7 @@ public:
             //Set up the SS model constraints for time steps [1,N]
             fg[1 + x_start + t] = x1 - (x0 + v0 * CppAD::cos(psi0) * dt);
             fg[1 + y_start + t] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
-            fg[1 + psi_start + t] = psi1 - (psi0 + v0 * delta0 * dt);
+            fg[1 + psi_start + t] = psi1 - (psi0 +  delta0 * dt);
         }
     }
 };
