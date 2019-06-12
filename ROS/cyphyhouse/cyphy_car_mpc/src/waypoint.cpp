@@ -15,6 +15,7 @@
 #include "geometry_msgs/PointStamped.h"
 #include <ackermann_msgs/AckermannDriveStamped.h>
 #include "ros/package.h"
+#include <chrono>
 
 #define WP_RATE 100.0 //Hz
 #define PRINT_RATE 100.0 //Hz
@@ -108,7 +109,12 @@ void drive()
 
         if (gotWP)
         {
+            auto tic = std::chrono::high_resolution_clock::now();
             auto solution = mpc.Solve(state);
+            auto stop = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+            std::cout << "MPC time: " << duration.count() / 1000000. << std::endl; //Time in seconds
+            
             direction = solution[0];
             speed = solution[1];
         }
