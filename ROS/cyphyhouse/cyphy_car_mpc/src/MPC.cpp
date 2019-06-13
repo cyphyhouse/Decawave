@@ -6,9 +6,6 @@
 #include "geometry_msgs/PoseStamped.h"
 #include "geometry_msgs/PointStamped.h"
 
-//Variables from waypoint script
-extern geometry_msgs::Point current_waypoint;
-
 using CppAD::AD;
 
 // Set the timestep length and duration
@@ -16,15 +13,15 @@ size_t N = 10;
 double dt = 0.1;
 
 //Geometric parameters of car
-//const double lr = //MEASURE
+const double lr = 0.3;
 
 //Arena boundaries
 const double x_bound = 3.5;
-const double y_bound = 4;
+const double y_bound = 5;
 
 //Define target states
-double x_ref = current_waypoint.x;
-double y_ref = current_waypoint.y;
+double x_ref, y_ref;
+//double y_ref = current_waypoint.y;
 
 //Initialize
 size_t x_start = 0;
@@ -42,21 +39,25 @@ public:
         fg[0] = 0;
 
         //State cost weights
-        const int x_weight = 10;
-        const int y_weight = 10;
+        const int x_weight = 100;
+        const int y_weight = 100;
+        
+        //Boundary cost weights
+        const double xbound_weight = 0.1;
+        const double ybound_weight = 0.1;
 
         //Input/input derivative cost weights
-        const int delta_weight = 0.5;
-        const int delta_rate_weight = 0.25;
-        const int v_weight = 0.5;
-        const int v_rate_weight = 0.25;
+        const double delta_weight = 100;
+        const double delta_rate_weight = 250;
+        const double v_weight = 50;
+        const double v_rate_weight = 100;
 
         //Set up the cost function
         for (unsigned int t = 0; t < N; ++t){
             //Penalize x-distance from waypoint and boundary
-            fg[0] += x_weight * CppAD::pow(vars[x_start + t] - x_ref, 2) + 1 / pow(abs(vars[x_start + t]) - x_bound,2);
+            fg[0] += x_weight * CppAD::pow(vars[x_start + t] - x_ref,2) + xbound_weight / pow(abs(vars[x_start + t]) - x_bound,2);
             //Penalize y-distance from waypoint and boundary
-            fg[0] += y_weight * CppAD::pow(vars[y_start + t] - y_ref, 2) + 1 / pow(abs(vars[y_start + t]) - y_bound,2);
+            fg[0] += y_weight * CppAD::pow(vars[y_start + t] - y_iref, 2) + ybound_weight / pow(abs(vars[y_start + t]) - y_bound,2);
         }
 
         //Minimize inputs
@@ -94,7 +95,7 @@ public:
             //Set up the SS model constraints for time steps [1,N]
             fg[1 + x_start + t] = x1 - (x0 + v0 * CppAD::cos(psi0) * dt);
             fg[1 + y_start + t] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
-            fg[1 + psi_start + t] = psi1 - (psi0 +  delta0 * dt);
+            fg[1 + psi_start + t] = psi1 - (psi0 + v0 * CppAD::tan(delta0) * dt / lr);
         }
     }
 };
@@ -105,10 +106,11 @@ public:
 MPC::MPC() = default;
 MPC::~MPC() = default;
 
-vector<double> MPC::Solve(Eigen::VectorXd state) {
+vector<double> MPC::Solve(Eigen::VectorXd state, geometry_msgs::Point waypoint) {
     bool ok = true;
     typedef CPPAD_TESTVECTOR(double) Dvector;
-
+    x_ref = waypoint.x;
+    y_ref = waypoint.y;
     double x = state[0];
     double y = state[1];
     double psi = state[2];
@@ -116,7 +118,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state) {
     // Set number of model variables
     size_t n_vars = N * 3 + (N - 1) * 2; // 3N state elements, 2(N-1) actuators
     // Set the number of constraints
-    size_t n_constraints = N * 3; // (x, y, v)
+    size_t n_constraints = N * 3; // (x, y, psi)
 
     // Initialize model variables to zero
     Dvector vars(n_vars);
@@ -139,13 +141,13 @@ vector<double> MPC::Solve(Eigen::VectorXd state) {
     }
 
     // Steering angle upper and lower limits [rad]
-    for (unsigned int i = delta_start; i < v_start; ++i) {
+    for (unsigned int i = delta_start; i < n_vars; ++i) {
         vars_lowerbound[i] = -0.35;
         vars_upperbound[i] = 0.35;
     }
 
     // Velocity upper and lower limits [m/s]
-    for (unsigned int i = v_start; i < n_vars; ++i) {
+    for (unsigned int i = v_start; i < delta_start; ++i) {
         vars_lowerbound[i] = 0.0;
         vars_upperbound[i] = 2.0;
     }
@@ -176,7 +178,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state) {
     // options for IPOPT solver
     std::string options;
     // Uncomment this if you'd like more print information
-    //options += "Integer print_level  0\n";
+    options += "Integer print_level  0\n";
     // NOTE: Setting sparse to true allows the solver to take advantage
     // of sparse routines, this makes the computation MUCH FASTER. If you
     // can uncomment 1 of these and see if it makes a difference or not but
@@ -186,7 +188,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state) {
     //options += "Sparse  true        reverse\n";
     // NOTE: Currently the solver has a maximum time limit of 0.5 seconds.
     // Change this as you see fit.
-    options += "Numeric max_cpu_time          0.5\n";
+    options += "Numeric max_cpu_time          0.099\n";
 
     // place to return solution
     CppAD::ipopt::solve_result<Dvector> solution;
@@ -207,11 +209,15 @@ vector<double> MPC::Solve(Eigen::VectorXd state) {
 
     result.push_back(solution.x[delta_start]);
     result.push_back(solution.x[v_start]);
-    
-    for (int i = 0; i < N-1; i++) {
-        result.push_back(solution.x[x_start + i + 1]);
-        result.push_back(solution.x[y_start + i + 1]);
-    }
 
+    //Clear the mpc x & y value vectors
+    this->x_vals.clear();
+    this->y_vals.clear();
+
+    //push back the predicted x,y values into the attributes
+    for (unsigned int i = 1; i < N; ++i){
+        this->x_vals.push_back(solution.x[x_start+i]);
+        this->y_vals.push_back(solution.x[y_start+i]);
+    }
     return result;
 }

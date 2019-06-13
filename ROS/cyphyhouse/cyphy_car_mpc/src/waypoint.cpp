@@ -56,10 +56,6 @@ void getDecaPosition(const geometry_msgs::Point& point)
 void getViconPosition(const geometry_msgs::PoseStamped& pose)
 {
     vicon_position = pose.pose.position;
-}
-
-void getViconOrientation(const geometry_msgs::PoseStamped& pose)
-{
     quat = pose.pose.orientation;
 }
 
@@ -80,8 +76,7 @@ void drive()
         // Acknowledge that we reached the desired waypoint
         if (starl_flag)
         {
-            if (sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < 0.25)
-            {
+            if (sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < EPSILON_RADIUS)            {
                 waypoints.erase(waypoints.begin()); //delete first element
 
                 if(waypoints.size() == 0) //reached last point
@@ -110,20 +105,21 @@ void drive()
         if (gotWP)
         {
             auto tic = std::chrono::high_resolution_clock::now();
-            auto solution = mpc.Solve(state);
-            auto stop = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+            vector<double> solution = mpc.Solve(state,current_waypoint);
+            auto toc = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(toc - tic);
             std::cout << "MPC time: " << duration.count() / 1000000. << std::endl; //Time in seconds
             
-            direction = solution[0];
-            speed = solution[1];
+            direction = solution.at(0);
+            speed = solution.at(1);
+            ROS_INFO("speed: %f, steering: %f", speed, direction);
         }
 
         ackermann_msgs::AckermannDriveStamped drive_msg;
         drive_msg.drive.speed = speed;
         drive_msg.drive.steering_angle = direction;
         drive_pub.publish(drive_msg);
-        //ROS_INFO("speed: %f, steering: %f, a_error: %f", speed, direction, a_error);
+        //ROS_INFO("speed: %f, steering: %f",  speed, direction);
         r.sleep();
     }
 
