@@ -16,8 +16,8 @@ double dt = 0.1;
 const double lr = 0.3;
 
 //Arena boundaries
-const double x_bound = 3.5;
-const double y_bound = 5;
+const double x_bound = 3;
+const double y_bound = 3;
 
 //Define target states
 double x_ref, y_ref;
@@ -39,8 +39,8 @@ public:
         fg[0] = 0;
 
         //State cost weights
-        const int x_weight = 100;
-        const int y_weight = 100;
+        const int x_weight = 150;
+        const int y_weight = 150;
         
         //Boundary cost weights
         const double xbound_weight = 0.1;
@@ -48,16 +48,16 @@ public:
 
         //Input/input derivative cost weights
         const double delta_weight = 100;
-        const double delta_rate_weight = 250;
-        const double v_weight = 50;
+        const double delta_rate_weight = 200;
+        const double v_weight = 25;
         const double v_rate_weight = 100;
 
         //Set up the cost function
         for (unsigned int t = 0; t < N; ++t){
             //Penalize x-distance from waypoint and boundary
-            fg[0] += x_weight * CppAD::pow(vars[x_start + t] - x_ref,2) + xbound_weight / pow(abs(vars[x_start + t]) - x_bound,2);
+            fg[0] += x_weight * CppAD::pow(vars[x_start + t] - x_ref,2);// + xbound_weight / pow(abs(vars[x_start + t]) - x_bound,2);
             //Penalize y-distance from waypoint and boundary
-            fg[0] += y_weight * CppAD::pow(vars[y_start + t] - y_iref, 2) + ybound_weight / pow(abs(vars[y_start + t]) - y_bound,2);
+            fg[0] += y_weight * CppAD::pow(vars[y_start + t] - y_ref, 2);// + ybound_weight / pow(abs(vars[y_start + t]) - y_bound,2);
         }
 
         //Minimize inputs
@@ -139,6 +139,17 @@ vector<double> MPC::Solve(Eigen::VectorXd state, geometry_msgs::Point waypoint) 
         vars_lowerbound[i] = -1.0e19;
         vars_upperbound[i] = 1.0e19;
     }
+    
+    //X and Y bounds
+    for (unsigned int i = x_start; i < y_start; ++i) {
+        vars_lowerbound[i] = -3.0;
+        vars_upperbound[i] = 3.0;
+    }
+
+    for (unsigned int i = y_start; i < psi_start; ++i) {
+        vars_lowerbound[i] = -3.0;
+        vars_upperbound[i] = 3.0;
+    }
 
     // Steering angle upper and lower limits [rad]
     for (unsigned int i = delta_start; i < n_vars; ++i) {
@@ -148,8 +159,8 @@ vector<double> MPC::Solve(Eigen::VectorXd state, geometry_msgs::Point waypoint) 
 
     // Velocity upper and lower limits [m/s]
     for (unsigned int i = v_start; i < delta_start; ++i) {
-        vars_lowerbound[i] = 0.0;
-        vars_upperbound[i] = 2.0;
+        vars_lowerbound[i] = -3.0;
+        vars_upperbound[i] = 3.0;
     }
 
     // Lower and upper bounds for hard constraints (0 except for initial states)
