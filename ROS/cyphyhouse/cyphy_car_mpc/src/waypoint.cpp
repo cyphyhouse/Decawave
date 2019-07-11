@@ -155,9 +155,9 @@ void printToFile()
     positionFile.close();
 }
 
-void getWP(const geometry_msgs::PointStamped& stamped_point)
+void getWP(const geometry_msgs::PoseStamped& stamped_point)
 {
-    geometry_msgs::Point point = stamped_point.point;
+    geometry_msgs::Point point = stamped_point.pose.position;
 
     if (waypoints.size() == 0)
     {
@@ -197,7 +197,7 @@ int main(int argc, char **argv)
 
     ros::Subscriber deca_pos = n.subscribe("/decaPos", 1, getDecaPosition);
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getViconPosition);
-    ros::Subscriber waypoint = n.subscribe("/Waypoint_"+bot_num, 10, getWP);  // second parameter is num of buffered messages
+    ros::Subscriber waypoint = n.subscribe("/Waypoint_", 10, getWP);  // second parameter is num of buffered messages
 
     dir_path = ros::package::getPath("cyphy_car");
 
