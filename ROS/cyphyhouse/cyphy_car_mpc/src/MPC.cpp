@@ -39,18 +39,18 @@ public:
         fg[0] = 0;
 
         //State cost weights
-        const int x_weight = 150;
-        const int y_weight = 150;
+        const int x_weight = 300;
+        const int y_weight = 300;
         
         //Boundary cost weights
         const double xbound_weight = 0.1;
         const double ybound_weight = 0.1;
 
         //Input/input derivative cost weights
-        const double delta_weight = 100;
+        const double delta_weight = 150;
         const double delta_rate_weight = 200;
         const double v_weight = 25;
-        const double v_rate_weight = 100;
+        const double v_rate_weight = 150;
 
         //Set up the cost function
         for (unsigned int t = 0; t < N; ++t){
@@ -139,7 +139,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, geometry_msgs::Point waypoint) 
         vars_lowerbound[i] = -1.0e19;
         vars_upperbound[i] = 1.0e19;
     }
-    
+/*
     //X and Y bounds
     for (unsigned int i = x_start; i < y_start; ++i) {
         vars_lowerbound[i] = -3.0;
@@ -150,7 +150,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, geometry_msgs::Point waypoint) 
         vars_lowerbound[i] = -3.0;
         vars_upperbound[i] = 3.0;
     }
-
+*/
     // Steering angle upper and lower limits [rad]
     for (unsigned int i = delta_start; i < n_vars; ++i) {
         vars_lowerbound[i] = -0.35;
