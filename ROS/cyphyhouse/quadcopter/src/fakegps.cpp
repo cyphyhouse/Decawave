@@ -51,7 +51,7 @@ static GeographicLib::Geoid egm96_5("egm96-5", "", true, true);
 static GeographicLib::Geocentric earth(GeographicLib::Constants::WGS84_a(), GeographicLib::Constants::WGS84_f());
 static GeographicLib::LocalCartesian proj(lat0, lon0, 0, earth);
 
-std::thread gps_thread, print_thread;
+std::thread gps_thread, print_thread, pos_thread;
 
 
 void getDecaPosition(const geometry_msgs::Point& point)
@@ -76,6 +76,16 @@ void getViconVelocity(const geometry_msgs::TwistStamped& twist)
     vicon_vel.x = twist.twist.linear.x;
     vicon_vel.y = twist.twist.linear.y;
     vicon_vel.z = twist.twist.linear.z;
+}
+
+void printPos()
+{
+    ros::Rate pr(1);
+    while(ros::ok())
+    {
+        ROS_INFO("x: %f, y: %f, z: %f\n", vicon_position.x, vicon_position.y, vicon_position.z);
+        pr.sleep();
+    }
 }
 
 void sendFakeGPS()
@@ -190,17 +200,18 @@ void printToFile()
     positionFile.close();
 }
 
-void sendWP(const geometry_msgs::PointStamped& stamped_point)
+void sendWP(const geometry_msgs::PoseStamped& stamped_point)
 {
     double lat, lon, h;
     mavros_msgs::SetMode mode_msg;
     mode_msg.request.base_mode = 0;
     mode_msg.request.custom_mode = "GUIDED";
     mode_client.call(mode_msg);
-    geometry_msgs::Point point = stamped_point.point;
+    geometry_msgs::Point point = stamped_point.pose.position;
     std::string stamp = stamped_point.header.frame_id;
     proj.Reverse(point.y, -point.x, point.z, lat, lon, h);
     starl_flag = true;
+    std::cout << "Going to point x: " << point.x << ", y: " << point.y << ", z: " << point.z << std::endl;
     if (stamp == "0")    // takeoff
     {
         mavros_msgs::CommandBool arming_msg;
@@ -267,7 +278,6 @@ int main(int argc, char **argv)
     ros::NodeHandle n("~");
     
     n.param<std::string>("vicon_obj", vicon_obj, "cyphyhousecopter");
-    n.param<std::string>("bot_num", bot_num, "bot1");
     n.param<bool>("use_deca", use_deca, false);
 
     arming_client = n.serviceClient<mavros_msgs::CommandBool>("/mavros/cmd/arming");
@@ -276,14 +286,14 @@ int main(int argc, char **argv)
     mode_client = n.serviceClient<mavros_msgs::SetMode>("/mavros/set_mode");
 
     postarget_pub = n.advertise<geometry_msgs::PoseStamped>("/mavros/setpoint_position/local", 1);
-    reached_pub = n.advertise<std_msgs::String>("/Reached", 1);
+    reached_pub = n.advertise<std_msgs::String>("reached", 1);
  
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getViconPosition);
     ros::Subscriber vel_sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/twist", 1, getViconVelocity);
-    ros::Subscriber deca_pos = n.subscribe("/decaPos", 1, getDecaPosition);
-    ros::Subscriber deca_vel = n.subscribe("/decaVel", 1, getDecaVelocity);
+    ros::Subscriber deca_pos = n.subscribe("decaPos", 1, getDecaPosition);
+    ros::Subscriber deca_vel = n.subscribe("decaVel", 1, getDecaVelocity);
     
-    ros::Subscriber waypoint = n.subscribe("/Waypoint_"+bot_num, 1, sendWP);
+    ros::Subscriber waypoint = n.subscribe("waypoint", 1, sendWP);
 
     ros::ServiceClient sethome_client = n.serviceClient<mavros_msgs::CommandHome>("/mavros/cmd/set_home");
     mavros_msgs::CommandHome sethome_msg;
@@ -294,11 +304,13 @@ int main(int argc, char **argv)
     sethome_client.call(sethome_msg);
     
     gps_thread = std::thread(sendFakeGPS);
-    print_thread = std::thread(printToFile);
+    pos_thread = std::thread(printPos);
+    //print_thread = std::thread(printToFile);
 
     ros::spin();
     
     gps_thread.join();
-    print_thread.join();
+    pos_thread.join();
+    //print_thread.join();
     return 0;
 }
