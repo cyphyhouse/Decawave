@@ -17,8 +17,8 @@
 #include "ros/package.h"
 #include <chrono>
 
-#define WP_RATE 100.0 //Hz
-#define PRINT_RATE 100.0 //Hz
+#define WP_RATE 50.0 //Hz
+#define PRINT_RATE 50.0 //Hz
 
 #define DELTA_DIRECTION  0.01
 #define DELTA_SPEED      0.25
