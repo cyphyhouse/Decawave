@@ -17,8 +17,8 @@
 #include "ros/package.h"
 #include <chrono>
 
-#define WP_RATE 100.0 //Hz
-#define PRINT_RATE 100.0 //Hz
+#define WP_RATE 50.0 //Hz
+#define PRINT_RATE 50.0 //Hz
 
 #define DELTA_DIRECTION  0.01
 #define DELTA_SPEED      0.25
@@ -192,12 +192,12 @@ int main(int argc, char **argv)
 
     std::cout << "Vicon Object: " << vicon_obj << ", bot_num: " << bot_num << std::endl;
 
-    reached_pub = n.advertise<std_msgs::String>("/Reached", 1);
+    reached_pub = n.advertise<std_msgs::String>("reached", 1);
     drive_pub = n.advertise<ackermann_msgs::AckermannDriveStamped>("/ackermann_cmd", 1);
 
-    ros::Subscriber deca_pos = n.subscribe("/decaPos", 1, getDecaPosition);
+    ros::Subscriber deca_pos = n.subscribe("decaPos", 1, getDecaPosition);
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getViconPosition);
-    ros::Subscriber waypoint = n.subscribe("/Waypoint_", 10, getWP);  // second parameter is num of buffered messages
+    ros::Subscriber waypoint = n.subscribe("waypoint", 10, getWP);  // second parameter is num of buffered messages
 
     dir_path = ros::package::getPath("cyphy_car");
 
