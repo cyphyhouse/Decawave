@@ -38,6 +38,7 @@ ros::ServiceClient arming_client;
 ros::ServiceClient takeoff_client;
 ros::ServiceClient land_client;
 ros::ServiceClient mode_client;
+ros::ServiceClient sethome_client;
 
 ros::Publisher postarget_pub;
 ros::Publisher reached_pub;
@@ -295,7 +296,7 @@ int main(int argc, char **argv)
     
     ros::Subscriber waypoint = n.subscribe("waypoint", 1, sendWP);
 
-    ros::ServiceClient sethome_client = n.serviceClient<mavros_msgs::CommandHome>("/mavros/cmd/set_home");
+    sethome_client = n.serviceClient<mavros_msgs::CommandHome>("/mavros/cmd/set_home");
     mavros_msgs::CommandHome sethome_msg;
     sethome_msg.request.current_gps = false;
     sethome_msg.request.latitude = lat0;
