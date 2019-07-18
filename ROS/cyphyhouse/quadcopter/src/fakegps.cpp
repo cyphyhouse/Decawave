@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include <thread>
+#include <csignal>
 
 #include <GeographicLib/Geocentric.hpp>
 #include <GeographicLib/LocalCartesian.hpp>
@@ -44,7 +45,7 @@ ros::Publisher postarget_pub;
 ros::Publisher reached_pub;
 
 geometry_msgs::Point deca_position, vicon_position, deca_vel, vicon_vel;
-geometry_msgs::Point current_waypoint;  // VICON coords
+geometry_msgs::Point current_waypoint, takeoff_pos;  // VICON coords
 
 static mavconn::MAVConnInterface::Ptr ardupilot_link;
 
@@ -54,6 +55,15 @@ static GeographicLib::LocalCartesian proj(lat0, lon0, 0, earth);
 
 std::thread gps_thread, print_thread, pos_thread;
 
+int stopflag = 1;
+void sigHandler(int signum)
+{
+    if(signum == SIGINT)
+    {
+        printf("Stopping fakegps\n");
+	stopflag = 0;
+    }
+}
 
 void getDecaPosition(const geometry_msgs::Point& point)
 {
@@ -82,7 +92,7 @@ void getViconVelocity(const geometry_msgs::TwistStamped& twist)
 void printPos()
 {
     ros::Rate pr(1);
-    while(ros::ok())
+    while(ros::ok() && stopflag)
     {
         ROS_INFO("x: %f, y: %f, z: %f\n", vicon_position.x, vicon_position.y, vicon_position.z);
         pr.sleep();
@@ -94,7 +104,7 @@ void sendFakeGPS()
     mavlink::common::msg::HIL_GPS fix {};
     ros::Rate r(GPS_RATE);
 
-    while(ros::ok())
+    while(ros::ok() && stopflag)
     {
         geometry_msgs::Point point, current_vel;
         if(use_deca)
@@ -156,7 +166,7 @@ void sendFakeGPS()
         fix.time_usec = ros::Time::now().toNSec() / 1000;
         fix.lat = lat * 1e7;
         fix.lon = lon * 1e7;
-        fix.alt = h * 1e2;
+        fix.alt = h * 1e3;
         fix.vel = sqrt(current_vel.x * current_vel.x + current_vel.y * current_vel.y + current_vel.z * current_vel.z) * 100;
         fix.vn = -current_vel.x * 100;
         fix.ve = current_vel.y * 100;
@@ -234,6 +244,15 @@ void sendWP(const geometry_msgs::PoseStamped& stamped_point)
             ROS_INFO("takeoff failed");
         takeoff_flag = true;
         isFlying = true;
+
+        mavros_msgs::CommandHome sethome_msg;
+        sethome_msg.request.current_gps = false;
+        sethome_msg.request.latitude = lat0;
+        sethome_msg.request.longitude = lon0;
+        sethome_msg.request.altitude = 0;
+        sethome_client.call(sethome_msg);
+	
+	takeoff_pos = vicon_position;
     }
     else if (stamp == "2")   // land
     {
@@ -259,16 +278,16 @@ void sendWP(const geometry_msgs::PoseStamped& stamped_point)
         geometry_msgs::PoseStamped postarget_msg;
         postarget_msg.header.stamp = ros::Time::now();
         postarget_msg.header.frame_id = '0';
-        postarget_msg.pose.position.x = point.y;
-        postarget_msg.pose.position.y = -point.x;
-        postarget_msg.pose.position.z = point.z;
+        postarget_msg.pose.position.x = (point.y - takeoff_pos.y);
+        postarget_msg.pose.position.y = -(point.x - takeoff_pos.x);
+        postarget_msg.pose.position.z = (point.z - takeoff_pos.z);
 
         // publish it
         postarget_pub.publish(postarget_msg);
     }
-    current_waypoint.x = point.x;
-    current_waypoint.y = point.y;
-    current_waypoint.z = point.z;
+    current_waypoint.x = (point.x - takeoff_pos.x);
+    current_waypoint.y = (point.y - takeoff_pos.y);
+    current_waypoint.z = (point.z - takeoff_pos.z);
 }
 
 int main(int argc, char **argv)
@@ -295,6 +314,8 @@ int main(int argc, char **argv)
     ros::Subscriber deca_vel = n.subscribe("decaVel", 1, getDecaVelocity);
     
     ros::Subscriber waypoint = n.subscribe("waypoint", 1, sendWP);
+    
+    signal(SIGINT, &sigHandler);
 
     sethome_client = n.serviceClient<mavros_msgs::CommandHome>("/mavros/cmd/set_home");
     mavros_msgs::CommandHome sethome_msg;

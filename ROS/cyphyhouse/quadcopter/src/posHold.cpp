@@ -59,7 +59,7 @@ public:
         kd = Kd;
         dt = 1/Rate;
         samplingRate = Rate;
-        integralLimit = outLimit;
+        integralLimit = outLimit / ki;
         outputLimit = outLimit;
         lastMeasured = 0;
         integ = 0;
@@ -130,7 +130,7 @@ void printPos()
     while(ros::ok())
     {
         ROS_INFO("x: %f, y: %f, z: %f\n", vicon_pose.position.x, vicon_pose.position.y, vicon_pose.position.z);
-        /*Eigen::Quaterniond q = Eigen::Quaterniond(vicon_pose.orientation.w, vicon_pose.orientation.x, vicon_pose.orientation.y, vicon_pose.orientation.z);
+        Eigen::Quaterniond q = Eigen::Quaterniond(vicon_pose.orientation.w, vicon_pose.orientation.x, vicon_pose.orientation.y, vicon_pose.orientation.z);
         Eigen::Vector3d rpy = q.toRotationMatrix().eulerAngles(0, 1, 2);
 	//if (rpy(0) > M_PI) rpy(0) -= 2*M_PI;
 	//if (rpy(1) > M_PI) rpy(1) -= 2*M_PI; 
@@ -141,7 +141,7 @@ void printPos()
 	rpyBody(2) = rpy(2);
 
 	ROS_INFO("Roll: %f, Pitch: %f, Yaw: %f\n", rpyBody(0), rpyBody(1), rpyBody(2));
-        */
+        
 	pr.sleep();
     }
 }
@@ -178,7 +178,7 @@ void sendAttitude()
         if(isFlying)
         {
             Eigen::Quaterniond q = Eigen::Quaterniond(vicon_pose.orientation.w, vicon_pose.orientation.x, vicon_pose.orientation.y, vicon_pose.orientation.z);
-            Eigen::Vector3d rpyVicon = q.toRotationMatrix().eulerAngles(2, 1, 0).reverse();
+            Eigen::Vector3d rpyVicon = q.toRotationMatrix().eulerAngles(0, 1, 2);
             
             geometry_msgs::Vector3 rpySetpoint, rpyRateSetpoint, rpyBody;
             double thrust;
@@ -200,11 +200,13 @@ void sendAttitude()
             
             geometry_msgs::TwistStamped velmsg;
             velmsg.header.stamp = ros::Time::now();
+	    velmsg.header.frame_id = "map";
             velmsg.twist.angular = rpyRateSetpoint;
             atttarget_pub.publish(velmsg);
             
             mavros_msgs::Thrust thrustmsg;
             thrustmsg.header.stamp = ros::Time::now();
+	    thrustmsg.header.frame_id = "map";
             thrustmsg.thrust = thrust;
             thrusttarget_pub.publish(thrustmsg);
 	    //ROS_INFO("Thrust: %f, T setpoint: %f, Error: %f, Output: %f\n", thrust, pidZ.getSetpoint(), pidZ.getError(), pidZ.getOutput());
