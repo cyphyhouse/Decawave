@@ -32,6 +32,8 @@ bool takeoff_flag = false;
 bool starl_flag = false;
 bool isFlying = false;
 
+int takeoff_num = 0;
+
 std::string bot_num, vicon_obj;
 bool use_deca;
 
@@ -55,15 +57,6 @@ static GeographicLib::LocalCartesian proj(lat0, lon0, 0, earth);
 
 std::thread gps_thread, print_thread, pos_thread;
 
-int stopflag = 1;
-void sigHandler(int signum)
-{
-    if(signum == SIGINT)
-    {
-        printf("Stopping fakegps\n");
-	stopflag = 0;
-    }
-}
 
 void getDecaPosition(const geometry_msgs::Point& point)
 {
@@ -92,7 +85,7 @@ void getViconVelocity(const geometry_msgs::TwistStamped& twist)
 void printPos()
 {
     ros::Rate pr(1);
-    while(ros::ok() && stopflag)
+    while(ros::ok())
     {
         ROS_INFO("x: %f, y: %f, z: %f\n", vicon_position.x, vicon_position.y, vicon_position.z);
         pr.sleep();
@@ -104,7 +97,7 @@ void sendFakeGPS()
     mavlink::common::msg::HIL_GPS fix {};
     ros::Rate r(GPS_RATE);
 
-    while(ros::ok() && stopflag)
+    while(ros::ok())
     {
         geometry_msgs::Point point, current_vel;
         if(use_deca)
@@ -124,9 +117,9 @@ void sendFakeGPS()
             geometry_msgs::PoseStamped postarget_msg;
             postarget_msg.header.stamp = ros::Time::now();
             postarget_msg.header.frame_id = '0';
-            postarget_msg.pose.position.x = current_waypoint.y;
-            postarget_msg.pose.position.y = -current_waypoint.x;
-            postarget_msg.pose.position.z = current_waypoint.z;
+            postarget_msg.pose.position.x = current_waypoint.y - takeoff_pos.y;
+            postarget_msg.pose.position.y = -(current_waypoint.x - takeoff_pos.x);
+            postarget_msg.pose.position.z = (current_waypoint.z - takeoff_pos.z);
             postarget_pub.publish(postarget_msg);
             takeoff_flag = false;
         }
@@ -252,7 +245,9 @@ void sendWP(const geometry_msgs::PoseStamped& stamped_point)
         sethome_msg.request.altitude = 0;
         sethome_client.call(sethome_msg);
 	
-	takeoff_pos = vicon_position;
+        if (takeoff_num == 0) takeoff_pos = vicon_position;
+
+	takeoff_num++;
     }
     else if (stamp == "2")   // land
     {
@@ -285,9 +280,9 @@ void sendWP(const geometry_msgs::PoseStamped& stamped_point)
         // publish it
         postarget_pub.publish(postarget_msg);
     }
-    current_waypoint.x = (point.x - takeoff_pos.x);
-    current_waypoint.y = (point.y - takeoff_pos.y);
-    current_waypoint.z = (point.z - takeoff_pos.z);
+    current_waypoint.x = point.x;
+    current_waypoint.y = point.y;
+    current_waypoint.z = point.z;
 }
 
 int main(int argc, char **argv)
@@ -315,7 +310,6 @@ int main(int argc, char **argv)
     
     ros::Subscriber waypoint = n.subscribe("waypoint", 1, sendWP);
     
-    signal(SIGINT, &sigHandler);
 
     sethome_client = n.serviceClient<mavros_msgs::CommandHome>("/mavros/cmd/set_home");
     mavros_msgs::CommandHome sethome_msg;
