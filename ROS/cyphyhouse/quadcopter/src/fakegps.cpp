@@ -3,6 +3,7 @@
 #include <cmath>
 #include <thread>
 #include <csignal>
+#include <vector>
 
 #include <GeographicLib/Geocentric.hpp>
 #include <GeographicLib/LocalCartesian.hpp>
@@ -48,6 +49,8 @@ ros::Publisher reached_pub;
 
 geometry_msgs::Point deca_position, vicon_position, deca_vel, vicon_vel;
 geometry_msgs::Point current_waypoint, takeoff_pos;  // VICON coords
+
+std::vector<geometry_msgs::Point> waypoints;
 
 static mavconn::MAVConnInterface::Ptr ardupilot_link;
 
@@ -216,7 +219,7 @@ void sendWP(const geometry_msgs::PoseStamped& stamped_point)
     proj.Reverse(point.y, -point.x, point.z, lat, lon, h);
     starl_flag = true;
     std::cout << "Going to point x: " << point.x << ", y: " << point.y << ", z: " << point.z << std::endl;
-    if (stamp == "0")    // takeoff
+    if (!isFlying)    // currently not flying, takeoff
     {
         mavros_msgs::CommandBool arming_msg;
         mavros_msgs::CommandTOL takeoff_msg;
@@ -234,7 +237,11 @@ void sendWP(const geometry_msgs::PoseStamped& stamped_point)
         if (takeoff_client.call(takeoff_msg))
             ROS_INFO("takeoff success");
         else
+	{
             ROS_INFO("takeoff failed");
+	    return;
+	}
+
         takeoff_flag = true;
         isFlying = true;
 
@@ -249,7 +256,7 @@ void sendWP(const geometry_msgs::PoseStamped& stamped_point)
 
 	takeoff_num++;
     }
-    else if (stamp == "2")   // land
+    else if (point.z <= 0.0)   // land
     {
         mavros_msgs::CommandBool arming_msg;
         mavros_msgs::CommandTOL land_msg;
@@ -268,7 +275,7 @@ void sendWP(const geometry_msgs::PoseStamped& stamped_point)
         else
             ROS_INFO("disarming failed");
     }
-    else
+    else if ((
     {
         geometry_msgs::PoseStamped postarget_msg;
         postarget_msg.header.stamp = ros::Time::now();
@@ -294,6 +301,16 @@ int main(int argc, char **argv)
     
     n.param<std::string>("vicon_obj", vicon_obj, "cyphyhousecopter");
     n.param<bool>("use_deca", use_deca, false);
+    
+    std::string waypoint_topic, reached_topic;
+    if (!n.getParam("motion_automaton/waypoint_topic", waypoint_topic))
+    {
+        std::cout << "Error reading waypoint_topic" << std::endl;
+    }
+    if (!n.getParam("motion_automaton/reached_topic", reached_topic))
+    {
+	std::cout << "Error reading reached_topic" << std::endl;
+    }
 
     arming_client = n.serviceClient<mavros_msgs::CommandBool>("/mavros/cmd/arming");
     takeoff_client = n.serviceClient<mavros_msgs::CommandTOL>("/mavros/cmd/takeoff");
@@ -301,14 +318,14 @@ int main(int argc, char **argv)
     mode_client = n.serviceClient<mavros_msgs::SetMode>("/mavros/set_mode");
 
     postarget_pub = n.advertise<geometry_msgs::PoseStamped>("/mavros/setpoint_position/local", 1);
-    reached_pub = n.advertise<std_msgs::String>("reached", 1);
+    reached_pub = n.advertise<std_msgs::String>(reached_topic, 1);
  
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getViconPosition);
     ros::Subscriber vel_sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/twist", 1, getViconVelocity);
     ros::Subscriber deca_pos = n.subscribe("decaPos", 1, getDecaPosition);
     ros::Subscriber deca_vel = n.subscribe("decaVel", 1, getDecaVelocity);
     
-    ros::Subscriber waypoint = n.subscribe("waypoint", 1, sendWP);
+    ros::Subscriber waypoint = n.subscribe(waypoint_topic, 1, sendWP);
     
 
     sethome_client = n.serviceClient<mavros_msgs::CommandHome>("/mavros/cmd/set_home");
