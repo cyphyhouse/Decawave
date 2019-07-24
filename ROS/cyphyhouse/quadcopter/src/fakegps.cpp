@@ -29,15 +29,23 @@
 #define WP_RATE 10 //Hz
 #define PRINT_RATE 100 //Hz
 
+#define WP_RADIUS 0.3 //m
+#define TAKEOFF_H 0.5 //m
+#define LAND_H 0.3 //m
+#define TAKEOFF_TIMEOUT 10.0 //s
+#define LAND_TIMEOUT 10.0 //s
+
 static const double lat0 = 40.116, lon0 = -88.224;	// IRL GPS coords
-bool takeoff_flag = false;
-bool land_flag = false;
 bool gotWP_flag = false;
-bool isFlying = false;
+
+enum Stage { ground, takeoff, flight, land, landing };
+
+Stage quad_state = ground;
+ros::Time stage_time;
 
 int takeoff_num = 0;
 
-std::string bot_num, vicon_obj;
+std::string vicon_obj;
 bool use_deca;
 
 ros::ServiceClient arming_client, takeoff_client, land_client, mode_client, sethome_client;
@@ -56,7 +64,7 @@ static GeographicLib::Geoid egm96_5("egm96-5", "", true, true);
 static GeographicLib::Geocentric earth(GeographicLib::Constants::WGS84_a(), GeographicLib::Constants::WGS84_f());
 static GeographicLib::LocalCartesian proj(lat0, lon0, 0, earth);
 
-std::thread gps_thread, print_thread, pos_thread;
+std::thread gps_thread, print_thread, pos_thread, wp_thread;
 
 
 void getPosition(const geometry_msgs::PoseStamped& posestamped)
@@ -133,137 +141,170 @@ void sendWP()
 
     while(ros::ok())
     {
-        if (!isFlying)    
+        
+        if (gotWP_flag)
         {
-            if (gotWP_flag) // currently not flying, takeoff
+            switch(quad_state)
             {
-                mavros_msgs::SetMode mode_msg;
-                mode_msg.request.base_mode = 0;
-                mode_msg.request.custom_mode = "GUIDED";
-                mode_client.call(mode_msg);
-                
-                double lat, lon, h;
-                proj.Reverse(current_waypoint.y, -current_waypoint.x, current_waypoint.z, lat, lon, h);
-                
-                mavros_msgs::CommandBool arming_msg;
-                mavros_msgs::CommandTOL takeoff_msg;
-                arming_msg.request.value = true;
-                if (arming_client.call(arming_msg))
-                    ROS_INFO("arming cmd success");
-                else
-                    ROS_INFO("arming cmd failed");
-                    
-                takeoff_msg.request.min_pitch = 0; //have no idea about this
-                takeoff_msg.request.yaw = 0;
-                takeoff_msg.request.latitude = lat; // This is either the first waypoint or whatever the initial position is
-                takeoff_msg.request.longitude = lon;
-                takeoff_msg.request.altitude = h;
-
-                if (takeoff_client.call(takeoff_msg))
-                    ROS_INFO("takeoff cmd success");
-                else
-                    ROS_INFO("takeoff cmd failed");
-
-                takeoff_flag = true;
-                isFlying = true;
-                
-
-                mavros_msgs::CommandHome sethome_msg;
-                sethome_msg.request.current_gps = false;
-                sethome_msg.request.latitude = lat0;
-                sethome_msg.request.longitude = lon0;
-                sethome_msg.request.altitude = 0;
-                sethome_client.call(sethome_msg);
-	
-                if (takeoff_num == 0) takeoff_pos = current_pos;
-
-	            takeoff_num++;
-	        }
-        }
-        else
-        {
-            // Have to resend first waypoint
-            if (takeoff_flag && (current_pos.z >= 0.5))
-            {
-                geometry_msgs::PoseStamped postarget_msg;
-                postarget_msg.header.stamp = ros::Time::now();
-                postarget_msg.header.frame_id = '0';
-                postarget_msg.pose.position.x = current_waypoint.y - takeoff_pos.y;
-                postarget_msg.pose.position.y = -(current_waypoint.x - takeoff_pos.x);
-                postarget_msg.pose.position.z = (current_waypoint.z - takeoff_pos.z);
-                postarget_pub.publish(postarget_msg);
-                takeoff_flag = false;
-            }
-            
-            if (land_flag && (current_pos.z <= 0.3))
-            {
-                land_flag = false;
-            }
-            
-            
-
-            // Acknowledge that we reached the desired waypoint
-            if (gotWP_flag)
-            {
-                
-                if (sqrt(pow(current_pos.x - current_waypoint.x,2) + pow(current_pos.y - current_waypoint.y,2) + pow(current_pos.z - current_waypoint.z,2)) < 0.3)
+                case ground: // currently not flying, takeoff
                 {
-                    waypoints.erase(waypoints.begin()); //delete first element
+                    mavros_msgs::SetMode mode_msg;
+                    mode_msg.request.base_mode = 0;
+                    mode_msg.request.custom_mode = "GUIDED";
+                    mode_client.call(mode_msg);
                     
-                    if(waypoints.size() == 0) //reached last point
-                    {
-                        // tell CyPyHous3 if waypoint is reached
-                        // for now we only do that once we reach the final dest
-                        std_msgs::String wp_reached;
-                        wp_reached.data = "TRUE";
-                        gotWP_flag = false;
-                        reached_pub.publish(wp_reached);
-                    }
+                    double lat, lon, h;
+                    proj.Reverse(current_waypoint.y, -current_waypoint.x, current_waypoint.z, lat, lon, h);
+                    
+                    mavros_msgs::CommandBool arming_msg;
+                    mavros_msgs::CommandTOL takeoff_msg;
+                    arming_msg.request.value = true;
+                    if (arming_client.call(arming_msg))
+                        ROS_INFO("arming cmd success");
                     else
-                    {
-                        // else, set the next point as the next destination
-                        current_waypoint = waypoints.front();
+                        ROS_INFO("arming cmd failed");
                         
-                        if (current_waypoint.z <= 0.0)
+                    takeoff_msg.request.min_pitch = 0; //have no idea about this
+                    takeoff_msg.request.yaw = 0;
+                    takeoff_msg.request.latitude = lat; // This is either the first waypoint or whatever the initial position is
+                    takeoff_msg.request.longitude = lon;
+                    takeoff_msg.request.altitude = h;
+
+                    if (takeoff_client.call(takeoff_msg))
+                        ROS_INFO("takeoff cmd success");
+                    else
+                        ROS_INFO("takeoff cmd failed");
+
+                    quad_state = takeoff;
+                    stage_time = ros::Time::now();
+                    
+                    mavros_msgs::CommandHome sethome_msg;
+                    sethome_msg.request.current_gps = false;
+                    sethome_msg.request.latitude = lat0;
+                    sethome_msg.request.longitude = lon0;
+                    sethome_msg.request.altitude = 0;
+                    sethome_client.call(sethome_msg);
+	
+                    if (takeoff_num == 0) takeoff_pos = current_pos;
+
+	                takeoff_num++;
+	                
+	                break;
+	            }
+	            case takeoff:
+	            {
+	                if (current_pos.z >= TAKEOFF_H)
+	                {
+	                    // Successfully tookoff, resend first point
+	                    geometry_msgs::PoseStamped postarget_msg;
+                        postarget_msg.header.stamp = ros::Time::now();
+                        postarget_msg.header.frame_id = '0';
+                        postarget_msg.pose.position.x = current_waypoint.y - takeoff_pos.y;
+                        postarget_msg.pose.position.y = -(current_waypoint.x - takeoff_pos.x);
+                        postarget_msg.pose.position.z = (current_waypoint.z - takeoff_pos.z);
+                        postarget_pub.publish(postarget_msg);
+                        
+                        quad_state = flight;
+	                }
+	                else if ( (ros::Time::now() - stage_time).toSec() >= TAKEOFF_TIMEOUT )
+	                {
+	                    // took too long to takeoff, try resending takeoff cmd
+	                    quad_state = ground;
+	                }
+	                
+	                break;
+	            }
+	            case flight:
+	            {
+	                if (sqrt(pow(current_pos.x - current_waypoint.x,2) + pow(current_pos.y - current_waypoint.y,2) + pow(current_pos.z - current_waypoint.z,2)) < WP_RADIUS)
+                    {
+                        waypoints.erase(waypoints.begin()); //delete first element
+                    
+                        if(waypoints.size() == 0) //reached last point
                         {
-                            double lat, lon, h;
-                            proj.Reverse(current_waypoint.y, -current_waypoint.x, current_waypoint.z, lat, lon, h);
+                            // tell CyPyHous3 if waypoint is reached
+                            // for now we only do that once we reach the final dest
+                            std_msgs::String wp_reached;
+                            wp_reached.data = "TRUE";
+                            reached_pub.publish(wp_reached);
                             
-                            mavros_msgs::CommandBool arming_msg;
-                            mavros_msgs::CommandTOL land_msg;
-                            land_msg.request.min_pitch = 0;
-                            land_msg.request.yaw = 0;
-                            land_msg.request.latitude = lat;
-                            land_msg.request.longitude = lon;
-                            land_msg.request.altitude = 0;
-                            if (land_client.call(land_msg))
-                                ROS_INFO("landing cmd success");
-                            else
-                                ROS_INFO("landing cmd failed");
-                                
-                            arming_msg.request.value = false;
-                            if (arming_client.call(arming_msg))
-                                ROS_INFO("disarming cmd success");
-                            else
-                                ROS_INFO("disarming cmd failed");
-                                
-                            land_flag = true;
+                            gotWP_flag = false;
+                            quad_state = flight;
                         }
                         else
                         {
-                            geometry_msgs::PoseStamped postarget_msg;
-                            postarget_msg.header.stamp = ros::Time::now();
-                            postarget_msg.header.frame_id = '0';
-                            postarget_msg.pose.position.x = (current_waypoint.y - takeoff_pos.y);
-                            postarget_msg.pose.position.y = -(current_waypoint.x - takeoff_pos.x);
-                            postarget_msg.pose.position.z = (current_waypoint.z - takeoff_pos.z);
+                            current_waypoint = waypoints.front();
+                            
+                            if (current_waypoint.z <= 0.0)
+                            {
+                                quad_state = land;
+                            }
+                            else
+                            {
+                                geometry_msgs::PoseStamped postarget_msg;
+                                postarget_msg.header.stamp = ros::Time::now();
+                                postarget_msg.header.frame_id = '0';
+                                postarget_msg.pose.position.x = (current_waypoint.y - takeoff_pos.y);
+                                postarget_msg.pose.position.y = -(current_waypoint.x - takeoff_pos.x);
+                                postarget_msg.pose.position.z = (current_waypoint.z - takeoff_pos.z);
 
-                            // publish it
-                            postarget_pub.publish(postarget_msg);
+                                // publish it
+                                postarget_pub.publish(postarget_msg);
+                                
+                                quad_state = flight;
+                            }
                         }
                     }
                     
-                }
+	                break;
+	            }
+	            case land:
+	            {
+	                double lat, lon, h;
+                    proj.Reverse(current_waypoint.y, -current_waypoint.x, current_waypoint.z, lat, lon, h);
+                    
+                    mavros_msgs::CommandBool arming_msg;
+                    mavros_msgs::CommandTOL land_msg;
+                    land_msg.request.min_pitch = 0;
+                    land_msg.request.yaw = 0;
+                    land_msg.request.latitude = lat;
+                    land_msg.request.longitude = lon;
+                    land_msg.request.altitude = 0;
+                    if (land_client.call(land_msg))
+                        ROS_INFO("landing cmd success");
+                    else
+                        ROS_INFO("landing cmd failed");
+                        
+                    arming_msg.request.value = false;
+                    if (arming_client.call(arming_msg))
+                        ROS_INFO("disarming cmd success");
+                    else
+                        ROS_INFO("disarming cmd failed");
+                        
+                    quad_state = landing;
+                    stage_time = ros::Time::now();
+                    
+                    break;
+	            }
+	            case landing:
+	            {
+	                if (current_pos.z <= LAND_H)
+	                {
+	                    std_msgs::String wp_reached;
+                        wp_reached.data = "TRUE";
+                        reached_pub.publish(wp_reached);
+                        
+                        quad_state = ground;
+                        gotWP_flag = false;
+	                }
+	                else if ( (ros::Time::now() - stage_time).toSec() >= LAND_TIMEOUT )
+	                {
+	                    // took too long to land, try resending land cmd
+	                    quad_state = land;
+	                }
+	                
+	                break;
+	            }
             }
         }
         
@@ -278,7 +319,7 @@ void printToFile()
     positionFile.open ("/home/pi/copterpos.txt", std::ios::app);
     
     // Sleep and don't print anything while we are not flying
-    while(ros::ok() && !isFlying)
+    while(ros::ok() && (quad_state == ground))
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
@@ -286,7 +327,7 @@ void printToFile()
     // Once we send the takeoff command, start printing
     ros::Rate printrate(PRINT_RATE);
     ros::Time time_start = ros::Time::now();
-    while(ros::ok() && isFlying)
+    while(ros::ok() && (quad_state != ground))
     {
         ros::Duration time_since_start = ros::Time::now() - time_start;
         positionFile << time_since_start.toNSec() / 1000 << ", "; //Print time in useconds
@@ -375,12 +416,14 @@ int main(int argc, char **argv)
     
     gps_thread = std::thread(sendFakeGPS);
     pos_thread = std::thread(printPos);
+    wp_thread = std::thread(sendWP);
     //print_thread = std::thread(printToFile);
 
     ros::spin();
     
     gps_thread.join();
     pos_thread.join();
+    wp_thread.join();
     //print_thread.join();
     return 0;
 }
