@@ -22,6 +22,8 @@
     </rosparam>
   </node>
   
-  <node name="drone" pkg="quadcopter" type="fakeGPS_node" output="screen" />
+  <node name="drone" pkg="quadcopter" type="fakeGPS_node" output="screen">
+    <rosparam file="/home/pi/CyPyHous3/src/config/simple.yml" command="load" />
+  </node>
 
 </launch>
