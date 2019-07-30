@@ -85,7 +85,7 @@ void printPos()
         ROS_INFO("x: %f, y: %f, z: %f\n", current_pos.x, current_pos.y, current_pos.z);
         pr.sleep();
     }
-    std::cout << "Done print loop"
+    std::cout << "Done print loop" << std::endl;
 }
 
 void sendFakeGPS()
@@ -387,10 +387,12 @@ int main(int argc, char **argv)
     if (!n.getParam("motion_automaton/waypoint_topic", waypoint_topic))
     {
         std::cout << "Error reading waypoint_topic" << std::endl;
+	waypoint_topic = "waypoint";
     }
     if (!n.getParam("motion_automaton/reached_topic", reached_topic))
     {
         std::cout << "Error reading reached_topic" << std::endl;
+	reached_topic = "reached";
     }
 
     arming_client = n.serviceClient<mavros_msgs::CommandBool>("/mavros/cmd/arming");
