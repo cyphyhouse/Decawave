@@ -193,7 +193,7 @@ int main(int argc, char **argv)
     std::cout << "Vicon Object: " << vicon_obj << ", bot_num: " << bot_num << std::endl;
 
     reached_pub = n.advertise<std_msgs::String>("reached", 1);
-    drive_pub = n.advertise<ackermann_msgs::AckermannDriveStamped>("ackermann_cmd", 1);
+    drive_pub = n.advertise<ackermann_msgs::AckermannDriveStamped>("/ackermann_cmd", 1);
 
     ros::Subscriber deca_pos = n.subscribe("decaPos", 1, getDecaPosition);
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getViconPosition);

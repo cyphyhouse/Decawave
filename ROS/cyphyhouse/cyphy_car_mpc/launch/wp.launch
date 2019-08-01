@@ -44,7 +44,6 @@
   </node>
   
   <node name="waypoint_node" pkg="cyphy_car_mpc" type="mpc_wp_node" output="screen" >
-    <remap from="ackermann_cmd" to="/ackermann_cmd" />
     <rosparam subst_value="true">
       vicon_obj: hotdec_car
       bot_num: 1
