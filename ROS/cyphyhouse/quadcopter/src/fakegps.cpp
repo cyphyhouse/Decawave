@@ -35,7 +35,7 @@
 #define TAKEOFF_TIMEOUT 10.0 //s
 #define LAND_TIMEOUT 10.0 //s
 
-static const double lat0 = 40.116, lon0 = -88.224;  // IRL GPS coords
+const double lat0 = 40.116, lon0 = -88.224;  // IRL GPS coords
 bool gotWP_flag = false;
 
 enum Stage { ground, takeoff, flight, land, landing };
@@ -49,20 +49,18 @@ std::string vicon_obj;
 bool use_deca;
 
 ros::ServiceClient arming_client, takeoff_client, land_client, mode_client, sethome_client;
-
 ros::Publisher postarget_pub, reached_pub;
 
-geometry_msgs::Point current_pos;
+geometry_msgs::Point current_pos, current_waypoint, takeoff_pos;
 geometry_msgs::Twist current_vel;
-geometry_msgs::Point current_waypoint, takeoff_pos;  // VICON coords
 
 std::vector<geometry_msgs::Point> waypoints;
 
-static mavconn::MAVConnInterface::Ptr ardupilot_link;
+mavconn::MAVConnInterface::Ptr ardupilot_link;
 
-static GeographicLib::Geoid egm96_5("egm96-5", "", true, true);
-static GeographicLib::Geocentric earth(GeographicLib::Constants::WGS84_a(), GeographicLib::Constants::WGS84_f());
-static GeographicLib::LocalCartesian proj(lat0, lon0, 0, earth);
+GeographicLib::Geoid egm96_5("egm96-5", "", true, true);
+GeographicLib::Geocentric earth(GeographicLib::Constants::WGS84_a(), GeographicLib::Constants::WGS84_f());
+GeographicLib::LocalCartesian proj(lat0, lon0, 0, earth);
 
 std::thread gps_thread, print_thread, pos_thread, wp_thread;
 
@@ -150,8 +148,7 @@ void sendWP()
             {
                 case ground: // currently not flying, takeoff
                 {
-                    current_waypoint = waypoints.front();
-                    waypoints.erase(waypoints.begin()); //delete first element
+                    current_waypoint = waypoints.front(); // Read first point, but only remove it once we tookoff
                     
                     mavros_msgs::SetMode mode_msg;
                     mode_msg.request.base_mode = 0;
@@ -202,6 +199,8 @@ void sendWP()
                     if (current_pos.z >= TAKEOFF_H)
                     {
                         // Successfully tookoff, resend first point
+                        waypoints.erase(waypoints.begin()); //delete first element
+                        
                         geometry_msgs::PoseStamped postarget_msg;
                         postarget_msg.header.stamp = ros::Time::now();
                         postarget_msg.header.frame_id = '0';
@@ -212,6 +211,7 @@ void sendWP()
                       
                         std::cout << "Flight stage" << std::endl;
                         quad_state = flight;
+                        
                     }
                     else if ( (ros::Time::now() - stage_time).toSec() >= TAKEOFF_TIMEOUT )
                     {
@@ -309,6 +309,7 @@ void sendWP()
                         quad_state = ground;
                         std::cout << "Ground stage" << std::endl;
                         gotWP_flag = false;
+                        waypoints.clear();
                     }
                     else if ( (ros::Time::now() - stage_time).toSec() >= LAND_TIMEOUT )
                     {
@@ -362,20 +363,26 @@ void getWP(const geometry_msgs::PoseStamped& stamped_point)
     
     std::cout << "Got point x: " << point.x << ", y: " << point.y << ", z: " << point.z << std::endl;
     
-    waypoints.push_back(point);
-
-    if (stamp == "1")
+    if ((point.z <= 0.0) && (quad_state == ground))
     {
-        gotWP_flag = true;
-        std::cout << "Doing path" << std::endl;
+        //ignore, already landed
+        return;
     }
-    
+    else
+    {
+        waypoints.push_back(point);
+
+        if (stamp == "1")
+        {
+            gotWP_flag = true;
+            std::cout << "Doing path" << std::endl;
+        }
+    }
     
 }
 
 int main(int argc, char **argv)
 {
-    current_waypoint.x = current_waypoint.y = current_waypoint.z = 0;
     ros::init(argc, argv, "fakeGPS");
     ardupilot_link = mavconn::MAVConnInterface::open_url("udp://127.0.0.1:14550@");
     ros::NodeHandle n("~");
