@@ -261,6 +261,7 @@ void sendWP()
 
                                 // publish it
                                 postarget_pub.publish(postarget_msg);
+                                std::cout << "Publishing point x: " << point.x << ", y: " << point.y << ", z: " << point.z << std::endl;
                                 
                                 quad_state = flight;
                             }
