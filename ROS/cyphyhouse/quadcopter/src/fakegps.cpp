@@ -261,7 +261,7 @@ void sendWP()
 
                                 // publish it
                                 postarget_pub.publish(postarget_msg);
-                                std::cout << "Publishing point x: " << point.x << ", y: " << point.y << ", z: " << point.z << std::endl;
+                                std::cout << "Publishing point x: " << current_waypoint.x << ", y: " << current_waypoint.y << ", z: " << current_waypoint.z << std::endl;
                                 
                                 quad_state = flight;
                             }
@@ -408,7 +408,7 @@ int main(int argc, char **argv)
     land_client = n.serviceClient<mavros_msgs::CommandTOL>("/mavros/cmd/land");
     mode_client = n.serviceClient<mavros_msgs::SetMode>("/mavros/set_mode");
 
-    postarget_pub = n.advertise<geometry_msgs::PoseStamped>("/mavros/setpoint_position/local", 1);
+    postarget_pub = n.advertise<geometry_msgs::PoseStamped>("/mavros/setpoint_position/local", 10);
     reached_pub = n.advertise<std_msgs::String>(reached_topic, 1);
     
     ros::Subscriber pos_sub, vel_sub;
@@ -423,7 +423,7 @@ int main(int argc, char **argv)
         vel_sub = n.subscribe("decaVel", 1, getVelocity);
     }
     
-    ros::Subscriber waypoint = n.subscribe(waypoint_topic, 1, getWP);
+    ros::Subscriber waypoint = n.subscribe(waypoint_topic, 10, getWP);
     
 
     sethome_client = n.serviceClient<mavros_msgs::CommandHome>("/mavros/cmd/set_home");
