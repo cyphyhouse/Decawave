@@ -76,9 +76,9 @@ void drive()
         // Acknowledge that we reached the desired waypoint
         if (starl_flag)
         {
-            if (sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < EPSILON_RADIUS)            {
+            if ((sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < EPSILON_RADIUS) || (abs(speed) < 0.15))           {
                 waypoints.erase(waypoints.begin()); //delete first element
-
+            
                 if(waypoints.size() == 0) //reached last point
                 {
                     // tell STARL if waypoint is reached
