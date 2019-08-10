@@ -4,6 +4,9 @@ project(cyphy_car_mpc)
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
 
+## Additional cmake files for find_package
+SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -12,12 +15,17 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   roslib
-  sensor_msgs
   ackermann_msgs
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
+find_package(EIGEN3 REQUIRED NAMES Eigen3)
+find_package(IPOPT REQUIRED)
+find_package(CPPAD REQUIRED)
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${IPOPT_DEFINITIONS}")  # Add required C flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IPOPT_DEFINITIONS}")  # Add required CXX flags
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -85,10 +93,18 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES cyphyhouse
-#  CATKIN_DEPENDS roscpp serial std_msgs
-#  DEPENDS system_lib
+  INCLUDE_DIRS include
+  LIBRARIES cyphyhouse
+  CATKIN_DEPENDS
+    roscpp
+    std_msgs
+    geometry_msgs
+    roslib
+    ackermann_msgs
+  DEPENDS
+    EIGEN3
+    IPOPT
+    CPPAD
 )
 
 ###########
@@ -100,12 +116,9 @@ catkin_package(
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  /usr/include/eigen3/
-  /usr/include/cppad/
-)
-
-link_directories(
-    /usr/lib/
+  ${EIGEN3_INCLUDE_DIRS}
+  ${IPOPT_INCLUDE_DIRS}
+  ${CPPAD_INCLUDE_DIRS}
 )
 
 ## Add cmake target dependencies of the library
@@ -131,7 +144,7 @@ add_executable(mpc_wp_node src/waypoint.cpp src/MPC.cpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(mpc_wp_node
   ${catkin_LIBRARIES}
-  ipopt
+  ${IPOPT_LIBRARIES}
 )
 
 
