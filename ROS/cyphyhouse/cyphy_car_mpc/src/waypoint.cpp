@@ -199,7 +199,7 @@ int main(int argc, char **argv)
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getViconPosition);
     ros::Subscriber waypoint = n.subscribe("waypoint", 10, getWP);  // second parameter is num of buffered messages
 
-    dir_path = ros::package::getPath("cyphy_car");
+    dir_path = ros::package::getPath("cyphy_car_mpc");
 
     // Gets the current time so we can add to data output
     time_t rawtime;
