@@ -18,7 +18,7 @@ public:
     vector<double> x_vals;
     vector<double> y_vals;
     // Solve the model given an initial state
-    vector<double> Solve(Eigen::VectorXd state, geometry_msgs::Point waypoint);
+    vector<double> Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs);
 
 };
 

@@ -43,7 +43,7 @@
     </rosparam>
   </node>
   
-  <node name="waypoint_node" pkg="cyphy_car_mpc" type="mpc_wp_node" output="screen" >
+  <node name="waypoint_node" pkg="cyphy_car_mpc2" type="mpc2_wp_node" output="screen" >
     <rosparam subst_value="true">
       vicon_obj: hotdec_car
       bot_num: 1
