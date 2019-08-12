@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="server" default="192.168.1.2" />
+  <arg name="node_name" default="drone" />
 
   <!-- run vrpn -->
   <node pkg="vrpn_client_ros" name="vrpn_client_node" output="screen" type="vrpn_client_node">
@@ -22,8 +23,8 @@
     </rosparam>
   </node>
   
-  <node name="drone" pkg="quadcopter" type="fakeGPS_node" output="screen">
-    <rosparam file="/home/pi/CyPyHous3/src/config/simple.yml" command="load" />
+  <node name="$(arg node_name)" pkg="quadcopter" type="fakeGPS_node" output="screen">
+    <rosparam file="/home/pi/CyPyHous3/config.yml" command="load" />
   </node>
 
 </launch>

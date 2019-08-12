@@ -387,21 +387,18 @@ int main(int argc, char **argv)
     ros::init(argc, argv, "fakeGPS");
     ardupilot_link = mavconn::MAVConnInterface::open_url("udp://127.0.0.1:14550@");
     ros::NodeHandle n("~");
+   
+    std::string wp_topic, reached_topic, pos_topic;
+    int queue_size;
     
-    n.param<std::string>("vicon_obj", vicon_obj, "cyphyhousecopter");
     n.param<bool>("use_deca", use_deca, false);
     
-    std::string waypoint_topic, reached_topic;
-    if (!n.getParam("motion_automaton/waypoint_topic", waypoint_topic))
-    {
-        std::cout << "Error reading waypoint_topic" << std::endl;
-	waypoint_topic = "waypoint";
-    }
-    if (!n.getParam("motion_automaton/reached_topic", reached_topic))
-    {
-        std::cout << "Error reading reached_topic" << std::endl;
-	reached_topic = "reached";
-    }
+    n.param<std::string>("device/bot_name", vicon_obj, "cph");
+    n.param<std::string>("device/waypoint_topic/topic", wp_topic, "waypoint");
+    n.param<std::string>("device/reached_topic/topic", reached_topic, "reached");
+    n.param<std::string>("device/positioning_topic/topic", pos_topic, "/vrpn_client_node/");
+    n.param<int>("device/queue_size", queue_size, 10);
+
 
     arming_client = n.serviceClient<mavros_msgs::CommandBool>("/mavros/cmd/arming");
     takeoff_client = n.serviceClient<mavros_msgs::CommandTOL>("/mavros/cmd/takeoff");
@@ -414,8 +411,8 @@ int main(int argc, char **argv)
     ros::Subscriber pos_sub, vel_sub;
     if (!use_deca)
     {
-        pos_sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getPosition);
-        vel_sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/twist", 1, getVelocity);
+        pos_sub = n.subscribe(pos_topic+vicon_obj+"/pose", 1, getPosition);
+        vel_sub = n.subscribe(pos_topic+vicon_obj+"/twist", 1, getVelocity);
     }
     else
     {
@@ -423,7 +420,7 @@ int main(int argc, char **argv)
         vel_sub = n.subscribe("decaVel", 1, getVelocity);
     }
     
-    ros::Subscriber waypoint = n.subscribe(waypoint_topic, 10, getWP);
+    ros::Subscriber waypoint = n.subscribe(wp_topic, queue_size, getWP);
     
 
     sethome_client = n.serviceClient<mavros_msgs::CommandHome>("/mavros/cmd/set_home");
