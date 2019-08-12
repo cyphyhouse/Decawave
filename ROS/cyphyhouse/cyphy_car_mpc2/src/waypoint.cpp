@@ -31,6 +31,7 @@ bool gotWP = false;
 double speed = 0, direction = 0;
 geometry_msgs::Point prev_loc, curr_loc;
 double curr_ang = 0;
+int n_wp;
 
 std::string bot_num, vicon_obj;
 std::vector<geometry_msgs::Point> waypoints;
@@ -139,7 +140,11 @@ void drive()
 
         if (gotWP)
         { 
-            int n_wp = 10; //Examine first 10 waypoints in list
+            if (waypoints.size() < 10) {
+                n_wp = waypoints.size();
+            } else {
+                n_wp = 10;
+            }
             for (int i =0; i < n_wp; ++i){
                 waypoints_x.push_back(waypoints[i].x);
                 waypoints_y.push_back(waypoints[i].y);
@@ -148,7 +153,7 @@ void drive()
             double* wpy = &waypoints_y[0];
             Eigen::Map<Eigen::VectorXd> wpx_solve(wpx, n_wp);
             Eigen::Map<Eigen::VectorXd> wpy_solve(wpy, n_wp);
-            auto coeffs(wpx_solve, wpy_solve, 3);
+            auto coeffs = polyfit(wpx_solve, wpy_solve, 3);
             double cte = polyeval(coeffs,0);
             double epsi = -atan(coeffs[1]);
             state << curr_loc.x, curr_loc.y, curr_ang, cte, epsi;

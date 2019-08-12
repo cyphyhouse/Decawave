@@ -26,7 +26,7 @@ size_t x_start = 0;
 size_t y_start = x_start + N;
 size_t psi_start = y_start + N;
 size_t cte_start = psi_start + N;
-size_t epsi_start = cte_start + N
+size_t epsi_start = cte_start + N;
 size_t v_start = epsi_start + N;
 size_t delta_start = v_start + N - 1;
 
@@ -56,7 +56,7 @@ public:
             //Penalize cross track error
             fg[0] += cte_weight * CppAD::pow(vars[cte_start + t],2);
             //Penalize error in heading
-            fg[0] += epsi_weight * CppAD::pow(vars[epsi_start + t] - y_ref, 2);
+            fg[0] += epsi_weight * CppAD::pow(vars[epsi_start + t], 2);
         }
 
         //Minimize inputs
@@ -109,7 +109,7 @@ public:
             fg[1 + y_start + t] = y1 - (y0 + v0 * CppAD::sin(psi0) * dt);
             fg[1 + psi_start + t] = psi1 - (psi0 + v0 * CppAD::tan(delta0) * dt / lr);
             fg[1 + cte_start + t] = cte1 - ((f0 - y0) + (v0 * CppAD::sin(epsi0) * dt));
-            fg[1 + epsi_start + t] = epsi1 - ((psi0 - psides0) + v0 * delta0 / Lf * dt);
+            fg[1 + epsi_start + t] = epsi1 - ((psi0 - psides0) + v0 * delta0 / lr * dt);
         }
     }
 };
