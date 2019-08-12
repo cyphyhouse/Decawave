@@ -34,6 +34,8 @@ double curr_ang = 0;
 
 std::string bot_num, vicon_obj;
 std::vector<geometry_msgs::Point> waypoints;
+std::vector<double> waypoints_x;
+std::vector<double> waypoints_y;
 
 ros::Publisher drive_pub;
 ros::Publisher reached_pub;
@@ -46,7 +48,41 @@ std::string dir_path;
 char time_buffer[80];
 std::thread drive_thread, print_thread;
 
-Eigen::VectorXd state(3);
+Eigen::VectorXd state(5);
+
+// Evaluate a polynomial.
+double polyeval(Eigen::VectorXd coeffs, double x) {
+    double result = 0.0;
+    for (int i = 0; i < coeffs.size(); i++) {
+    result += coeffs[i] * pow(x, i);
+    }
+    return result;
+}
+
+// Fit a polynomial.
+// Adapted from
+// https://github.com/JuliaMath/Polynomials.jl/blob/master/src/Polynomials.jl#L676-L716
+Eigen::VectorXd polyfit(Eigen::VectorXd xvals, Eigen::VectorXd yvals,
+                        int order) {
+    assert(xvals.size() == yvals.size());
+    assert(order >= 1 && order <= xvals.size() - 1);
+    Eigen::MatrixXd A(xvals.size(), order + 1);
+
+    for (int i = 0; i < xvals.size(); i++) {
+    A(i, 0) = 1.0;
+    }
+
+    for (int j = 0; j < xvals.size(); j++) {
+    for (int i = 0; i < order; i++) {
+      A(j, i + 1) = A(j, i) * xvals(j);
+    }
+    }
+
+    auto Q = A.householderQr();
+    auto result = Q.solve(yvals);
+    return result;
+}
+
 
 void getDecaPosition(const geometry_msgs::Point& point)
 {
@@ -71,14 +107,13 @@ void drive()
         prev_loc = curr_loc;
         curr_loc = vicon_position;
         curr_ang = atan2(2 * (quat.x * quat.y + quat.w * quat.z), pow(quat.w,2) + pow(quat.x,2) - pow(quat.y,2) - pow(quat.z,2));
-        state << curr_loc.x, curr_loc.y, curr_ang;
 
         // Acknowledge that we reached the desired waypoint
         if (starl_flag)
         {
-            if ((sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < EPSILON_RADIUS) || (abs(speed) < 0.15))           {
+            if (sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < EPSILON_RADIUS)            {
                 waypoints.erase(waypoints.begin()); //delete first element
-            
+
                 if(waypoints.size() == 0) //reached last point
                 {
                     // tell STARL if waypoint is reached
@@ -103,9 +138,22 @@ void drive()
         //ROS_INFO("x: %f, y: %f, z: %f\n", curr_loc.x, curr_loc.y, curr_loc.z);
 
         if (gotWP)
-        {
+        { 
+            int n_wp = 10; //Examine first 10 waypoints in list
+            for (int i =0; i < n_wp; ++i){
+                waypoints_x.push_back(waypoints[i].x);
+                waypoints_y.push_back(waypoints[i].y);
+            }
+            double* wpx = &waypoints_x[0];
+            double* wpy = &waypoints_y[0];
+            Eigen::Map<Eigen::VectorXd> wpx_solve(wpx, n_wp);
+            Eigen::Map<Eigen::VectorXd> wpy_solve(wpy, n_wp);
+            auto coeffs(wpx_solve, wpy_solve, 3);
+            double cte = polyeval(coeffs,0);
+            double epsi = -atan(coeffs[1]);
+            state << curr_loc.x, curr_loc.y, curr_ang, cte, epsi;
             auto tic = std::chrono::high_resolution_clock::now();
-            vector<double> solution = mpc.Solve(state,current_waypoint);
+            vector<double> solution = mpc.Solve(state,coeffs);
             auto toc = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(toc - tic);
             std::cout << "MPC time: " << duration.count() / 1000000. << std::endl; //Time in seconds
