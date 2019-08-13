@@ -36,7 +36,7 @@
 #define LAND_H 0.3 //m
 #define TAKEOFF_TIMEOUT 10.0 //s
 #define LAND_TIMEOUT 10.0 //s
-#define VICON_TIMEOUT 5.0 //s
+#define VICON_TIMEOUT 3.0 //s
 
 const double lat0 = 40.116, lon0 = -88.224;  // IRL GPS coords
 std::atomic<bool> gotWP_flag (false);
@@ -65,25 +65,18 @@ ros::Time pos_time;
 
 void emergencyLand()
 {
+    std::cout << "Emergency Land" << std::endl;
     quad_state = land;
     wp_mutex.lock();
     current_waypoint = current_pos;
     wp_mutex.unlock();
+    gotWP_flag = true;
 }
 
 void getPosition(const geometry_msgs::PoseStamped& posestamped)
 {
     current_pos = posestamped.pose.position;
-    
-    ros::Time pos_time_now = ros::Time::now();
-    if ((pos_time_now - pos_time).toSec() > VICON_TIMEOUT)
-    {
-        emergencyLand();
-    }
-    else
-    {
-        pos_time = pos_time_now;
-    }
+    pos_time = ros::Time::now();
 }
 
 void getVelocity(const geometry_msgs::TwistStamped& twiststamped)
@@ -211,7 +204,13 @@ void sendFakeGPS()
 
     while(ros::ok())
     {
-        geometry_msgs::Point point = current_pos;
+    
+        if (((ros::Time::now() - pos_time).toSec() > VICON_TIMEOUT) && (quad_state == flight))
+        {
+            emergencyLand();
+        }
+       
+       	geometry_msgs::Point point = current_pos;
          
         double lat, lon, h;
         //ROS_INFO("x: %f, y: %f, z: %f\n", point.x, point.y, point.z);
