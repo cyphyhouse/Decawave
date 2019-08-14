@@ -26,6 +26,7 @@
 #define EPSILON_ANGLE    0.1
 
 bool starl_flag = false;
+bool poly_flag = false;
 bool isDriving = false;
 bool gotWP = false;
 double speed = 0, direction = 0;
@@ -138,34 +139,39 @@ void drive()
 
         //ROS_INFO("x: %f, y: %f, z: %f\n", curr_loc.x, curr_loc.y, curr_loc.z);
 
-        if (gotWP)
+        if ((gotWP) && (poly_flag))
         { 
-            if (waypoints.size() < 10) {
-                n_wp = waypoints.size();
-            } else {
-                n_wp = 10;
-            }
+            n_wp = waypoints.size();
             for (int i =0; i < n_wp; ++i){
-                waypoints_x.push_back(waypoints[i].x);
-                waypoints_y.push_back(waypoints[i].y);
+                //Offset axis origin to car location
+                double shift_x = waypoints[i].x - curr_loc.x;
+                double shift_y = waypoints[i].y - curr_loc.y;
+                //Transform wp coordinates
+                waypoints_x[i] = (shift_x*cos(curr_ang) + shift_y*sin(curr_ang);
+                waypoints_y[i] = (shift_x*cos(curr_ang) + shift_y*sin(curr_ang);
             }
+            //Convert waypoints to Eigen vector
             double* wpx = &waypoints_x[0];
             double* wpy = &waypoints_y[0];
             Eigen::Map<Eigen::VectorXd> wpx_solve(wpx, n_wp);
             Eigen::Map<Eigen::VectorXd> wpy_solve(wpy, n_wp);
+            //Polynomial fit
             auto coeffs = polyfit(wpx_solve, wpy_solve, 3);
+            //Calculate cross track error and heading error
             double cte = polyeval(coeffs,0);
             double epsi = -atan(coeffs[1]);
             state << curr_loc.x, curr_loc.y, curr_ang, cte, epsi;
             auto tic = std::chrono::high_resolution_clock::now();
+            //Solve MPC problem
             vector<double> solution = mpc.Solve(state,coeffs);
             auto toc = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(toc - tic);
             std::cout << "MPC time: " << duration.count() / 1000000. << std::endl; //Time in seconds
-            
+            //Apply control inputs
             direction = solution.at(0);
             speed = solution.at(1);
             ROS_INFO("speed: %f, steering: %f", speed, direction);
+            poly_flag = false;
         }
 
         ackermann_msgs::AckermannDriveStamped drive_msg;
@@ -226,6 +232,7 @@ void getWP(const geometry_msgs::PoseStamped& stamped_point)
     {
         gotWP = true;
         starl_flag = true;
+        poly_flag = true;
     }
 
     if(!isDriving)
