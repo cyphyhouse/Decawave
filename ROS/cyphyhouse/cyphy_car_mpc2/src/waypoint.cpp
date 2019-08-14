@@ -147,8 +147,8 @@ void drive()
                 double shift_x = waypoints[i].x - curr_loc.x;
                 double shift_y = waypoints[i].y - curr_loc.y;
                 //Transform wp coordinates
-                waypoints_x[i] = (shift_x*cos(curr_ang) + shift_y*sin(curr_ang);
-                waypoints_y[i] = (shift_x*cos(curr_ang) + shift_y*sin(curr_ang);
+                waypoints_x[i] = (shift_x*cos(curr_ang) + shift_y*sin(curr_ang));
+                waypoints_y[i] = (shift_x*cos(curr_ang) + shift_y*sin(curr_ang));
             }
             //Convert waypoints to Eigen vector
             double* wpx = &waypoints_x[0];
