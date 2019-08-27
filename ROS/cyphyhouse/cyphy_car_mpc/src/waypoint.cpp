@@ -45,6 +45,7 @@ geometry_msgs::Quaternion quat; //Get orientation
 std::string dir_path;
 char time_buffer[80];
 std::thread drive_thread, print_thread;
+ros::Time wp_time;
 
 Eigen::VectorXd state(3);
 
@@ -76,7 +77,8 @@ void drive()
         // Acknowledge that we reached the desired waypoint
         if (starl_flag)
         {
-            if ((sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < EPSILON_RADIUS) || (abs(speed) < 0.15))           {
+            double elapsed_time = (ros::Time::now() - wp_time).toSec();
+            if ((sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < EPSILON_RADIUS) || ((abs(speed) < 0.15) && (elapsed_time >= 1.0)))           {
                 waypoints.erase(waypoints.begin()); //delete first element
             
                 if(waypoints.size() == 0) //reached last point
@@ -173,6 +175,7 @@ void getWP(const geometry_msgs::PoseStamped& stamped_point)
     {
         gotWP = true;
         starl_flag = true;
+        wp_time = ros::Time::now();
     }
 
     if(!isDriving)
