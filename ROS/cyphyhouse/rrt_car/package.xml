@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <package>
-  <name>cyphy_car_mpc</name>
+  <name>rrt_car</name>
   <version>0.1.0</version>
   <description>The car package with MPC control</description>
 
-  <maintainer email="gosse2@illinois.edu">Amelia Gosse</maintainer>
+  <maintainer email="janschp2@illinois.edu">Joao Porto/maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->

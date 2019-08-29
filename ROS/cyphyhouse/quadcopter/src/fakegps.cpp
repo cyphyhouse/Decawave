@@ -36,6 +36,7 @@
 #define LAND_H 0.3 //m
 #define TAKEOFF_TIMEOUT 10.0 //s
 #define LAND_TIMEOUT 10.0 //s
+#define GOTO_TIMEOUT 5.0 //s
 #define VICON_TIMEOUT 3.0 //s
 
 const double lat0 = 40.116, lon0 = -88.224;  // IRL GPS coords
@@ -338,10 +339,16 @@ void sendWP()
                             else
                             {
                                 sendPosition(current_waypoint);
-                                
                                 quad_state = flight;
+                                stage_time = ros::Time::now();
                             }
                         }
+                    }
+                    
+                    if ( (ros::Time::now() - stage_time).toSec() >= GOTO_TIMEOUT )
+                    {
+                        sendPosition(current_waypoint);
+                        stage_time = ros::Time::now();
                     }
                     
                     break;
