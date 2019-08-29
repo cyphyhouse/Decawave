@@ -9,15 +9,15 @@
 using CppAD::AD;
 
 // Set the timestep length and duration
-size_t N = 10;
-double dt = 0.1;
+const size_t N = 10;
+const double dt = 0.1;
 
 //Geometric parameters of car
 const double lr = 0.3;
 
 //State and input hard constraints
-const double x_bound = 3.0;
-const double y_bound = 3.0;
+const double x_bound = 10.0;
+const double y_bound = 10.0;
 const double dir_bound = 0.35;
 const double vel_bound = 3.0;
 
@@ -25,17 +25,26 @@ const double vel_bound = 3.0;
 double x_ref, y_ref;
 
 //Initialize
-size_t x_start = 0;
-size_t y_start = x_start + N;
-size_t psi_start = y_start + N;
-size_t v_start = psi_start + N;
-size_t delta_start = v_start + N - 1;
+
+// Set number of model variables
+const size_t n_vars = N * 3 + (N - 1) * 2; // 3N state elements, 2(N-1) actuators
+
+const size_t x_start = 0;
+const size_t y_start = x_start + N;
+const size_t psi_start = y_start + N;
+const size_t v_start = psi_start + N;
+const size_t delta_start = v_start + N - 1;
+
+// Set the number of constraints
+const size_t n_constraints = N * 3; // N*(x, y, psi)
 
 class FG_eval {
 public:
     FG_eval() = default;
     typedef CPPAD_TESTVECTOR(AD<double>) ADvector;
     void operator()(ADvector& fg, const ADvector& vars) {
+        assert(fg.size() == 1 + n_constraints);
+        assert(vars.size() == n_vars);
         //Initialize cost at 0
         fg[0] = 0;
 
@@ -104,7 +113,7 @@ public:
 MPC::MPC() = default;
 MPC::~MPC() = default;
 
-vector<double> MPC::Solve(Eigen::VectorXd state, geometry_msgs::Point waypoint) {
+std::vector<double> MPC::Solve(Eigen::VectorXd state, geometry_msgs::Point waypoint) {
     bool ok = true;
     typedef CPPAD_TESTVECTOR(double) Dvector;
     x_ref = waypoint.x;
@@ -112,11 +121,6 @@ vector<double> MPC::Solve(Eigen::VectorXd state, geometry_msgs::Point waypoint) 
     double x = state[0];
     double y = state[1];
     double psi = state[2];
-
-    // Set number of model variables
-    size_t n_vars = N * 3 + (N - 1) * 2; // 3N state elements, 2(N-1) actuators
-    // Set the number of constraints
-    size_t n_constraints = N * 3; // (x, y, psi)
 
     // Initialize model variables to zero
     Dvector vars(n_vars);
