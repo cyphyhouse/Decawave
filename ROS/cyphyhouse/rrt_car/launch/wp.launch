@@ -43,7 +43,7 @@
     </rosparam>
   </node>
   
-  <node name="waypoint_node" pkg="rrt_car" type="mpc_wp_node" output="screen" >
+  <node name="waypoint_node" pkg="rrt_car" type="rrt_wp_node" output="screen" >
     <rosparam subst_value="true">
       vicon_obj: hotdec_car
     </rosparam>

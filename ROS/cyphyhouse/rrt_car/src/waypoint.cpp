@@ -143,8 +143,7 @@ void printToFile()
     {
         ros::Duration time_since_start = ros::Time::now() - time_start;
         positionFile << time_since_start.toNSec() / 1000 << ", "; //Print time in useconds
-        positionFile << vicon_position.x << ", " << vicon_position.y << ", " << vicon_position.z << ", ";
-        positionFile << deca_position.x << ", " << deca_position.y << ", " << deca_position.z << "\r\n";
+        positionFile << vicon_position.x << ", " << vicon_position.y << ", " << vicon_position.z << "\r\n ";
 
         printrate.sleep();
     }

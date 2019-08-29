@@ -22,7 +22,7 @@ const double dir_bound = 0.35;
 const double vel_bound = 3.0;
 
 //Define target states
-double x_ref[N], y_ref[N];
+double x_ref[10], y_ref[10];
 
 //Initialize
 size_t x_start = 0;
