@@ -27,6 +27,7 @@
 
 bool isDriving = false;
 bool gotWP = false;
+bool slow_flag = false;
 double speed = 0, direction = 0;
 geometry_msgs::Point curr_loc;
 double curr_ang = 0;
@@ -45,6 +46,7 @@ std::string dir_path;
 char time_buffer[80];
 std::thread drive_thread, print_thread;
 ros::Time wp_time;
+ros::Time slow_time;
 
 Eigen::VectorXd state(3);
 
@@ -53,6 +55,11 @@ void getViconPosition(const geometry_msgs::PoseStamped& pose)
 {
     vicon_position = pose.pose.position;
     quat = pose.pose.orientation;
+}
+
+inline double goalDist(const geometry_msgs::Point pos, const geometry_msgs::Point goal)
+{
+    return sqrt(pow(pos.x - goal.x, 2) + pow(pos.y - goal.y, 2));
 }
 
 void drive()
@@ -71,19 +78,21 @@ void drive()
         // Acknowledge that we reached the desired waypoint
         if (gotWP)
         {
-            double elapsed_time = (ros::Time::now() - wp_time).toSec();
-            if ((sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < EPSILON_RADIUS) || ((abs(speed) < 0.15) && (elapsed_time >= 1.0)))
+            ROS_INFO("x: %f, y: %f", curr_loc.x, curr_loc.y);
+
+            if ((goalDist(curr_loc, current_waypoint) < EPSILON_RADIUS) || (slow_flag == true))
             {
                 // tell STARL if waypoint is reached
                 // for now assume we only do that once we reach the final dest
                 std_msgs::String wp_reached;
                 wp_reached.data = "TRUE";
                 reached_pub.publish(wp_reached);
-                
+                ROS_INFO("Goal dist: %f", goalDist(curr_loc, current_waypoint));
                 // Stop moving
                 gotWP = false;
                 speed = 0;
                 direction = 0;
+                slow_flag = false;
                 
                 waypoints.clear();
             }
@@ -107,6 +116,17 @@ void drive()
                 speed = solution.at(1);
                 ROS_INFO("speed: %f, steering: %f", speed, direction);
                 
+                double elapsed_time = (ros::Time::now() - slow_time).toSec();
+                if ((abs(speed) < 0.15) && (elapsed_time > 2.0) && (slow_flag == false)) 
+                {
+                    slow_flag = true;
+                    slow_time = ros::Time::now();
+                }
+                else if (abs(speed) > 0.15)
+                {
+                    slow_flag = false;
+                    slow_time = ros::Time::now();
+                }
                 waypoints.erase(waypoints.begin()); //delete first element
             }
         }
@@ -153,15 +173,19 @@ void printToFile()
 void getWP(const geometry_msgs::PoseStamped& stamped_point)
 {
     geometry_msgs::Point point = stamped_point.pose.position;
+    
+    if (waypoints.size() == 0) waypoints.push_back(vicon_position);
 
     waypoints.push_back(point);
+    std::cout << "Got Point x: " << point.x << ", y: " << point.y << std::endl;
 
     // wait until we get the final point
     if(stamped_point.header.frame_id == "1")
     {
         current_waypoint = point;
         gotWP = true;
-        wp_time = ros::Time::now();
+        slow_time = ros::Time::now();
+        slow_flag = false;
     }
 
     if(!isDriving)
@@ -184,9 +208,9 @@ int main(int argc, char **argv)
     drive_pub = n.advertise<ackermann_msgs::AckermannDriveStamped>("/ackermann_cmd", 1);
 
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getViconPosition);
-    ros::Subscriber waypoint = n.subscribe("waypoint", 10, getWP);  // second parameter is num of buffered messages
+    ros::Subscriber waypoint = n.subscribe("waypoint", 50, getWP);  // second parameter is num of buffered messages
 
-    dir_path = ros::package::getPath("cyphy_car");
+    dir_path = ros::package::getPath("rrt_car");
 
     // Gets the current time so we can add to data output
     time_t rawtime;
