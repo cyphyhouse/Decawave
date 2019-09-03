@@ -9,17 +9,17 @@
 using CppAD::AD;
 
 // Set the timestep length and duration
-size_t N = 10;
-double dt = 0.1;
+const size_t N = 10;
+const double dt = 0.1;
 
 //Geometric parameters of car
-const double lr = 0.3;
+const double lr = 0.33;
 
 //State and input hard constraints
 const double x_bound = 3.0;
 const double y_bound = 3.0;
 const double dir_bound = 0.35;
-const double vel_bound = 3.0;
+const double vel_bound = 4.0;
 
 //Define target states
 double x_ref[10], y_ref[10];
@@ -31,6 +31,14 @@ size_t psi_start = y_start + N;
 size_t v_start = psi_start + N;
 size_t delta_start = v_start + N - 1;
 
+//State cost weights
+const double x_weight = 50;
+const double y_weight = 50;
+
+//Input and input derivative cost weights
+const double delta_weight = 10;
+const double v_weight = 5;
+
 class FG_eval {
 public:
     FG_eval() = default;
@@ -39,21 +47,12 @@ public:
         //Initialize cost at 0
         fg[0] = 0;
 
-        //State cost weights
-        const int x_weight = 400;
-        const int y_weight = 400;
         
-
-        //Input and input derivative cost weights
-        const double delta_weight = 200;
-        const double delta_rate_weight = 250;
-        const double v_weight = 50;
-        const double v_rate_weight = 200;
 
         //Set up the cost function
         for (unsigned int t = 0; t < N; ++t){
             //Penalize x-distance from waypoint and boundary
-            fg[0] += x_weight * CppAD::pow(vars[x_start + t] - x_ref[t],2);
+            fg[0] += x_weight * CppAD::pow(vars[x_start + t] - x_ref[t], 2);
             //Penalize y-distance from waypoint and boundary
             fg[0] += y_weight * CppAD::pow(vars[y_start + t] - y_ref[t], 2);
         }
@@ -62,12 +61,6 @@ public:
         for (unsigned int t = 0; t < N - 1; ++t) {
             fg[0] += delta_weight * CppAD::pow(vars[delta_start + t], 2);
             fg[0] += v_weight * CppAD::pow(vars[v_start + t], 2);
-        }
-
-        //Minimize input derivatives
-        for (unsigned int t = 0; t < N - 2; ++t) {
-            fg[0] += delta_rate_weight * CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
-            fg[0] += v_rate_weight * CppAD::pow(vars[v_start + t + 1] - vars[v_start + t], 2);
         }
 
         //Set the constraints at time t=0
