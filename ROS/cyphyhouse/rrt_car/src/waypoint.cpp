@@ -13,6 +13,7 @@
 #include <std_msgs/String.h>
 #include "geometry_msgs/PoseStamped.h"
 #include "geometry_msgs/PointStamped.h"
+#include "geometry_msgs/TwistStamped.h"
 #include <ackermann_msgs/AckermannDriveStamped.h>
 #include "ros/package.h"
 #include <chrono>
@@ -41,20 +42,30 @@ ros::Publisher reached_pub;
 geometry_msgs::Point vicon_position;
 geometry_msgs::Point current_waypoint;  // VICON coords
 geometry_msgs::Quaternion quat; //Get orientation
+geometry_msgs::Vector3 vicon_vel;
 
 std::string dir_path;
 char time_buffer[80];
-std::thread drive_thread, print_thread;
+std::thread drive_thread, print_thread, cmd_thread;
 ros::Time wp_time;
 ros::Time slow_time;
 
-Eigen::VectorXd state(3);
+Eigen::Vector3d state;
 
+Eigen::Quaterniond quat_eig;
+Eigen::Vector3d vel_eig, vel_tf;
+double vel_error_int = 0, vel_error_deriv = 0;
+const double Kp = 1, Ki = 1; Kd = 0.1;
 
 void getViconPosition(const geometry_msgs::PoseStamped& pose)
 {
     vicon_position = pose.pose.position;
     quat = pose.pose.orientation;
+}
+
+void getViconVel(const geometry_msgs::TwistStamped& data)
+{
+    vicon_vel = data.twist.linear;
 }
 
 inline double goalDist(const geometry_msgs::Point pos, const geometry_msgs::Point goal)
@@ -105,7 +116,6 @@ void drive()
                     waypoints.push_back(waypoints.back());
                 }
                 
-                
                 auto tic = std::chrono::high_resolution_clock::now();
                 std::vector<double> solution = mpc.Solve(state, waypoints);
                 auto toc = std::chrono::high_resolution_clock::now();
@@ -116,29 +126,52 @@ void drive()
                 speed = solution.at(1);
                 ROS_INFO("speed: %f, steering: %f", speed, direction);
                 
-                double elapsed_time = (ros::Time::now() - slow_time).toSec();
-                if ((abs(speed) < 0.15) && (elapsed_time > 2.0) && (slow_flag == false)) 
-                {
-                    slow_flag = true;
-                    slow_time = ros::Time::now();
-                }
-                else if (abs(speed) > 0.15)
-                {
-                    slow_flag = false;
-                    slow_time = ros::Time::now();
-                }
                 waypoints.erase(waypoints.begin()); //delete first element
             }
         }
-
-        ackermann_msgs::AckermannDriveStamped drive_msg;
-        drive_msg.drive.speed = speed;
-        drive_msg.drive.steering_angle = direction;
-        drive_pub.publish(drive_msg);
-        //ROS_INFO("speed: %f, steering: %f",  speed, direction);
         r.sleep();
     }
+}
 
+
+void drive_cmd()
+{   
+    ros::Rate r(100);
+    
+    double vel_error = 0;
+    double prev_vel = 0;
+    
+    while (ros::ok())
+    {
+        quat_eig = Eigen::Quaterniond(quat.w, quat.x, quat.y, quat.z);
+        vel_eig << vicon_vel.x, vicon_vel.y, vicon_vel.z;
+        
+        vel_tf = vel_eig.rotate(quat_eig);
+        double car_vel = vel_tf(0);
+        
+        std::cout << "Original vel x: " << vel_eig(0) << ", y: " << vel_eig(1) << "; ";
+        std::cout << "Rotate vel x: " << vel_tf(0) << ", y: " << vel_tf(1) << std::endl;
+        
+        if (fabs(car_vel) < 0.001) car_vel = 0; //Vicon noise...
+        
+        vel_error = speed - car_vel;
+        vel_error_int += vel_error;
+        vel_error_int = fmax(fmin(vel_error_int, 4.0), -4.0);
+        vel_error_deriv = 0.9 * vel_error + 0.1 * vel_error_deriv;
+        
+        double vel_cmd = Kp * vel_error + Ki * vel_error_int + Kd * vel_error_deriv;
+        vel_cmd = fmax(fmin(vel_cmd, 4.0), -4.0);
+        
+        ackermann_msgs::AckermannDriveStamped drive_msg;
+        drive_msg.drive.speed = vel_cmd;
+        drive_msg.drive.steering_angle = direction;
+        drive_pub.publish(drive_msg);
+        
+        ROS_INFO("Ackermann speed: %f", vel_cmd);
+        
+        r.sleep()
+    }
+    
     ackermann_msgs::AckermannDriveStamped drive_msg;
     drive_msg.drive.speed = 0;
     drive_msg.drive.steering_angle = 0;
@@ -208,6 +241,7 @@ int main(int argc, char **argv)
     drive_pub = n.advertise<ackermann_msgs::AckermannDriveStamped>("/ackermann_cmd", 1);
 
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getViconPosition);
+    ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/twist", 1, getViconVel);
     ros::Subscriber waypoint = n.subscribe("waypoint", 50, getWP);  // second parameter is num of buffered messages
 
     dir_path = ros::package::getPath("rrt_car");
@@ -222,11 +256,13 @@ int main(int argc, char **argv)
     std::cout << "Starting waypoint follower" << std::endl;
 
     drive_thread = std::thread(drive);
+    cmd_thread = std::thread(drive_cmd);
     //print_thread = std::thread(printToFile);
 
     ros::spin();
 
     drive_thread.join();
+    cmd_thread.join();
     //print_thread.join();
 
     ackermann_msgs::AckermannDriveStamped drive_msg;

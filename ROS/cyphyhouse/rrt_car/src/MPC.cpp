@@ -37,7 +37,9 @@ const double y_weight = 50;
 
 //Input and input derivative cost weights
 const double delta_weight = 10;
+const double delta_rate_weight = 25;
 const double v_weight = 5;
+const double v_rate_weight = 20;
 
 class FG_eval {
 public:
@@ -61,6 +63,12 @@ public:
         for (unsigned int t = 0; t < N - 1; ++t) {
             fg[0] += delta_weight * CppAD::pow(vars[delta_start + t], 2);
             fg[0] += v_weight * CppAD::pow(vars[v_start + t], 2);
+        }
+        
+        //Minimize input derivatives
+        for (unsigned int t = 0; t < N - 2; ++t) {
+            fg[0] += delta_rate_weight * CppAD::pow(vars[delta_start + t + 1] - vars[delta_start + t], 2);
+            fg[0] += v_rate_weight * CppAD::pow(vars[v_start + t + 1] - vars[v_start + t], 2);
         }
 
         //Set the constraints at time t=0
