@@ -24,7 +24,7 @@
 
 namespace {  // File local variables
 
-std::queue<geometry_msgs::Point> waypoints;
+std::queue<geometry_msgs::PoseStamped> waypoints;
 
 geometry_msgs::Point vicon_position;
 geometry_msgs::Quaternion quat; //Get orientation
@@ -39,8 +39,7 @@ void getViconPosition(const geometry_msgs::PoseStamped& pose)
 
 void getWP(const geometry_msgs::PoseStamped& stamped_point)
 {
-    const geometry_msgs::Point& point = stamped_point.pose.position;
-    waypoints.push(point);
+    waypoints.push(stamped_point);
 }
 
 int main(int argc, char **argv)
@@ -76,17 +75,20 @@ int main(int argc, char **argv)
         }
 
         const geometry_msgs::Point& curr_loc = vicon_position;
-        const geometry_msgs::Point& current_waypoint = waypoints.front();
+        const geometry_msgs::Point& current_waypoint = waypoints.front().pose.position;
         // Acknowledge that we reached the desired waypoint
         if (sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < EPSILON_RADIUS)
         {
-            waypoints.pop();  //delete first element
-
-            // tell STARL if waypoint is reached
-            // for now assume we only do that once we reach the final dest
-            std_msgs::String wp_reached;
-            wp_reached.data = "TRUE";
-            reached_pub.publish(wp_reached);
+            ROS_INFO_STREAM("Reached waypoint:\n" << current_waypoint);
+            if(waypoints.front().header.frame_id == "1")
+            {
+                // tell STARL if waypoint is reached
+                // for now assume we only do that once we reach the final dest
+                std_msgs::String wp_reached;
+                wp_reached.data = "TRUE";
+                reached_pub.publish(wp_reached);
+            }
+            waypoints.pop();  // Delete first element
             continue;  // Continue to process or wait for next waypoint
         }
         // else  // Compute and publish Ackermann message
