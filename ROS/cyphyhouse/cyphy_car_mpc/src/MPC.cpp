@@ -13,7 +13,7 @@ const size_t N = 10;
 const double dt = 0.1;
 
 //Geometric parameters of car
-const double lr = 0.3;
+const double lr = 0.325;
 
 //State and input hard constraints
 const double x_bound = 10.0;
@@ -62,9 +62,9 @@ public:
         //Set up the cost function
         for (unsigned int t = 0; t < N; ++t){
             //Penalize x-distance from waypoint and boundary
-            fg[0] += x_weight * CppAD::pow(vars[x_start + t] - x_ref,2);
+            fg[0] += x_weight*(t+1) * CppAD::pow(vars[x_start + t] - x_ref,2);
             //Penalize y-distance from waypoint and boundary
-            fg[0] += y_weight * CppAD::pow(vars[y_start + t] - y_ref, 2);
+            fg[0] += y_weight*(t+1) * CppAD::pow(vars[y_start + t] - y_ref, 2);
         }
 
         //Minimize inputs

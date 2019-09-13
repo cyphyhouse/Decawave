@@ -14,12 +14,12 @@
 
 #include "MPC.h"
 
-#define WP_RATE 50.0 //Hz
+#define WP_RATE 10.0 //Hz
 #define PRINT_RATE 50.0 //Hz
 
 #define DELTA_DIRECTION  0.01
 #define DELTA_SPEED      0.25
-#define EPSILON_RADIUS   0.25
+#define EPSILON_RADIUS   0.5
 #define EPSILON_ANGLE    0.1
 
 namespace {  // File local variables
@@ -40,6 +40,7 @@ void getViconPosition(const geometry_msgs::PoseStamped& pose)
 void getWP(const geometry_msgs::PoseStamped& stamped_point)
 {
     waypoints.push(stamped_point);
+    std::cout << "gotpoint: " << stamped_point.pose.position.x << ", " << stamped_point.pose.position.y << std::endl;
 }
 
 int main(int argc, char **argv)
@@ -76,6 +77,7 @@ int main(int argc, char **argv)
 
         const geometry_msgs::Point& curr_loc = vicon_position;
         const geometry_msgs::Point& current_waypoint = waypoints.front().pose.position;
+        std::cout << "goint to : " << current_waypoint.x << ", " << current_waypoint.y << std::endl;
         // Acknowledge that we reached the desired waypoint
         if (sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < EPSILON_RADIUS)
         {
