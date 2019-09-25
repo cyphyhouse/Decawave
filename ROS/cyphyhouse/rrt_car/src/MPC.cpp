@@ -19,7 +19,7 @@ const double lr = 0.33;
 const double x_bound = 3.0;
 const double y_bound = 3.0;
 const double dir_bound = 0.35;
-const double vel_bound = 4.0;
+const double vel_bound = 3.0;
 
 //Define target states
 double x_ref[10], y_ref[10];
@@ -54,9 +54,9 @@ public:
         //Set up the cost function
         for (unsigned int t = 0; t < N; ++t){
             //Penalize x-distance from waypoint and boundary
-            fg[0] += x_weight * CppAD::pow(vars[x_start + t] - x_ref[t], 2);
+            fg[0] += x_weight * (t + 1) * CppAD::pow(vars[x_start + t] - x_ref[t], 2);
             //Penalize y-distance from waypoint and boundary
-            fg[0] += y_weight * CppAD::pow(vars[y_start + t] - y_ref[t], 2);
+            fg[0] += y_weight * (t + 1) * CppAD::pow(vars[y_start + t] - y_ref[t], 2);
         }
 
         //Minimize inputs
@@ -105,7 +105,7 @@ public:
 MPC::MPC() = default;
 MPC::~MPC() = default;
 
-std::vector<double> MPC::Solve(Eigen::VectorXd state, std::vector<geometry_msgs::Point> waypoints) 
+std::deque<double> MPC::Solve(Eigen::VectorXd state, std::deque<geometry_msgs::Point> waypoints) 
 {
     bool ok = true;
     typedef CPPAD_TESTVECTOR(double) Dvector;
@@ -220,7 +220,7 @@ std::vector<double> MPC::Solve(Eigen::VectorXd state, std::vector<geometry_msgs:
     //auto cost = solution.obj_value;
     //std::cout << "Cost " << cost << std::endl;
 
-    std::vector<double> result;
+    std::deque<double> result;
 
     result.push_back(solution.x[delta_start]);
     result.push_back(solution.x[v_start]);

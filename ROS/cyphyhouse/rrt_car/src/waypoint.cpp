@@ -5,7 +5,7 @@
 #include <ctime>
 #include <cstdbool>
 #include <fstream>
-#include <vector>
+#include <deque>
 #include <eigen3/Eigen/Dense>
 #include <eigen3/Eigen/Geometry>
 #include "MPC.h"
@@ -28,13 +28,12 @@
 
 bool isDriving = false;
 bool gotWP = false;
-bool slow_flag = false;
 double speed = 0, direction = 0;
 geometry_msgs::Point curr_loc;
 double curr_ang = 0;
 
 std::string bot_num, vicon_obj;
-std::vector<geometry_msgs::Point> waypoints;
+std::deque<geometry_msgs::Point> waypoints;
 
 ros::Publisher drive_pub;
 ros::Publisher reached_pub;
@@ -48,14 +47,14 @@ std::string dir_path;
 char time_buffer[80];
 std::thread drive_thread, print_thread, cmd_thread;
 ros::Time wp_time;
-ros::Time slow_time;
 
 Eigen::Vector3d state;
 
 Eigen::Quaterniond quat_eig;
 Eigen::Vector3d vel_eig, vel_tf;
 double vel_error_int = 0, vel_error_deriv = 0;
-const double Kp = 1, Ki = 1; Kd = 0.1;
+const double Kp = 2.0, Ki = 5.0; Kd = 0.1;
+const double vel_bound = 4.0;
 
 void getViconPosition(const geometry_msgs::PoseStamped& pose)
 {
@@ -89,21 +88,20 @@ void drive()
         // Acknowledge that we reached the desired waypoint
         if (gotWP)
         {
-            ROS_INFO("x: %f, y: %f", curr_loc.x, curr_loc.y);
+            //ROS_INFO("x: %f, y: %f", curr_loc.x, curr_loc.y);
 
-            if ((goalDist(curr_loc, current_waypoint) < EPSILON_RADIUS) || (slow_flag == true))
+            if (goalDist(curr_loc, current_waypoint) < EPSILON_RADIUS)
             {
                 // tell STARL if waypoint is reached
                 // for now assume we only do that once we reach the final dest
                 std_msgs::String wp_reached;
                 wp_reached.data = "TRUE";
                 reached_pub.publish(wp_reached);
-                ROS_INFO("Goal dist: %f", goalDist(curr_loc, current_waypoint));
+                //ROS_INFO("Goal dist: %f", goalDist(curr_loc, current_waypoint));
                 // Stop moving
                 gotWP = false;
                 speed = 0;
                 direction = 0;
-                slow_flag = false;
                 
                 waypoints.clear();
             }
@@ -116,17 +114,17 @@ void drive()
                     waypoints.push_back(waypoints.back());
                 }
                 
-                auto tic = std::chrono::high_resolution_clock::now();
+                //auto tic = std::chrono::high_resolution_clock::now();
                 std::vector<double> solution = mpc.Solve(state, waypoints);
-                auto toc = std::chrono::high_resolution_clock::now();
-                auto duration = std::chrono::duration_cast<std::chrono::microseconds>(toc - tic);
-                std::cout << "MPC time: " << duration.count() / 1000000. << std::endl; //Time in seconds
+                //auto toc = std::chrono::high_resolution_clock::now();
+                //auto duration = std::chrono::duration_cast<std::chrono::microseconds>(toc - tic);
+                //std::cout << "MPC time: " << duration.count() / 1000000. << std::endl; //Time in seconds
                 
                 direction = solution.at(0);
                 speed = solution.at(1);
-                ROS_INFO("speed: %f, steering: %f", speed, direction);
+                ROS_INFO("MPC speed: %f, steering: %f", speed, direction);
                 
-                waypoints.erase(waypoints.begin()); //delete first element
+                waypoints.pop_front(); //delete first element
             }
         }
         r.sleep();
@@ -156,18 +154,18 @@ void drive_cmd()
         
         vel_error = speed - car_vel;
         vel_error_int += vel_error;
-        vel_error_int = fmax(fmin(vel_error_int, 4.0), -4.0);
+        vel_error_int = fmax(fmin(vel_error_int, vel_bound), -vel_bound);
         vel_error_deriv = 0.9 * vel_error + 0.1 * vel_error_deriv;
         
         double vel_cmd = Kp * vel_error + Ki * vel_error_int + Kd * vel_error_deriv;
-        vel_cmd = fmax(fmin(vel_cmd, 4.0), -4.0);
+        vel_cmd = fmax(fmin(vel_cmd, vel_bound), -vel_bound);
         
         ackermann_msgs::AckermannDriveStamped drive_msg;
         drive_msg.drive.speed = vel_cmd;
         drive_msg.drive.steering_angle = direction;
         drive_pub.publish(drive_msg);
         
-        ROS_INFO("Ackermann speed: %f", vel_cmd);
+        ROS_INFO("Vicon Speed: %f, Ackermann speed: %f", car_vel, vel_cmd);
         
         r.sleep()
     }
@@ -218,7 +216,6 @@ void getWP(const geometry_msgs::PoseStamped& stamped_point)
         current_waypoint = point;
         gotWP = true;
         slow_time = ros::Time::now();
-        slow_flag = false;
     }
 
     if(!isDriving)

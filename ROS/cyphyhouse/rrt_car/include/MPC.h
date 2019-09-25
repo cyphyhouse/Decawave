@@ -5,7 +5,7 @@
 #ifndef MPC_MPC_H
 #define MPC_MPC_H
 #include "geometry_msgs/PointStamped.h"
-#include <vector>
+#include <deque>
 #include "Eigen/Dense"
 
 
@@ -14,10 +14,10 @@ public:
     MPC();
 
     virtual ~MPC();
-    std::vector<double> x_vals;
-    std::vector<double> y_vals;
+    std::deque<double> x_vals;
+    std::deque<double> y_vals;
     // Solve the model given an initial state
-    std::vector<double> Solve(Eigen::VectorXd state, std::vector<geometry_msgs::Point> waypoints);
+    std::deque<double> Solve(Eigen::VectorXd state, std::deque<geometry_msgs::Point> waypoints);
 
 };
 
