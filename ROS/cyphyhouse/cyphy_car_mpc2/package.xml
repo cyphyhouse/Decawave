@@ -2,7 +2,7 @@
 <package>
   <name>cyphy_car_mpc2</name>
   <version>0.1.0</version>
-  <description>The car package with MPC control</description>
+  <description>The car package with MPC control (trajectory following)</description>
 
   <maintainer email="gosse2@illinois.edu">Amelia Gosse</maintainer>
 
