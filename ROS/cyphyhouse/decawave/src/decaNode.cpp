@@ -25,8 +25,8 @@
 #define MSG_SIZE      9
 
 #define MSG_TYPE_BYTE 0
-#define ANCN_BYTE     1
-#define ANCR_BYTE     2
+#define ANCR_BYTE     1
+#define ANCN_BYTE     2
 #define DATA_BYTE     3
 #define CS_BYTE       7
 
@@ -138,12 +138,12 @@ void serial_comm()
                     uint16_t cs = (serial_msg[MSG_SIZE-2] << 8) | serial_msg[MSG_SIZE-1];
                     if(cs == serial_checksum(serial_msg, MSG_SIZE-2))
                     {
-                        An = serial_msg[ANCN_BYTE];
                         Ar = serial_msg[ANCR_BYTE];
+                        An = serial_msg[ANCN_BYTE];
                         tdoaDistDiff = to_float(&serial_msg[DATA_BYTE]);
 
 			            ekf_mutex.lock();
-			            deca_ekf.scalarTDOADistUpdate(An, Ar, tdoaDistDiff);
+			            deca_ekf.scalarTDOADistUpdate(Ar, An, tdoaDistDiff);
                         //deca_ekf.stateEstimatorFinalize(); //Commented out because it doesnt do anything right now
 			            ekf_mutex.unlock();
 

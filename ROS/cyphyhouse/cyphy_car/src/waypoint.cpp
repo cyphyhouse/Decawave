@@ -5,7 +5,7 @@
 #include <ctime>
 #include <cstdbool>
 #include <fstream>
-#include <vector>
+#include <deque>
 
 
 #include "ros/ros.h"
@@ -15,58 +15,58 @@
 #include <ackermann_msgs/AckermannDriveStamped.h>
 #include "ros/package.h"
 
-#define WP_RATE 100.0 //Hz
-#define PRINT_RATE 100.0 //Hz
+#define WP_RATE          100.0 //Hz
+#define PRINT_RATE       100.0 //Hz
 
 #define DELTA_DIRECTION  0.01
 #define DELTA_SPEED      0.25
 #define EPSILON_RADIUS   0.25
 #define EPSILON_ANGLE    0.1
 
-bool starl_flag = false;
+#define MAX_SPEED        4.0
+#define MAX_ANGLE        0.35
+
 bool isDriving = false;
 bool gotWP = false;
 double speed = 0, direction = 0;
 geometry_msgs::Point prev_loc, curr_loc;
 
 std::string bot_num, vicon_obj;
-std::vector<geometry_msgs::Point> waypoints;
+std::deque<geometry_msgs::Point> waypoints;
 
 ros::Publisher drive_pub;
 ros::Publisher reached_pub;
 
-geometry_msgs::Point deca_position, vicon_position;
+geometry_msgs::Point vicon_position;
 geometry_msgs::Point current_waypoint;  // VICON coords
+geometry_msgs::Quaternion quat; //Get orientation
 
 std::string dir_path;
 char time_buffer[80];
 std::thread drive_thread, print_thread;
 
-void getDecaPosition(const geometry_msgs::Point& point)
-{
-    deca_position = point;
-}
+int vel_sign, dir_sign;
 
 void getViconPosition(const geometry_msgs::PoseStamped& pose)
 {
     vicon_position = pose.pose.position;
+    quat = pose.pose.orientation;
 }
 
-double get_angle_between_3_pts(geometry_msgs::Point center, geometry_msgs::Point waypoint, geometry_msgs::Point next_pos)
+inline double goalDist(const geometry_msgs::Point pos, const geometry_msgs::Point goal)
 {
-    double n_waypoint[2], n_next_pos[2];
-    n_waypoint[0] = waypoint.x - center.x;
-    n_waypoint[1] = waypoint.y - center.y;
-    n_next_pos[0] = next_pos.x - center.x;
-    n_next_pos[1] = next_pos.y - center.y;
-    if (fabs(n_next_pos[0]) < 0.001 && fabs(n_next_pos[1]) < 0.001)
-    {
-        return 0;
-    }
-    else
-    {
-        return atan2(n_waypoint[1], n_waypoint[0]) - atan2(n_next_pos[1], n_next_pos[0]);
-    }
+    return sqrt(pow(pos.x - goal.x, 2) + pow(pos.y - goal.y, 2));
+}
+
+double get_angle_between_3_pts(geometry_msgs::Point center, geometry_msgs::Point waypoint, geometry_msgs::Quaternion q)
+{
+    double curr_ang = atan2(2 * (q.x * q.y + q.w * q.z), pow(q.w,2) + pow(q.x,2) - pow(q.y,2) - pow(q.z,2));
+    double v_x = waypoint.x - center.x;
+    double v_y = waypoint.y - center.y;
+    double abs_v = sqrt(v_x * v_x + v_y + v_y);
+    double wp_ang = acos((v_x)/(abs_v)); // angle between next wp and x axis.
+    
+    return wp_ang - curr_ang;
 }
 
 double a_error = 0;
@@ -83,9 +83,9 @@ double get_pid_distance(double d_err_curr, double d_err_prev)
     static double Kp = 1.2;
     static double Kd = 0.01;
     static double Ki = 0.01;
-    static double i_limit = 1.0;
+    static double i_limit = 2.0;
     d_integral += d_err_curr*(1.0/WP_RATE);
-    d_integral = fmin(d_integral,i_limit);
+    d_integral = fmin(d_integral, i_limit);
     
     double diff = (d_err_curr - d_err_prev)*WP_RATE;
     d_diff = 0.2*d_diff + 0.8*diff;
@@ -117,15 +117,14 @@ void drive()
     while(ros::ok())
     {
         
-        prev_loc = curr_loc;
         curr_loc = vicon_position;
         
         // Acknowledge that we reached the desired waypoint
-        if (starl_flag)
+        if (gotWP)
         {
-            if (sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2)) < 0.25)
+            if (goalDist(curr_loc, current_waypoint) < EPSILON_RADIUS)
             {
-                waypoints.erase(waypoints.begin()); //delete first element
+                waypoints.pop_front(); //delete first element
                 
                 if(waypoints.size() == 0) //reached last point
                 {
@@ -133,7 +132,7 @@ void drive()
                     // for now assume we only do that once we reach the final dest
                     std_msgs::String wp_reached;
                     wp_reached.data = "TRUE";
-                    starl_flag = false;
+                    gotWP = false;
                     reached_pub.publish(wp_reached);
                     
                     gotWP = false;
@@ -150,6 +149,9 @@ void drive()
                 {
                     current_waypoint = waypoints.front();
                     //might also need to reset the angle errors
+                    a_error = 0;
+                    a_integral = 0;
+                    a_prev = 0;
                 }
             }
         }
@@ -158,9 +160,35 @@ void drive()
 
         if (gotWP)
         {
-            a_error = get_angle_between_3_pts(prev_loc, current_waypoint, curr_loc);
-            if (a_error > M_PI) a_error -= 2*M_PI;
-            if (a_error < -M_PI) a_error += 2*M_PI;
+            a_error = get_angle_error(curr_loc, current_waypoint, quat);
+            //if (a_error > M_PI) a_error -= 2*M_PI;
+            //if (a_error < -M_PI) a_error += 2*M_PI;
+            if (fabs(a_error) <= M_PI/2.0;)
+            {
+                vel_sign = 1;
+                if (a_error <= 0.0)
+                {
+                    dir_sign = 1;
+                }
+                else
+                {
+                    dir_sign = -1;
+                }
+            }
+            else
+            {
+                vel_sign = -1;
+                if (a_error <= 0.0)
+                {
+                    dir_sign = -1;
+                    a_error += M_PI;
+                }
+                else
+                {
+                    dir_sign = 1;
+                    a_error -= M_PI;
+                }
+            }
             
             d_target = sqrt(pow(curr_loc.x - current_waypoint.x,2) + pow(curr_loc.y - current_waypoint.y,2));
             
@@ -171,12 +199,12 @@ void drive()
             d_prev = d_target;
             a_prev = a_error;
             
-            speed = vel_pid;
-            direction = ang_pid;
+            speed = vel_sign * vel_pid;
+            direction = vel_sign * ang_pid;
             //ROS_INFO("d_target: %f, speed: %f, a_error: %f, direction: %f", d_target, vel_pid, a_error, ang_pid);
             
-            speed = fmax(fmin(speed, 2), -2);
-            direction = fmax(fmin(direction, 0.35), -0.35);
+            speed = fmax(fmin(speed, MAX_SPEED), -MAX_SPEED);
+            direction = fmax(fmin(direction, MAX_ANGLE), -MAX_ANGLE);
         }
         
         ackermann_msgs::AckermannDriveStamped drive_msg;
@@ -223,20 +251,13 @@ void getWP(const geometry_msgs::PointStamped& stamped_point)
 {
     geometry_msgs::Point point = stamped_point.point;
     
-    if (waypoints.size() == 0)
-    {
-        current_waypoint.x = point.x;
-        current_waypoint.y = point.y;
-        //current_waypoint.z = point.z;
-    }
-    
     waypoints.push_back(point);
     
     // wait until we get the final point
     if(stamped_point.header.frame_id == "1")
     {
+        current_waypoint = waypoints.front();
         gotWP = true;
-        starl_flag = true;
     }
     
     if(!isDriving)
@@ -252,16 +273,14 @@ int main(int argc, char **argv)
     ros::NodeHandle n("~");
     
     n.param<std::string>("vicon_obj", vicon_obj, "hotdec_car");
-    n.param<std::string>("bot_num", bot_num, "bot1");
 
-    std::cout << "Vicon Object: " << vicon_obj << ", bot_num: " << bot_num << std::endl;
+    std::cout << "Vicon Object: " << vicon_obj << std::endl;
     
-    reached_pub = n.advertise<std_msgs::String>("/Reached", 1);
+    reached_pub = n.advertise<std_msgs::String>("reached", 1);
     drive_pub = n.advertise<ackermann_msgs::AckermannDriveStamped>("/ackermann_cmd", 1);
 
-    ros::Subscriber deca_pos = n.subscribe("/decaPos", 1, getDecaPosition);
     ros::Subscriber sub = n.subscribe("/vrpn_client_node/"+vicon_obj+"/pose", 1, getViconPosition);
-    ros::Subscriber waypoint = n.subscribe("/Waypoint_"+bot_num, 10, getWP);  // second parameter is num of buffered messages
+    ros::Subscriber waypoint = n.subscribe("waypoint", 50, getWP);  // second parameter is num of buffered messages
 
     dir_path = ros::package::getPath("cyphy_car");
     
@@ -271,11 +290,6 @@ int main(int argc, char **argv)
     struct tm * timeinfo;
     timeinfo = localtime(&rawtime);
     strftime(time_buffer, 80, "%G%m%dT%H%M%S", timeinfo);
-
-    prev_loc.x = 0;
-    prev_loc.y = 0;
-    curr_loc.x = 0;
-    curr_loc.y = 0;
     
     std::cout << "Starting waypoint follower" << std::endl;
     
