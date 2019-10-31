@@ -58,14 +58,15 @@ inline double goalDist(const geometry_msgs::Point pos, const geometry_msgs::Poin
     return sqrt(pow(pos.x - goal.x, 2) + pow(pos.y - goal.y, 2));
 }
 
-double get_angle_between_3_pts(geometry_msgs::Point center, geometry_msgs::Point waypoint, geometry_msgs::Quaternion q)
+double get_angle_error(geometry_msgs::Point center, geometry_msgs::Point waypoint, geometry_msgs::Quaternion q)
 {
     double curr_ang = atan2(2 * (q.x * q.y + q.w * q.z), pow(q.w,2) + pow(q.x,2) - pow(q.y,2) - pow(q.z,2));
     double v_x = waypoint.x - center.x;
     double v_y = waypoint.y - center.y;
-    double abs_v = sqrt(v_x * v_x + v_y + v_y);
-    double wp_ang = acos((v_x)/(abs_v)); // angle between next wp and x axis.
-    
+    //double abs_v = sqrt(v_x * v_x + v_y * v_y);
+    //double wp_ang = acos((v_x)/(abs_v)); // angle between next wp and x axis.
+    double wp_ang = atan2(v_y, v_x);
+    std::cout << curr_ang << ", " << wp_ang-curr_ang << std::endl;
     return wp_ang - curr_ang;
 }
 
@@ -149,9 +150,10 @@ void drive()
                 {
                     current_waypoint = waypoints.front();
                     //might also need to reset the angle errors
-                    a_error = 0;
                     a_integral = 0;
                     a_prev = 0;
+                    d_integral = 0;
+                    d_prev = 0;
                 }
             }
         }
@@ -163,17 +165,10 @@ void drive()
             a_error = get_angle_error(curr_loc, current_waypoint, quat);
             //if (a_error > M_PI) a_error -= 2*M_PI;
             //if (a_error < -M_PI) a_error += 2*M_PI;
-            if (fabs(a_error) <= M_PI/2.0;)
+            if (fabs(a_error) <= M_PI/2.0)
             {
                 vel_sign = 1;
-                if (a_error <= 0.0)
-                {
-                    dir_sign = 1;
-                }
-                else
-                {
-                    dir_sign = -1;
-                }
+                dir_sign = 1;
             }
             else
             {
@@ -240,16 +235,15 @@ void printToFile()
         ros::Duration time_since_start = ros::Time::now() - time_start;
         positionFile << time_since_start.toNSec() / 1000 << ", "; //Print time in useconds
         positionFile << vicon_position.x << ", " << vicon_position.y << ", " << vicon_position.z << ", ";
-        positionFile << deca_position.x << ", " << deca_position.y << ", " << deca_position.z << "\r\n";
         
         printrate.sleep();
     }
     positionFile.close();
 }
 
-void getWP(const geometry_msgs::PointStamped& stamped_point)
+void getWP(const geometry_msgs::PoseStamped& stamped_point)
 {
-    geometry_msgs::Point point = stamped_point.point;
+    geometry_msgs::Point point = stamped_point.pose.position;
     
     waypoints.push_back(point);
     
