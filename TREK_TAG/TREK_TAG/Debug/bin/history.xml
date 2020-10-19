@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<history>
+   <processor signature="5.4.1 -mcpu=cortex-m3 -mthumb -g -Map=TREK_TAG.map -O1 --gc-sections -lm -lgcc -lc -LC:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/linkers -TC:/Users/JanschPortoJoaoPaulo/Documents/GitHub/Decawave/TREK_TAG/linkers/stm32_flash_256k_ram_64k.ld -g">
+      <target file="TREK_TAG.elf" lastModified="17541ceed2b">
+         <source file="..\obj\stm32f10x_rtc.o" lastModified="17541cec3fb"/>
+         <source file="..\obj\usb_core.o" lastModified="17541cec548"/>
+         <source file="..\obj\stm32f10x_tim.o" lastModified="17541cec68b"/>
+         <source file="..\obj\core_cm3.o" lastModified="17541cec6fa"/>
+         <source file="..\obj\usbd_usr.o" lastModified="17541cec787"/>
+         <source file="..\obj\deca_usb_bsp_evk1000.o" lastModified="17541cec838"/>
+         <source file="..\obj\stm32f10x_dbgmcu.o" lastModified="17541cec8c1"/>
+         <source file="..\obj\system_stm32f10x.o" lastModified="17541cec960"/>
+         <source file="..\obj\deca_device.o" lastModified="17541cecac2"/>
+         <source file="..\obj\deca_spi.o" lastModified="17541cecb87"/>
+         <source file="..\obj\stm32f10x_fsmc.o" lastModified="17541cecc37"/>
+         <source file="..\obj\stm32f10x_pwr.o" lastModified="17541cecccb"/>
+         <source file="..\obj\stm32f10x_can.o" lastModified="17541cecd97"/>
+         <source file="..\obj\stm32f10x_gpio.o" lastModified="17541cece68"/>
+         <source file="..\obj\stm32f10x_dac.o" lastModified="17541cecf12"/>
+         <source file="..\obj\usbd_core.o" lastModified="17541cecfef"/>
+         <source file="..\obj\main.o" lastModified="17541ced127"/>
+         <source file="..\obj\stm32f10x_crc.o" lastModified="17541ced1b6"/>
+         <source file="..\obj\stm32f10x_rcc.o" lastModified="17541ced270"/>
+         <source file="..\obj\startup_stm32f10x_cl.o" lastModified="17541ced2bc"/>
+         <source file="..\obj\stm32f10x_exti.o" lastModified="17541ced345"/>
+         <source file="..\obj\stm32f10x_adc.o" lastModified="17541ced424"/>
+         <source file="..\obj\usbd_desc.o" lastModified="17541ced4bb"/>
+         <source file="..\obj\deca_mutex.o" lastModified="17541ced55f"/>
+         <source file="..\obj\deca_usb.o" lastModified="17541ced639"/>
+         <source file="..\obj\stm32f10x_usart.o" lastModified="17541ced6fd"/>
+         <source file="..\obj\deca_sleep.o" lastModified="17541ced789"/>
+         <source file="..\obj\syscalls.o" lastModified="17541ced859"/>
+         <source file="..\obj\stm32f10x_flash.o" lastModified="17541ced91a"/>
+         <source file="..\obj\stm32f10x_it.o" lastModified="17541ced9b6"/>
+         <source file="..\obj\stm32f10x_cec.o" lastModified="17541ceda48"/>
+         <source file="..\obj\usbd_req.o" lastModified="17541cedb13"/>
+         <source file="..\obj\usb_dcd_int.o" lastModified="17541cedbe5"/>
+         <source file="..\obj\stm32f10x_sdio.o" lastModified="17541cedc96"/>
+         <source file="..\obj\usbd_cdc_core.o" lastModified="17541cedd41"/>
+         <source file="..\obj\stm32f10x_dma.o" lastModified="17541ceddd3"/>
+         <source file="..\obj\usb_hcd.o" lastModified="17541cede76"/>
+         <source file="..\obj\lcd.o" lastModified="17541cedf22"/>
+         <source file="..\obj\misc.o" lastModified="17541cedfb1"/>
+         <source file="..\obj\usb_dcd.o" lastModified="17541cee05b"/>
+         <source file="..\obj\stm32f10x_wwdg.o" lastModified="17541cee0f4"/>
+         <source file="..\obj\stm32f10x_spi.o" lastModified="17541cee1b4"/>
+         <source file="..\obj\stm32f10x_i2c.o" lastModified="17541cee285"/>
+         <source file="..\obj\deca_params_init.o" lastModified="17541cee314"/>
+         <source file="..\obj\usbd_ioreq.o" lastModified="17541cee3a8"/>
+         <source file="..\obj\port_deca.o" lastModified="17541cee47c"/>
+         <source file="..\obj\tdoa_tag.o" lastModified="17541cee578"/>
+         <source file="..\obj\stm32f10x_bkp.o" lastModified="17541cee61a"/>
+         <source file="..\obj\usb_hcd_int.o" lastModified="17541cee8ec"/>
+         <source file="..\obj\stm32f10x_iwdg.o" lastModified="17541cee980"/>
+      </target>
+   </processor>
+</history>
